@@ -608,7 +608,7 @@ int main(int argc, char** argv)
     printf("area: %le n_source: %le n_lens: %le\n",survey.area,survey.n_gal,survey.n_lens);
 
     //sprintf(covparams.outdir,"/home/u17/timeifler/covparallel/"); 
-    sprintf(covparams.outdir,"/aurora_nobackup/cosmos/teifler/covparallel/");
+    sprintf(covparams.outdir,"/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/covparallel/");
     printf("----------------------------------\n");  
     sprintf(OUTFILE,"%s_%le_%le_ssss_cov_Ncl%d_Ntomo%d",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin);
     for (l=0;l<tomo.shear_Npowerspectra; l++){
