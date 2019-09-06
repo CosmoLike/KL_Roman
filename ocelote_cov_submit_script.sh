@@ -3,7 +3,7 @@
 #PBS -V
 #PBS -W group_list=cosmo
 #PBS -q standard
-#PBS -J 1-8365
+#PBS -J 1-1540
 #PBS -l select=1:ncpus=1:mem=1GB
 #PBS -l place=free:shared
 #PBS -l walltime=8:00:00
