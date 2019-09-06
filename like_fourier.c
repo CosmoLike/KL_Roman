@@ -43,7 +43,7 @@
 #include "../cosmolike_core/theory/external_prior.c"
 #include "../cosmolike_core/theory/GRS.c"
 #include "init_WFIRST_forecasts.c"
-#include "like_grs.c"
+
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
 double C_cgl_tomo_sys(double ell_Cluster,int zl,int nN, int zs);
