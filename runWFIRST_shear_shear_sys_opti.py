@@ -13,7 +13,8 @@ cov_file = os.path.join(dirname, "cov/WFIRST_shear_shear_inv")
 chain_file = "/extra/timeifler/WFIRST_forecasts/chains/like_WFIRST_shear_shear_sys_opti"
 
 initcosmo("halofit")
-initbins(25,30.0,15000.0,4000.0,21.0,10,10)
+# initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)
+initbins( 25, 30.0, 15000.0,     4000.0,      21.0,           10,         10) # standard WL
 initpriors("photo_opti","shear_opti","none","none")
 initsurvey("WFIRST")
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")

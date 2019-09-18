@@ -7,11 +7,11 @@ from numpy import linalg as LA
 import numpy as np
 
 
-infile =['/users/timeifler/Dropbox/cosmolike_store/WFIRST_forecasts/cov/cov_WFIRST_SNclustering10']
+infile =['Total_Cov_Matrix/WFIRST_Tully_Fisher_8.000000e+00_2.000000e+03_ssss_cov_Ncl25_Ntomo10']
 
 #infile =['/users/timeifler/Dropbox/cosmolike_store/WFIRST_forecasts/cov/cov_WFIRST_Ncl25_4clusterbins_nrichmin25_source_Dec17']
-data= ['datav/WFIRST_all_2pt_clusterN_clusterWL_fid']
-outname=['WFIRST_SN10']
+data= ['Total_Cov_Matrix/WFIRST_Tully_Fisher_8.000000e+00_2.000000e+03_ssss_cov_Ncl25_Ntomo10']
+outname=['WFIRST_Tully_Fisher_SN10']
 
 # the numbers below can be computed knowing the data vector settings, e.g. 10 tomographic source bins results in 55 shear-shear power spectra. Or they can be read off when running the covariance code, i.e. type 'compute_covariance_fourier 100000' and look for the output mentioning number of ggl bins accepted and/or number of cluster weka lensing bins accepted. The default numbers below most likely don't correspond to your binning choices.
 nggl = 32 	# number of ggl power spectra
@@ -31,12 +31,13 @@ n2ptcl=n2pt+ncluster
 nclusterN_WL=ncluster+nrich*ngcl*nclgcl
 
 for k in range(0,1):
-  	datafile= np.genfromtxt(data[k])
+#  	datafile= np.genfromtxt(data[k])
   	mask = np.zeros(ndata)
-	for i in range(0,datafile.shape[0]):
-		if (datafile[i,1] >1.0e-15): 
-			mask[i]=1.0
-
+#	for i in range(0,datafile.shape[0]):
+#		if (datafile[i,1] >1.0e-15): 
+#			mask[i]=1.0
+	for m in mask:
+		m = 1.0
   	
   	covfile = np.genfromtxt(infile[k])
 	cov = np.zeros((ndata,ndata))
@@ -78,7 +79,7 @@ for k in range(0,1):
 	  		f.write("%d %d %e\n" %(i,j, inv[i,j]))
 	f.close()
 
-	
+'''	
 	# ############### invert clustering covariance #################
 	inv = LA.inv(cov[(nshear+nggl)*ncl:(nshear+nggl+nlens)*ncl,(nshear+nggl)*ncl:(nshear+nggl+nlens)*ncl])
 	a = np.sort(LA.eigvals(cov[(nshear+nggl)*ncl:(nshear+nggl+nlens)*ncl,(nshear+nggl)*ncl:(nshear+nggl+nlens)*ncl]))
@@ -151,7 +152,7 @@ for k in range(0,1):
 	  	for j in range(0,nclusterN_WL):
 	  		f.write("%d %d %e\n" %( i,j, inv[i,j]))
 	f.close()
-
+'''
 	
 	
 
