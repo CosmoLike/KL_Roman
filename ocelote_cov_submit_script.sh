@@ -7,7 +7,7 @@
 #PBS -l select=1:ncpus=1:mem=1GB
 #PBS -l place=free:shared
 #PBS -l walltime=8:00:00
-#PBS -N KL_W1st_cov_0.05
+#PBS -N KL_W1st_cov_0.06
 #PBS -e /home/u17/jiachuanxu/output/
 #PBS -o /home/u17/jiachuanxu/output/
 

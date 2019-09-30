@@ -553,7 +553,6 @@ int main(int argc, char** argv)
   
   // when using SNR=10 clustering sample
   //double scenario_table[1][3]={{2000.0,51.0,66.0}}; // WFIRST standard
-
 //  when using SNR=10 clustering sample LSST area and f_LSST of 73% in the clustering SN>5 sample, 79% 
 //  double scenario_table[1][3]={{18000.0,48.,52.}};
 
@@ -573,12 +572,12 @@ int main(int argc, char** argv)
   init_cosmo_runmode("emu");
   //init_cosmo_runmode("halofit");
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);
-  init_binning_fourier(25, 30.0, 15000.0, 4000.0, 21.0, 10, 10);
+  init_binning_fourier(20, 30.0, 4000.0, 4000.0, 21.0, 10, 10);
   init_priors("photo_opti","shear_opti","none","none");
   init_survey("WFIRST");
-  survey.sigma_e=0.05; // shape noise of KL
+//  survey.sigma_e=0.06; // shape noise of KL
   //init_galaxies("zdistris/zdistribution_DESY1_source","zdistris/zdistribution_DESY1_lens", "none", "none", "DES_Y1");
-  init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin", "none", "none", "SN10");
+  init_galaxies("zdistris/zdistribution_WFIRST_KL_new","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin", "none", "none", "SN10");
 //  init_galaxies("zdistris/zdistri_WFIRST_lensing_fine_bin","zdistris/zdistri_WFIRST_clustering_fine_bin", "none", "none", "SN10");
   init_clusters();
   init_IA("none", "GAMA");
