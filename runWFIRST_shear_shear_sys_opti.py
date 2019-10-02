@@ -3,7 +3,7 @@
 import sys
 sys.path.append('/home/u17/timeifler/WFIRST_forecasts')
 
-from cosmolike_libs_pessi import * 
+from cosmolike_libs_opti import * 
 from schwimmbad import MPIPool
 
 file_source_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin")
@@ -14,7 +14,7 @@ chain_file = "/extra/timeifler/WFIRST_forecasts/chains/like_WFIRST_shear_shear_s
 
 initcosmo("halofit")
 # initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)
-initbins( 25, 30.0, 15000.0,     4000.0,      21.0,           10,         10) # standard WL
+initbins( 25, 30.0, 4000.0,     4000.0,      21.0,           10,         10) # standard WL
 initpriors("photo_opti","shear_opti","none","none")
 initsurvey("WFIRST")
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
