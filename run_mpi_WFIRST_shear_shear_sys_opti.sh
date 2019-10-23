@@ -9,19 +9,27 @@
 #PBS -l place=free:shared
 #PBS -l cput=8400:00:00
 #PBS -l walltime=15:00:00
-#PBS -N WF_ss_sy_o
-#PBS -e /home/u17/timeifler/output/
-#PBS -o /home/u17/timeifler/output/
+#PBS -N WF_KL_ss_sys_o
+#PBS -e /home/u17/jiachuanxu/output/
+#PBS -o /home/u17/jiachuanxu/output/
 
-
+### cput 8400:00:00 std
+### walltime 15:00:00 std
 cd $PBS_O_WORKDIR
 
 module load python/2
 module load mpich/ge/gcc/64/3.2.1
 module load openmpi
+VIRTUAL_ENV="/home/u17/jiachuanxu/python2_virtualenv"
+export VIRTUAL_ENV
 
+_OLD_VIRTUAL_PATH="$PATH"
+PATH="$VIRTUAL_ENV/bin:$PATH"
+export PATH
 ### run your executable program with begin and end date and time output
 export MPI_DSM_DISTRIBUTE
 date
-/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_opti.py
+#/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_opti.py
+/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_KL.py
 date
+echo "Your job $PBS_JOBID $PBS_JOBNAME is finished!" | mail -s "Your job $PBS_JOBID $PBS_JOBNAME is finished!" jiachuanxu@email.arizona.edu

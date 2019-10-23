@@ -34,6 +34,5 @@ sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear())
 #sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
 
-#sample_main(sample_params,10000,560,1,chain_file, blind=False, pool=MPIPool())
-sample_main(sample_params,1000,560,1,chain_file, blind=False, pool=MPIPool())
+sample_main(sample_params,10000,560,1,chain_file, blind=False, pool=MPIPool())
 

@@ -544,9 +544,9 @@ int main(int argc, char** argv)
   
   int N_scenarios=1;
 // when using standard WFIRST WL
-//  double scenario_table[1][3]={ {2000.0, 51.0, 66.0} };
+  double scenario_table[1][3]={ {2000.0, 51.0, 66.0} };
 // when using WFIRST KL
-  double scenario_table[1][3]={ {2000.0, 8.0, 66.0} };
+//  double scenario_table[1][3]={ {2000.0, 8.0, 66.0} };
   //static double scenario_table[15][2]={{1500.0,45.0},{2000.0,45.0},{2500.0,45.0},{3000.0,45.0},{3500.0,45.0},{4000.0,45.0},{10000.0,45.0},{18000.0,45.0},{2000.0,33.0},{2000.0,36.0},{2000.0,39.0},{2000.0,42.0},{2000.0,48.0},{2000.0,51.0},{2000.0,54.0}};
   // when using SNR=5 clustering sample
   //double scenario_table[1][3]={{2000.0,51.0,107.0}};
@@ -577,8 +577,8 @@ int main(int argc, char** argv)
   init_survey("WFIRST");
 //  survey.sigma_e=0.06; // shape noise of KL
   //init_galaxies("zdistris/zdistribution_DESY1_source","zdistris/zdistribution_DESY1_lens", "none", "none", "DES_Y1");
-  init_galaxies("zdistris/zdistribution_WFIRST_KL_new","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin", "none", "none", "SN10");
-//  init_galaxies("zdistris/zdistri_WFIRST_lensing_fine_bin","zdistris/zdistri_WFIRST_clustering_fine_bin", "none", "none", "SN10");
+//  init_galaxies("zdistris/zdistribution_WFIRST_KL_new","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin", "none", "none", "SN10");
+  init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");
   init_clusters();
   init_IA("none", "GAMA");
   

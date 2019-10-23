@@ -36,9 +36,6 @@ initia.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
 initpriors=lib.init_priors
 initpriors.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
 
-initpriors_KL=lib.init_priors_KL
-initpriors_KL.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
-
 initprobes=lib.init_probes
 initprobes.argtypes=[ctypes.c_char_p]
 
@@ -523,7 +520,7 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
 #    sampler = emcee.EnsembleSampler(nwalker, ndim, likelihood, pool=pool)
 
     f = open(filename, 'w')
-    print "Writing output file..."
+
     #write header here
     f.write('# ' + '    '.join(varied_parameters)+" log_like\n")
     f.write('#blind=%s\n'%blind)

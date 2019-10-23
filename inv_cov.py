@@ -1,27 +1,32 @@
 #!/usr/bin/python
 import sys
 import math, numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from numpy import linalg as LA
 import numpy as np
 
-
-infile =['Total_Cov_Matrix/WFIRST_Tully_Fisher_8.000000e+00_2.000000e+03_ssss_cov_Ncl25_Ntomo10']
-
+# covariance matrix
+infile =['Total_Cov_Matrix/WFIRST_Tully_Fisher_8.000000e+00_2.000000e+03_ssss_cov_Ncl20_Ntomo10_sigmae0.06_zdistrinew']
 #infile =['/users/timeifler/Dropbox/cosmolike_store/WFIRST_forecasts/cov/cov_WFIRST_Ncl25_4clusterbins_nrichmin25_source_Dec17']
-data= ['Total_Cov_Matrix/WFIRST_Tully_Fisher_8.000000e+00_2.000000e+03_ssss_cov_Ncl25_Ntomo10']
-outname=['WFIRST_Tully_Fisher_SN10']
+
+# data vector
+data= ['/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/datav/WFIRST_KL_shear_shear_opti']
+
+# output file name
+outname=['WFIRST_Tully_Fisher_SN10_sigmae0.06']
 
 # the numbers below can be computed knowing the data vector settings, e.g. 10 tomographic source bins results in 55 shear-shear power spectra. Or they can be read off when running the covariance code, i.e. type 'compute_covariance_fourier 100000' and look for the output mentioning number of ggl bins accepted and/or number of cluster weka lensing bins accepted. The default numbers below most likely don't correspond to your binning choices.
-nggl = 32 	# number of ggl power spectra
-ngcl = 22	# number of cluster-source galaxy power spectra
-nlens = 10 	# number of lens bins 
-nlenscl= 4 	# number of cluster redshift bins 
-nshear = 55 # number of shear tomographic power spectra
-ncl=25		# number of ell-bins
-nclgcl=5	# number of cluster ell-bins
-nrich=4 	# number of richness bins
+nggl = 0 	# number of ggl power spectra
+ngcl = 0	# number of cluster-source galaxy power spectra
+nlens = 0 	# number of lens bins 
+nlenscl= 0 	# number of cluster redshift bins 
+nshear = 55 	# number of shear tomographic power spectra
+ncl=20		# number of ell-bins
+nclgcl=0	# number of cluster ell-bins
+nrich=0		# number of richness bins
 
 
 ndata = (nshear+nggl+nlens)*ncl+nlenscl*nrich+nrich*ngcl*nclgcl
@@ -31,13 +36,13 @@ n2ptcl=n2pt+ncluster
 nclusterN_WL=ncluster+nrich*ngcl*nclgcl
 
 for k in range(0,1):
-#  	datafile= np.genfromtxt(data[k])
+  	datafile= np.genfromtxt(data[k])
   	mask = np.zeros(ndata)
-#	for i in range(0,datafile.shape[0]):
-#		if (datafile[i,1] >1.0e-15): 
-#			mask[i]=1.0
-	for m in mask:
-		m = 1.0
+	for i in range(0,datafile.shape[0]):
+		if (datafile[i,1] >1.0e-15): 
+			mask[i]=1.0
+#	for m in mask:
+#		m = 1.0
   	
   	covfile = np.genfromtxt(infile[k])
 	cov = np.zeros((ndata,ndata))
@@ -45,7 +50,7 @@ for k in range(0,1):
 	print ndata,n2pt,int(np.max(covfile[:,0])+1)
 
 	for i in range(0,covfile.shape[0]):
-	  	cov[int(covfile[i,0]),int(covfile[i,1])] = covfile[i,8]+covfile[i,9]
+	  	cov[int(covfile[i,0]),int(covfile[i,1])] = covfile[i,8]+covfile[i,9] # accounting both gaussian and ng
 	  	cov[int(covfile[i,1]),int(covfile[i,0])] = covfile[i,8]+covfile[i,9]
 		# cov[int(covfile[i,0]),int(covfile[i,1])] = covfile[i,8]
 	 	# cov[int(covfile[i,1]),int(covfile[i,0])] = covfile[i,8]
@@ -78,8 +83,7 @@ for k in range(0,1):
 	  	for j in range(0,nshear*ncl):
 	  		f.write("%d %d %e\n" %(i,j, inv[i,j]))
 	f.close()
-
-'''	
+	'''	
 	# ############### invert clustering covariance #################
 	inv = LA.inv(cov[(nshear+nggl)*ncl:(nshear+nggl+nlens)*ncl,(nshear+nggl)*ncl:(nshear+nggl+nlens)*ncl])
 	a = np.sort(LA.eigvals(cov[(nshear+nggl)*ncl:(nshear+nggl+nlens)*ncl,(nshear+nggl)*ncl:(nshear+nggl+nlens)*ncl]))
@@ -152,10 +156,7 @@ for k in range(0,1):
 	  	for j in range(0,nclusterN_WL):
 	  		f.write("%d %d %e\n" %( i,j, inv[i,j]))
 	f.close()
-'''
-	
-	
-
+	'''
 	labels = (r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$')
 	ticks = np.zeros(6)
 	tickx = np.zeros(5)
@@ -182,11 +183,12 @@ for k in range(0,1):
 	im = ax.imshow(np.log10(cov[:,:]), interpolation="nearest",vmin=-25, vmax=-10)
 	plt.xticks(tickx, labels,fontsize=fs)
 	plt.yticks(tickx-0.5, labels,fontsize=fs)
-	plt.tick_params(axis = 'x',length = 0, pad = 15)
-	plt.tick_params(axis = 'y',length = 0, pad = 5)
+	#plt.tick_params(axis = 'x',length = 0, pad = 15)
+	#plt.tick_params(axis = 'y',length = 0, pad = 5)
 
 	plt.colorbar(im)
-	plt.show()
+	#plt.show()
+	plt.savefig("/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/test_imgs/"+outname[k]+".png", format="png")
 	
 	print ticks
 	
