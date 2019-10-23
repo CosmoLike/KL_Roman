@@ -14,7 +14,7 @@ chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST+LSST_SN10_op
 
 initcosmo("halofit")
 # initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)
-initbins( 20, 30.0,    4000.0,     4000.0,      21.0,           10,         10)
+initbins( 25, 30.0, 4000.0,     4000.0,      21.0,           10,         10)
 initpriors("photo_opti","shear_opti","none","none")
 initsurvey("WFIRST")
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
