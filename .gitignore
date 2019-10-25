@@ -8,3 +8,7 @@ like_fourier
 like_fourier.so.dSYM/
 
 *.so
+
+chains/
+
+*.pyc

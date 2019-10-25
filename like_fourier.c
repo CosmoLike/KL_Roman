@@ -425,88 +425,78 @@ double log_multi_like(double OMM, double S8, double NS, double W0,double WA, dou
   }
   if (set_cosmology_params(OMM,S8,NS,W0,WA,OMB,H0,MGSigma,MGmu)==0){
     printf("Cosmology out of bounds\n");
-    return -1.0e12;
+    return -1.0e15;
   }
   set_nuisance_shear_calib(M1,M2,M3,M4,M5,M6,M7,M8,M9,M10);
   if (set_nuisance_shear_photoz(SP1,SP2,SP3,SP4,SP5,SP6,SP7,SP8,SP9,SP10,SPS1)==0){
     printf("Shear photo-z sigma too small\n");
-    return -1.0e12;
+    return -1.0e15;
   }
   if (set_nuisance_clustering_photoz(CP1,CP2,CP3,CP4,CP5,CP6,CP7,CP8,CP9,CP10,CPS1)==0){
     printf("Clustering photo-z sigma too small\n");
-    return -1.0e12;
+    return -1.0e15;
   }
   if (set_nuisance_ia(A_ia,beta_ia,eta_ia,eta_ia_highz,LF_alpha,LF_P,LF_Q,LF_red_alpha,LF_red_P,LF_red_Q)==0){
     printf("IA parameters out of bounds\n");
-    return -1.0e12; 
+    return -1.0e15; 
   }
   if (set_nuisance_gbias(B1,B2,B3,B4,B5,B6,B7,B8,B9,B10)==0){
     printf("Bias out of bounds\n");
-    return -1.0e12;
+    return -1.0e15;
   }
   if (set_nuisance_cluster_Mobs(mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm, mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope)==0){
     printf("Mobs out of bounds\n");
-    return -1.0e12;
+    return -1.0e15;
   }
        
-  //printf("like %le %le %le %le %le %le %le %le\n",cosmology.Omega_m, cosmology.Omega_v,cosmology.sigma_8,cosmology.n_spec,cosmology.w0,cosmology.wa,cosmology.omb,cosmology.h0); 
+  //printf("like %le %le %le %le %le %le %le %le %le %le\n",cosmology.Omega_m, cosmology.Omega_v,cosmology.sigma_8,cosmology.n_spec,cosmology.w0,cosmology.wa,cosmology.omb,cosmology.h0,cosmology.coverH0,cosmology.rho_crit); 
   // printf("like %le %le %le %le\n",gbias.b[0][0], gbias.b[1][0], gbias.b[2][0], gbias.b[3][0]);    
   // for (i=0; i<10; i++){
   //   printf("nuisance %le %le %le\n",nuisance.shear_calibration_m[i],nuisance.bias_zphot_shear[i],nuisance.sigma_zphot_shear[i]);
   // }
 
-  log_L_prior=log_L_3x2pt_clusterN_clusterWL_GRS();
-  //log_L_prior+=log_L_3x2pt_clusterN_clusterWL_GRS_SN();
-  // if(like.wlphotoz!=0) log_L_prior+=log_L_wlphotoz();
-  // if(like.clphotoz!=0) log_L_prior+=log_L_clphotoz();
-  // if(like.shearcalib==1) log_L_prior+=log_L_shear_calib();
-  // if(strcmp(like.ext_data,"WFIRST_SN")==0) log_L_prior+=log_L_SN_WFIRST_w0wa();
-  // if(like.GRS==1) log_L_prior+=log_like_GRS(OMM, S8, NS, W0,WA, OMB, H0, MGSigma, MGmu, GRSB1, GRSB2, GRSB3, GRSB4, GRSB5, GRSB6, GRSB7, SIGMAP1, SIGMAP2, SIGMAP3, SIGMAP4, SIGMAP5, SIGMAP6, SIGMAP7,SIGMAZ, PSHOT, KSTAR);
-  // if(like.clusterMobs==1) log_L_prior+=log_L_clusterMobs_WFIRST();
- 
+
+  if(like.wlphotoz!=0) log_L_prior+=log_L_wlphotoz();
+  if(like.clphotoz!=0) log_L_prior+=log_L_clphotoz();
+  if(like.shearcalib==1) log_L_prior+=log_L_shear_calib();
   //printf("%d %d %d %d\n",like.BAO,like.wlphotoz,like.clphotoz,like.shearcalib);
   // printf("logl %le %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz(),log_L_clusterMobs());
   int start=0;  
   
-  // if(like.shear_shear==1) {
-  //   set_data_shear(like.Ncl, ell, pred, start);
-  //   start=start+like.Ncl*tomo.shear_Npowerspectra;
-  // }
-  // if(like.shear_pos==1){
-  //   set_data_ggl(like.Ncl, ell, pred, start);
-  //   start=start+like.Ncl*tomo.ggl_Npowerspectra;
-  // } 
-  // if(like.pos_pos==1){
-  //   set_data_clustering(like.Ncl,ell,pred, start);
-  //   start=start+like.Ncl*tomo.clustering_Npowerspectra;
-  // }
-  // if(like.clusterN==1){ 
-  //   set_data_cluster_N(pred,start);
-  //   start= start+tomo.cluster_Nbin*Cluster.N200_Nbin;
-  // }
-  // if(like.clusterWL==1){
-  //   set_data_cgl(ell_Cluster,pred, start);
-  // }
+  if(like.shear_shear==1) {
+    set_data_shear(like.Ncl, ell, pred, start);
+    start=start+like.Ncl*tomo.shear_Npowerspectra;
+  }
+  if(like.shear_pos==1){
+    set_data_ggl(like.Ncl, ell, pred, start);
+    start=start+like.Ncl*tomo.ggl_Npowerspectra;
+  } 
+  if(like.pos_pos==1){
+    set_data_clustering(like.Ncl,ell,pred, start);
+    start=start+like.Ncl*tomo.clustering_Npowerspectra;
+  }
+  if(like.clusterN==1){ 
+    set_data_cluster_N(pred,start);
+    start= start+tomo.cluster_Nbin*Cluster.N200_Nbin;
+  }
+  if(like.clusterWL==1){
+    set_data_cgl(ell_Cluster,pred, start);
+  }
   chisqr=0.0;
-  // for (i=0; i<like.Ndata; i++){
-  //   for (j=0; j<like.Ndata; j++){
-  //     a=(pred[i]-data_read(1,i))*invcov_read(1,i,j)*(pred[j]-data_read(1,j));
-  //     chisqr=chisqr+a;
-  //   }
+  for (i=0; i<like.Ndata; i++){
+    for (j=0; j<like.Ndata; j++){
+      a=(pred[i]-data_read(1,i))*invcov_read(1,i,j)*(pred[j]-data_read(1,j));
+      chisqr=chisqr+a;
+    }
     // if (fabs(data_read(1,i)) < 1.e-25){
     //    printf("%d %le %le %le\n",i,data_read(1,i),pred[i],invcov_read(1,i,i));
     // }
-  // }
-  // if (chisqr<0.0){
-  //   printf("error: chisqr = %le\n",chisqr);
-  //   //exit(EXIT_FAILURE);
-  // }
-  // if (like.GRS == 1){
-  //   printf("like_grs activated!\n");
-  //   log_L_GRS = log_like_GRS(cosmology.Omega_m, cosmology.sigma_8, cosmology.n_spec, cosmology.w0,cosmology.wa, cosmology.omb, cosmology.h0,-42.,-42.,-42.,-42.,-42.,-42.,-42.,-42.,-42.,-42.,-42.,-42.,-42.,-42.,-42.,-42.,-42.);
-  // }
- //printf("%le\n",chisqr);
-//  return -0.5*chisqr+log_L_prior+log_L_GRS;
+  }
+  if (chisqr<0.0){
+    printf("error: chisqr = %le\n",chisqr);
+    //exit(EXIT_FAILURE);
+  }
+
   return -0.5*chisqr+log_L_prior;
 }
 
