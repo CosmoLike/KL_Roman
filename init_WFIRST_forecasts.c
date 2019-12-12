@@ -28,6 +28,8 @@ void set_clphotoz_WFIRST_pessi();
 void set_shear_priors_WFIRST_KL();
 void set_shear_priors_WFIRST_opti();
 void set_shear_priors_WFIRST_pessi();
+void set_survey_parameters_to_WFIRST_WL();
+void set_survey_parameters_to_WFIRST_KL();
 
 void init_clusterMobs();
 void set_equal_tomo_bins();
@@ -210,6 +212,9 @@ void init_survey(char *surveyname)
   if(strcmp(surveyname,"LSST")==0) set_survey_parameters_to_LSST();
   if(strcmp(surveyname,"Euclid")==0) set_survey_parameters_to_Euclid();
   if(strcmp(surveyname,"WFIRST")==0) set_survey_parameters_to_WFIRST();
+  if(strcmp(surveyname,"WFIRST_WL")==0) set_survey_parameters_to_WFIRST_WL();
+  if(strcmp(surveyname,"WFIRST_KL")==0) set_survey_parameters_to_WFIRST_KL();
+
   printf("Survey set to %s\n",survey.name);
   printf("Survey area: %le deg^2\n",survey.area);
   printf("Source Galaxy Density: %le galaxies/arcmin^2\n",survey.n_gal); 
@@ -932,3 +937,26 @@ void init_HOD_rm(){
   redm.hod[4] = 1.0;
 }
 
+void set_survey_parameters_to_WFIRST_WL()
+{
+  survey.area   = 2000.;
+  survey.n_gal   = 51.;
+  survey.sigma_e   = 0.37;
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor=1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim=28.0;
+  sprintf(survey.Kcorrect_File,"../zdistris/k+e.dat");
+  sprintf(survey.name,"WFIRST_WL");
+}
+
+void set_survey_parameters_to_WFIRST_KL()
+{
+  survey.area   = 2000.;
+  survey.n_gal   = 8.;
+  survey.sigma_e   = 0.05;
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor=1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim=28.0;
+  sprintf(survey.Kcorrect_File,"../zdistris/k+e.dat");
+  sprintf(survey.name,"WFIRST_KL");
+}

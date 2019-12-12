@@ -8,15 +8,18 @@ from schwimmbad import MPIPool
 
 file_source_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_KL_norm")
 file_lens_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm")
+#data_file = os.path.join(dirname, "datav/WFIRST_KL_shear_shear_opti_SPS002")
 data_file = os.path.join(dirname, "datav/WFIRST_KL_shear_shear_opti")
-cov_file = os.path.join(dirname, "cov/WFIRST_Tully_Fisher_SN10_sigmae0.05_shear_shear_inv")
-chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_SN10_opti_shear_shear_sys_sigmae0.05"
+#cov_file = os.path.join(dirname, "cov/WFIRST_Tully_Fisher_SN10_sigmae0.05_shear_shear_inv")
+cov_file = os.path.join(dirname, "cov/WFIRST_KL_SN10_shear_shear_inv")
+chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_SN10_opti_shear_shear_cos_sigmae0.05"
+#chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_SN10_opti_shear_shear_cos_sigmae0.05"
 
 initcosmo("halofit")
 # initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)
 initbins( 20, 30.0,    4000.0,     4000.0,      21.0,           10,         10)
-initpriors("photo_opti","shear_opti","none","none")
-initsurvey("WFIRST")
+initpriors_KL("photo_opti","shear_opti","none","none")
+initsurvey("WFIRST_KL")
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
 initclusters()
 initia("none","none")
@@ -35,5 +38,5 @@ sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear())
 #sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
 
-sample_main(sample_params,1000,560,1,chain_file, blind=False, pool=MPIPool())
+sample_main(sample_params,1000,560,1,chain_file+"_5000", blind=False, pool=MPIPool())
 

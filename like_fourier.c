@@ -194,9 +194,10 @@ int set_cosmology_params(double OMM, double S8, double NS, double W0,double WA, 
   cosmology.h0=H0;
   cosmology.MGSigma=MGSigma;
   cosmology.MGmu=MGmu;
-
-  if (cosmology.Omega_m < 0.05 || cosmology.Omega_m > 0.6) return 0;
-  if (cosmology.omb < 0.04 || cosmology.omb > 0.055) return 0;
+  // Jiachuan Xu: increase the lower bound of Omega_m to avoid f_baryon > 1.0
+  // which would make Tsqr_EH_wiggle return 0, and cause a bunch of errors
+  if (cosmology.Omega_m <= 0.08 || cosmology.Omega_m > 0.6) return 0;
+  if (cosmology.omb < 0.02 || cosmology.omb > 0.08) return 0;
   if (cosmology.sigma_8 < 0.5 || cosmology.sigma_8 > 1.1) return 0;
   if (cosmology.n_spec < 0.84 || cosmology.n_spec > 1.06) return 0;
   if (cosmology.w0 < -2.1 || cosmology.w0 > -0.0) return 0;
@@ -648,12 +649,27 @@ int main(int argc, char** argv)
   init_cosmo_runmode("halofit");
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);// WFIRST standard WL
   init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
-  if(strcmp(argv[1],"opti")==0) init_priors("photo_opti","shear_opti","none","none");
-  if(strcmp(argv[1],"pessi")==0) init_priors("photo_pessi","shear_pessi","none","none");
-  if(strcmp(argv[2],"WFIRST_KL")==0) init_survey("WFIRST");  
-  else init_survey(argv[2]);
+  if(strcmp(argv[2],"WFIRST_KL")==0)
+    init_priors_KL("photo_opti","shear_opti","none","none");
+  else{
+    if(strcmp(argv[1],"opti")==0) init_priors("photo_opti","shear_opti","none","none");
+    if(strcmp(argv[1],"pessi")==0) init_priors("photo_pessi","shear_pessi","none","none");
+  }
+  // init survey
+  if(strcmp(argv[2],"WFIRST_KL")==0) {
+    init_survey("WFIRST");
+    survey.area   = 2000.0;
+    survey.n_gal   = 8.0;
+    survey.sigma_e   = 0.05;
+    sprintf(survey.name,"WFIRST_KL");
+  }
+  else{
+    init_survey(argv[2]);
+    survey.area   = 2000.0;
+    survey.n_gal   = 51.0;
+  }
   if(strcmp(argv[2],"WFIRST")==0) init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//standard WL
-  if(strcmp(argv[2],"WFIRST_KL")==0) init_galaxies("zdistris/zdistribution_WFIRST_KL_new","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//WFIRST KL
+  if(strcmp(argv[2],"WFIRST_KL")==0) init_galaxies("zdistris/zdistri_WFIRST_KL_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//WFIRST KL
   init_clusters();
   init_IA("none", "none");
   init_probes(argv[3]);

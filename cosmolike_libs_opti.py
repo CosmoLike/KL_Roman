@@ -232,7 +232,7 @@ class InputCosmologyParams(IterableStruct):
         c.n_s = 0.05
         c.w0 = 0.2
         c.wa = 0.2
-        c.omega_b = 0.003
+        c.omega_b = 0.01
         c.h0 = 0.1
         c.MGSigma = 0.1
         c.MGmu = 0.2     

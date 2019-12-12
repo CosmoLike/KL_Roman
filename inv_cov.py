@@ -9,14 +9,14 @@ from numpy import linalg as LA
 import numpy as np
 
 # covariance matrix
-infile =['Total_Cov_Matrix/WFIRST_Tully_Fisher_8.000000e+00_2.000000e+03_ssss_cov_Ncl20_Ntomo10_sigmae0.06_zdistrinew']
+infile =['Total_Cov_Matrix/WFIRST_KL_ssss_cov_Ncl20_Ntomo10_sigmae05']
 #infile =['/users/timeifler/Dropbox/cosmolike_store/WFIRST_forecasts/cov/cov_WFIRST_Ncl25_4clusterbins_nrichmin25_source_Dec17']
 
 # data vector
 data= ['/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/datav/WFIRST_KL_shear_shear_opti']
 
 # output file name
-outname=['WFIRST_Tully_Fisher_SN10_sigmae0.06']
+outname=['WFIRST_KL_SN10']
 
 # the numbers below can be computed knowing the data vector settings, e.g. 10 tomographic source bins results in 55 shear-shear power spectra. Or they can be read off when running the covariance code, i.e. type 'compute_covariance_fourier 100000' and look for the output mentioning number of ggl bins accepted and/or number of cluster weka lensing bins accepted. The default numbers below most likely don't correspond to your binning choices.
 nggl = 0 	# number of ggl power spectra

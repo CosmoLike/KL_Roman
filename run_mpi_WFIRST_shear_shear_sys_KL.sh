@@ -9,7 +9,7 @@
 #PBS -l place=free:shared
 #PBS -l cput=2800:00:00
 #PBS -l walltime=5:00:00
-#PBS -N WF_WL_ss_sys_o
+#PBS -N WF_KL_ss_cos
 #PBS -e /home/u17/jiachuanxu/output/
 #PBS -o /home/u17/jiachuanxu/output/
 #PBS -m bea
@@ -32,7 +32,7 @@ export PATH
 export MPI_DSM_DISTRIBUTE
 echo $PBS_JOBNAME
 date
-/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_opti.py
-#/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_KL.py
+#/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_opti.py
+/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_KL.py
 date
 #echo "Your job $PBS_JOBID $PBS_JOBNAME is finished!" | mail -s "Your job $PBS_JOBID $PBS_JOBNAME is finished!" jiachuanxu@email.arizona.edu
