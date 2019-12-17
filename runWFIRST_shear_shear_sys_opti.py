@@ -11,7 +11,7 @@ file_lens_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_LSST_clustering_fin
 data_file = os.path.join(dirname, "datav/WFIRST_shear_shear_opti")
 #cov_file = os.path.join(dirname, "cov/WFIRST+LSST_SN10_opti_shear_shear_inv")
 cov_file = os.path.join(dirname, "cov/WFIRST_WL_SN10_shear_shear_inv")
-chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_WL_SN10_opti_shear_shear_sys_opti"
+chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_WL_SN10_opti_shear_shear_cos_opti"
 
 initcosmo("halofit")
 # initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)
@@ -29,8 +29,8 @@ initprobes("shear_shear")
 initdatainv(cov_file ,data_file)
 
 #sample_params=sample_LCDM_only()
-#sample_params= sample_cosmology_only()
-sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear())
+sample_params= sample_cosmology_only()
+#sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear())
 #sample_params = sample_cosmology_2pt_nuisance(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 

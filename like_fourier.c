@@ -247,7 +247,7 @@ int set_nuisance_shear_photoz(double SP1,double SP2,double SP3,double SP4,double
   
   for (i=0;i<tomo.shear_Nbin; i++){ 
     nuisance.sigma_zphot_shear[i]=SPS1;
-    if (nuisance.sigma_zphot_shear[i]<0.001) return 0;
+    if (nuisance.sigma_zphot_shear[i]<0.0002) return 0;
   }
   return 1;
 }
@@ -268,7 +268,7 @@ int set_nuisance_clustering_photoz(double CP1,double CP2,double CP3,double CP4,d
   
   for (i=0;i<tomo.clustering_Nbin; i++){ 
     nuisance.sigma_zphot_clustering[i]=CPS1;
-    if (nuisance.sigma_zphot_clustering[i]<0.001) return 0;
+    if (nuisance.sigma_zphot_clustering[i]<0.0002) return 0;
   }
   return 1;
 }
@@ -404,7 +404,7 @@ double log_L_3x2pt_clusterN_clusterWL_GRS()
 
 double log_multi_like(double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, double PSHOT, double KSTAR)
 {
-  printf("%le %le\n",B1,B2);
+  printf("%le %le\n",SPS1,CPS1);
   int i,j,k,m=0,l;
   static double *pred;
   static double *ell;

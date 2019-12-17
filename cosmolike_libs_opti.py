@@ -351,8 +351,12 @@ class InputNuisanceParams(IterableStruct):
 
 
 class LikelihoodFunctionWrapper(object):
-    def __init__(self, varied_parameters):
+    def __init__(self, varied_parameters, KL=False):
         self.varied_parameters = varied_parameters
+        if KL:
+            self.KL_flag = True
+        else:
+            self.KL_flag = False
 
 
     def fill_varied(self, icp, inp, x):
@@ -373,7 +377,10 @@ class LikelihoodFunctionWrapper(object):
 
     def __call__(self, x):
         icp = InputCosmologyParams.fiducial()
-        inp = InputNuisanceParams.fiducial()
+        if self.KL_flag:
+            inp = InputNuisanceParams.fiducial_KL()
+        else:
+            inp = InputNuisanceParams.fiducial()
         self.fill_varied(icp, inp, x)
         #icp.print_struct()
         #inp.print_struct()
@@ -541,7 +548,7 @@ def sample_cosmology_SN_WFIRST():
 def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blind=False, pool=None, KL=False):
     print varied_parameters
 
-    likelihood = LikelihoodFunctionWrapper(varied_parameters)
+    #likelihood = LikelihoodFunctionWrapper(varied_parameters)
     starting_point = InputCosmologyParams.fiducial().convert_to_vector_filter(varied_parameters)
     #starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
 
@@ -551,9 +558,11 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
     if KL:
         starting_point += InputNuisanceParams().fiducial_KL().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma_KL().convert_to_vector_filter(varied_parameters)
+        likelihood = LikelihoodFunctionWrapper(varied_parameters,KL=True)
     else:
         starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
+        likelihood = LikelihoodFunctionWrapper(varied_parameters)
 
     p0 = emcee.utils.sample_ball(starting_point, std, size=nwalker)
 
