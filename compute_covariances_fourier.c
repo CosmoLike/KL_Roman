@@ -572,7 +572,7 @@ int main(int argc, char** argv)
   //init_cosmo_runmode("emu");
   init_cosmo_runmode("halofit");
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);
-  init_binning_fourier(20, 30.0, 4000.0, 4000.0, 21.0, 10, 10);
+  init_binning_fourier(20, 30.0, 4000.0, 4000.0, 21.0, 30, 30);
 //  init_priors("photo_opti","shear_opti","none","none");
   init_priors_KL("photo_opti","shear_opti","none","none");
   init_survey("WFIRST");
