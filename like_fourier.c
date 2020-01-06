@@ -563,7 +563,7 @@ void compute_data_vector(
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_%s",survey.name,like.probes,details);}
+  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%d",survey.name,like.probes,details,tomo.shear_Nbin);}
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
     fprintf(F,"%d %le\n",i,pred[i]);
