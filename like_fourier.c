@@ -196,8 +196,8 @@ int set_cosmology_params(double OMM, double S8, double NS, double W0,double WA, 
   cosmology.MGmu=MGmu;
   // Jiachuan Xu: increase the lower bound of Omega_m to avoid f_baryon > 1.0
   // which would make Tsqr_EH_wiggle return 0, and cause a bunch of errors
-  if (cosmology.Omega_m <= 0.08 || cosmology.Omega_m > 0.6) return 0;
-  if (cosmology.omb < 0.02 || cosmology.omb > 0.08) return 0;
+  if (cosmology.Omega_m <= 0.095 || cosmology.Omega_m > 0.585) return 0;
+  if (cosmology.omb < 0.005 || cosmology.omb > 0.095) return 0;
   if (cosmology.sigma_8 < 0.5 || cosmology.sigma_8 > 1.1) return 0;
   if (cosmology.n_spec < 0.84 || cosmology.n_spec > 1.06) return 0;
   if (cosmology.w0 < -2.1 || cosmology.w0 > -0.0) return 0;
@@ -648,8 +648,10 @@ int main(int argc, char** argv)
 /* here, do your time-consuming job */
 
   init_cosmo_runmode("halofit");
+  // init_binning_fourier: Ncl, lmin, lmax, lmax_shear , Rmin_bias, source tomo bin, lensing tomo bin
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);// WFIRST standard WL
-  init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
+  //init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
+  init_binning_fourier(20,30.0,4000.0,4000.0,21.0,30,30);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 30
   if(strcmp(argv[2],"WFIRST_KL")==0)
     init_priors_KL("photo_opti","shear_opti","none","none");
   else{
