@@ -23,7 +23,7 @@ nggl = 0 	# number of ggl power spectra
 ngcl = 0	# number of cluster-source galaxy power spectra
 nlens = 0 	# number of lens bins 
 nlenscl= 0 	# number of cluster redshift bins 
-nshear = 55 	# number of shear tomographic power spectra
+nshear = 55 	# number of shear tomographic power spectra, sigma_{i=1}^{i=tomo.Nbin}
 ncl=20		# number of ell-bins
 nclgcl=0	# number of cluster ell-bins
 nrich=0		# number of richness bins
