@@ -242,12 +242,12 @@ class InputCosmologyParams(IterableStruct):
 class InputNuisanceParams(IterableStruct):
     section_name = "nuisance_parameters"
     _fields_ = [
-        ("bias", double*10),
-        ("source_z_bias", double*10),
+        ("bias", double*30),
+        ("source_z_bias", double*30),
         ("source_z_s", double),
-        ("lens_z_bias", double*10),
+        ("lens_z_bias", double*30),
         ("lens_z_s", double),
-        ("shear_m", double*10),
+        ("shear_m", double*30),
         ("A_ia", double),
         ("beta_ia", double),
         ("eta_ia", double),
@@ -263,12 +263,13 @@ class InputNuisanceParams(IterableStruct):
     @classmethod
     def fiducial(cls):
         c = cls()
-        c.bias[:] = [1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2]
-        c.source_z_bias[:] = np.repeat(0.0, 10)
+        #c.bias[:] = [1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2]
+        c.bias[:] = [1.3+0.1*i_ for i_ in range(30)]
+        c.source_z_bias[:] = np.repeat(0.0, 30)
         c.source_z_s = 0.01
-        c.lens_z_bias[:] = np.repeat(0.0, 10)
+        c.lens_z_bias[:] = np.repeat(0.0, 30)
         c.lens_z_s = 0.01
-        c.shear_m[:] = np.repeat(0.0, 10)
+        c.shear_m[:] = np.repeat(0.0, 30)
         c.A_ia = 5.92
         c.beta_ia = 1.1
         c.eta_ia = -0.47
@@ -285,12 +286,13 @@ class InputNuisanceParams(IterableStruct):
     @classmethod
     def fiducial_KL(cls):
         c = cls()
-        c.bias[:] = [1.3,1.35,1.4,1.45,1.5,1.55,1.6,1.65,1.7,1.75]
-        c.source_z_bias[:] = np.repeat(0.0, 10)
+        #c.bias[:] = [1.3,1.35,1.4,1.45,1.5,1.55,1.6,1.65,1.7,1.75]
+        c.bias[:] = [1.3+0.05*i_ for i_ in range(30)]
+        c.source_z_bias[:] = np.repeat(0.0, 30)
         c.source_z_s = 0.002
-        c.lens_z_bias[:] = np.repeat(0.0, 10)
+        c.lens_z_bias[:] = np.repeat(0.0, 30)
         c.lens_z_s = 0.002
-        c.shear_m[:] = np.repeat(0.0, 10)
+        c.shear_m[:] = np.repeat(0.0, 30)
         c.A_ia = 5.92
         c.beta_ia = 1.1
         c.eta_ia = -0.47
@@ -308,12 +310,12 @@ class InputNuisanceParams(IterableStruct):
     @classmethod
     def fiducial_sigma(cls):
         c = cls()
-        c.bias[:] = np.repeat(0.15, 10)
-        c.source_z_bias[:] = np.repeat(0.005, 10)
+        c.bias[:] = np.repeat(0.15, 30)
+        c.source_z_bias[:] = np.repeat(0.005, 30)
         c.source_z_s = 0.002
-        c.lens_z_bias[:] = np.repeat(0.005, 10)
+        c.lens_z_bias[:] = np.repeat(0.005, 30)
         c.lens_z_s = 0.002
-        c.shear_m[:] = np.repeat(0.005, 10)
+        c.shear_m[:] = np.repeat(0.005, 30)
         c.A_ia = 0.05
         c.beta_ia = 0.01
         c.eta_ia = 0.01
@@ -330,12 +332,12 @@ class InputNuisanceParams(IterableStruct):
     @classmethod
     def fiducial_sigma_KL(cls):
         c = cls()
-        c.bias[:] = np.repeat(0.15, 10)
-        c.source_z_bias[:] = np.repeat(0.001, 10)
+        c.bias[:] = np.repeat(0.15, 30)
+        c.source_z_bias[:] = np.repeat(0.001, 30)
         c.source_z_s = 0.0004
-        c.lens_z_bias[:] = np.repeat(0.001, 10)
+        c.lens_z_bias[:] = np.repeat(0.001, 30)
         c.lens_z_s = 0.0004
-        c.shear_m[:] = np.repeat(0.005, 10)
+        c.shear_m[:] = np.repeat(0.005, 30)
         c.A_ia = 0.05
         c.beta_ia = 0.01
         c.eta_ia = 0.01
