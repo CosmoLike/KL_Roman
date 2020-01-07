@@ -58,20 +58,20 @@ double log_L_3x2pt_clusterN_clusterWL_GRS();
 // API changes by JX
 void compute_data_vector(
 	char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, 
-	double* B, 
-	double* SP, double SPS1, 
-	double* CP, double CPS1, 
-	double* M,
+	const double* B, 
+	const double* SP, double SPS1, 
+	const double* CP, double CPS1, 
+	const double* M,
 	double A_ia, double beta_ia, double eta_ia, double eta_ia_highz,
 	double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,
 	double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope);
 // API changes by JX
 double log_multi_like(
 	double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu,
-	double* B, 
-	double* SP, double SPS1, 
-	double* CP, double CPS1,
-	double* M, 
+	const double* B, 
+	const double* SP, double SPS1, 
+	const double* CP, double CPS1,
+	const double* M, 
 	double A_ia, double beta_ia, double eta_ia, double eta_ia_highz,
 	double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,
 	double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope,
@@ -103,7 +103,6 @@ double C_shear_tomo_sys(double ell, int z1, int z2)
   double C;
   // C= C_shear_tomo_nointerp(ell,z1,z2);
   // if(like.IA==1) C+=C_II_nointerp(ell,z1,z2)+C_GI_nointerp(ell,z1,z2);
-  
   if(like.IA!=1) C= C_shear_tomo_nointerp(ell,z1,z2);
   //if(like.IA==1) C= C_shear_shear_IA(ell,z1,z2);
   if(like.IA==1) C = C_shear_tomo_nointerp(ell,z1,z2)+C_II_nointerp(ell,z1,z2)+C_GI_nointerp(ell,z1,z2);
@@ -237,13 +236,13 @@ int set_cosmology_params(double OMM, double S8, double NS, double W0,double WA, 
   return 1;
 }
 
-void set_nuisance_shear_calib(double* M)
+void set_nuisance_shear_calib(const double* M)
 {
 
   for(int i=0; i<tomo.shear_Nbin; i++) nuisance.shear_calibration_m[i] = M[i];
 }
 
-int set_nuisance_shear_photoz(double* SP, double SPS1)
+int set_nuisance_shear_photoz(const double* SP, double SPS1)
 {
   if (SPS1<0.0002) return 0;
   for (int i=0;i<tomo.shear_Nbin; i++){ 
@@ -253,7 +252,7 @@ int set_nuisance_shear_photoz(double* SP, double SPS1)
   return 1;
 }
 
-int set_nuisance_clustering_photoz(double* CP, double CPS1)
+int set_nuisance_clustering_photoz(const double* CP, double CPS1)
 {
   if (CPS1<0.0002) return 0; 
   for (int i=0;i<tomo.clustering_Nbin; i++){ 
@@ -312,7 +311,7 @@ return 1;
 }
 
 
-int set_nuisance_gbias(double* B)
+int set_nuisance_gbias(const double* B)
 {
   for (int i=0; i< tomo.clustering_Nbin; i++) gbias.b[i] = B[i];
   if(like.bias==1){
@@ -385,10 +384,10 @@ double log_L_3x2pt_clusterN_clusterWL_GRS()
 
 double log_multi_like(
 	double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu,
-	double* B, 
-	double* SP, double SPS1, 
-	double* CP, double CPS1, 
-	double* M, 
+	const double* B, 
+	const double* SP, double SPS1, 
+	const double* CP, double CPS1, 
+	const double* M, 
 	double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, 
 	double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,
 	double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, 
@@ -495,10 +494,10 @@ double log_multi_like(
 
 void compute_data_vector(
 	char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, 
-	double* B, 
-	double* SP, double SPS1, 
-	double* CP, double CPS1, 
-	double* M, 
+	const double* B, 
+	const double* SP, double SPS1, 
+	const double* CP, double CPS1, 
+	const double* M, 
 	double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, 
 	double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q, 
 	double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope)
@@ -534,7 +533,6 @@ void compute_data_vector(
   set_nuisance_ia(A_ia,beta_ia,eta_ia,eta_ia_highz,LF_alpha,LF_P,LF_Q,LF_red_alpha,LF_red_P,LF_red_Q);
   set_nuisance_gbias(B);
   set_nuisance_cluster_Mobs(mass_obs_norm,mass_obs_slope,mass_z_slope,mass_obs_scatter_norm,mass_obs_scatter_mass_slope,mass_obs_scatter_z_slope);
-  
   int start=0;  
   if(like.shear_shear==1) {
     set_data_shear(like.Ncl, ell, pred, start);
@@ -642,7 +640,7 @@ int main(int argc, char** argv)
   // init_binning_fourier: Ncl, lmin, lmax, lmax_shear , Rmin_bias, source tomo bin, lensing tomo bin
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);// WFIRST standard WL
   //init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
-  init_binning_fourier(20,30.0,4000.0,4000.0,21.0,30,30);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 30
+  init_binning_fourier(20,30.0,4000.0,4000.0,21.0,__NTOMO__,__NTOMO__);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 30
   if(strcmp(argv[2],"WFIRST_KL")==0)
     init_priors_KL("photo_opti","shear_opti","none","none");
   else{
@@ -669,7 +667,7 @@ int main(int argc, char** argv)
   init_probes(argv[3]);
 
   // Construct galaxy bias, shear/clustering photoz bias and shear calibration bias
-  double gal_b[30], shear_zphot_b[30], clustering_zphot_b[30], shear_calib_b[30];
+  double gal_b[__NTOMO__], shear_zphot_b[__NTOMO__], clustering_zphot_b[__NTOMO__], shear_calib_b[__NTOMO__];
   for (int i=0; i<tomo.shear_Nbin; i++){
     shear_zphot_b[i] = 0.;
     shear_calib_b[i] = 0.;
