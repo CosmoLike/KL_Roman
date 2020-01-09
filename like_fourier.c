@@ -561,7 +561,7 @@ void compute_data_vector(
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%d",survey.name,like.probes,details,tomo.shear_Nbin);}
+  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%d_Ncl%d",survey.name,like.probes,details,tomo.shear_Nbin, like.Ncl);}
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
     fprintf(F,"%d %le\n",i,pred[i]);
@@ -640,7 +640,7 @@ int main(int argc, char** argv)
   // init_binning_fourier: Ncl, lmin, lmax, lmax_shear , Rmin_bias, source tomo bin, lensing tomo bin
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);// WFIRST standard WL
   //init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
-  init_binning_fourier(20,30.0,4000.0,4000.0,21.0,__NTOMO__,__NTOMO__);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 30
+  init_binning_fourier(10,30.0,4000.0,4000.0,21.0,__NTOMO__,__NTOMO__);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 30
   if(strcmp(argv[2],"WFIRST_KL")==0)
     init_priors_KL("photo_opti","shear_opti","none","none");
   else{

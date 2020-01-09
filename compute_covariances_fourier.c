@@ -572,18 +572,19 @@ int main(int argc, char** argv)
   //init_cosmo_runmode("emu");
   init_cosmo_runmode("halofit");
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);
-  init_binning_fourier(20, 30.0, 4000.0, 4000.0, 21.0, 30, 30);
+  init_binning_fourier(10, 30.0, 4000.0, 4000.0, 21.0, __NTOMO__, __NTOMO__);
 //  init_priors("photo_opti","shear_opti","none","none");
   init_priors_KL("photo_opti","shear_opti","none","none");
   init_survey("WFIRST");
   survey.sigma_e=0.05; // shape noise of KL
   //init_galaxies("zdistris/zdistribution_DESY1_source","zdistris/zdistribution_DESY1_lens", "none", "none", "DES_Y1");
-  init_galaxies("zdistris/zdistri_WFIRST_KL_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");
+  init_galaxies("zdistris/zdistri_WFIRST_KL_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");
 //  init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");
   init_clusters();
   init_IA("none", "GAMA");
   
-  init_probes("all_2pt_clusterN_clusterWL");
+  //init_probes("all_2pt_clusterN_clusterWL");
+  init_probes("shear_shear");
   k=1;
   //set l-bins for shear, ggl, clustering, clusterWL
   double logdl=(log(like.lmax)-log(like.lmin))/like.Ncl;
@@ -617,18 +618,18 @@ int main(int argc, char** argv)
     //sprintf(covparams.outdir,"/home/u17/timeifler/covparallel/"); 
     sprintf(covparams.outdir,"/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/covparallel/");
     printf("----------------------------------\n");  
-    sprintf(OUTFILE,"%s_%le_%le_ssss_cov_Ncl%d_Ntomo%d_Sige%e",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
+    sprintf(OUTFILE,"%s_%.2le_%.2le_ssss_cov_Ncl%02d_Ntomo%02d_Sige%.2e",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
     for (l=0;l<tomo.shear_Npowerspectra; l++){
       for (m=l;m<tomo.shear_Npowerspectra; m++){
         if(k==hit){ 
-          sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+          sprintf(filename,"%s%s_%06d",covparams.outdir,OUTFILE,k);
           if (fopen(filename, "r") != NULL){exit(1);}
           else {
             run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
           }
         }
         k=k+1;
-        //printf("%d\n",k);
+        printf("%d\n",k);
       }
     }
 

@@ -3,7 +3,7 @@
 #PBS -V
 #PBS -W group_list=cosmo
 #PBS -q standard
-#PBS -J 1-7223
+#PBS -J 1-3495
 #PBS -l select=1:ncpus=1:mem=1GB
 #PBS -l place=free:shared
 #PBS -l walltime=8:00:00
@@ -14,9 +14,9 @@
 module load gsl/2/2.1
 
 cd $PBS_O_WORKDIR
-for (( c=0; c<15; c++ ))
+for (( c=0; c<31; c++ ))
 do
-	hit=$(( $PBS_ARRAY_INDEX + $c * 7223 ))
+	hit=$(( $PBS_ARRAY_INDEX + $c * 3495 ))
 	/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./compute_covariances_fourier $hit  >& /home/u17/jiachuanxu/output/job_output_$hit.log
 done
 
