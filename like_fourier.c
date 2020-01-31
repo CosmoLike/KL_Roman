@@ -652,7 +652,7 @@ int main(int argc, char** argv)
     init_survey("WFIRST");
     survey.area   = 2000.0;
     survey.n_gal   = 8.0;
-    survey.sigma_e   = 0.05;
+    survey.sigma_e   = 0.08;
     sprintf(survey.name,"WFIRST_KL");
   }
   else{

@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <time.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #include <fftw3.h>
 
@@ -517,8 +518,9 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
   printf("N_shear = %d\n", n1);
   z3 = Z1(n2); z4 = Z2(n2);
   printf("N_shear = %d (%d, %d)\n",n2,z3,z4);
-  sprintf(filename,"%s%s_%d",PATH,OUTFILE,start);
+  sprintf(filename,"%s%s_%06d",PATH,OUTFILE,start);
   F1 =fopen(filename,"w");
+  if (F1 == NULL){printf("Error: can not open file %s\n", filename);exit(EXIT_FAILURE);}
   for (nl1 = 0; nl1 < like.Ncl; nl1 ++){
     for (nl2 = 0; nl2 < like.Ncl; nl2 ++){
       c_ng = 0.; c_g = 0.;
@@ -529,7 +531,7 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
         c_g =  cov_G_shear_shear_tomo(ell[nl1],dell[nl1],z1,z2,z3,z4);
         if (ell[nl1] > like.lmax_shear && n1!=n2){c_g = 0.;} 
       }         
-      fprintf(F1,"%d %d %e %e %d %d %d %d %e %e\n",like.Ncl*n1+nl1,like.Ncl*(n2)+nl2,ell[nl1],ell[nl2],z1,z2,z3,z4,c_g,c_ng);
+      fprintf(F1,"%d %d %e %e %d %d %d %d %e %e\n",like.Ncl*n1+nl1,like.Ncl*(n2)+nl2,ell[nl1],ell[nl2],z1,z2,z3,z4,c_g,c_ng);fflush(F1);
       //printf("%d %d %e %e %d %d %d %d %e %e\n", like.Ncl*n1+nl1,like.Ncl*(n2)+nl2, ell[nl1],ell[nl2],z1,z2,z3,z4,c_g,c_ng);
     }
   }
@@ -576,7 +578,7 @@ int main(int argc, char** argv)
 //  init_priors("photo_opti","shear_opti","none","none");
   init_priors_KL("photo_opti","shear_opti","none","none");
   init_survey("WFIRST");
-  survey.sigma_e=0.05; // shape noise of KL
+  survey.sigma_e=0.08; // shape noise of KL
   //init_galaxies("zdistris/zdistribution_DESY1_source","zdistris/zdistribution_DESY1_lens", "none", "none", "DES_Y1");
   init_galaxies("zdistris/zdistri_WFIRST_KL_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");
 //  init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");
@@ -616,20 +618,25 @@ int main(int argc, char** argv)
     printf("area: %le n_source: %le n_lens: %le\n",survey.area,survey.n_gal,survey.n_lens);
 
     //sprintf(covparams.outdir,"/home/u17/timeifler/covparallel/"); 
-    sprintf(covparams.outdir,"/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/covparallel/");
+    sprintf(covparams.outdir,"/extra/jiachuanxu/WFIRST_forecasts/covparallel/");
     printf("----------------------------------\n");  
     sprintf(OUTFILE,"%s_%.2le_%.2le_ssss_cov_Ncl%02d_Ntomo%02d_Sige%.2e",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
     for (l=0;l<tomo.shear_Npowerspectra; l++){
       for (m=l;m<tomo.shear_Npowerspectra; m++){
         if(k==hit){ 
           sprintf(filename,"%s%s_%06d",covparams.outdir,OUTFILE,k);
-          if (fopen(filename, "r") != NULL){exit(1);}
+          if (fopen(filename, "r") != NULL){fprintf(stderr,"File %s already existed, please delete or remove the file!\n", filename); exit(1);}
           else {
             run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+            struct stat st;
+            long size;
+            stat(filename, &st);
+            size = st.st_size;
+            if (size == 0){printf("Error: Failed to write file %s\n", filename);exit(EXIT_FAILURE);}
           }
         }
         k=k+1;
-        printf("%d\n",k);
+        //printf("%d\n",k);
       }
     }
 
