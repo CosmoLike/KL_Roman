@@ -517,7 +517,7 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
   printf("N_shear = %d\n", n1);
   z3 = Z1(n2); z4 = Z2(n2);
   printf("N_shear = %d (%d, %d)\n",n2,z3,z4);
-  sprintf(filename,"%s%s_%d",PATH,OUTFILE,start);
+  sprintf(filename,"%s%s_DEu95CPL_%d",PATH,OUTFILE,start);
   F1 =fopen(filename,"w");
   for (nl1 = 0; nl1 < like.Ncl; nl1 ++){
     for (nl2 = 0; nl2 < like.Ncl; nl2 ++){
@@ -618,7 +618,7 @@ int main(int argc, char** argv)
     //sprintf(covparams.outdir,"/home/u17/timeifler/covparallel/"); 
     sprintf(covparams.outdir,"/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/covparallel/");
     printf("----------------------------------\n");  
-    sprintf(OUTFILE,"%s_%le_%le_ssss_cov_Ncl%d_Ntomo%d_Sige%e",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
+    sprintf(OUTFILE,"%s_%le_%le_ssss_cov_Ncl%d_Ntomo%d_Sige%e_DEu95CPL_DEu95CPL",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
     for (l=0;l<tomo.shear_Npowerspectra; l++){
       for (m=l;m<tomo.shear_Npowerspectra; m++){
         if(k==hit){ 
