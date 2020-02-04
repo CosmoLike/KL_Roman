@@ -570,13 +570,14 @@ int main(int argc, char** argv)
 
   //RUN MODE setup
   //init_cosmo_runmode("emu");
-  init_cosmo_runmode("halofit");
+  //init_cosmo_runmode("halofit");
+  init_cosmo_runmode_DEu95CPL("halofit");
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);
-  init_binning_fourier(20, 30.0, 4000.0, 4000.0, 21.0, 10, 10);
+  init_binning_fourier(10, 30.0, 4000.0, 4000.0, 21.0, 10, 10);
 //  init_priors("photo_opti","shear_opti","none","none");
   init_priors_KL("photo_opti","shear_opti","none","none");
   init_survey("WFIRST");
-  survey.sigma_e=0.05; // shape noise of KL
+  survey.sigma_e=0.08; // shape noise of KL
   //init_galaxies("zdistris/zdistribution_DESY1_source","zdistris/zdistribution_DESY1_lens", "none", "none", "DES_Y1");
   init_galaxies("zdistris/zdistri_WFIRST_KL_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");
 //  init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");

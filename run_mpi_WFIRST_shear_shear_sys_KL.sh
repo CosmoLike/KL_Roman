@@ -11,7 +11,7 @@
 ### PBS -l walltime=5:00:00
 #PBS -l cput=2800:00:00
 #PBS -l walltime=5:00:00
-#PBS -N WF_KL_ss_cos
+#PBS -N W1_KL_ss_cos
 #PBS -e /home/u17/jiachuanxu/output/
 #PBS -o /home/u17/jiachuanxu/output/
 #PBS -m bea
