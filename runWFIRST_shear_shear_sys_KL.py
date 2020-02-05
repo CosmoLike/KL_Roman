@@ -15,9 +15,9 @@ cov_file = os.path.join(dirname, "cov/WFIRST_KL_Ncl10_Ntomo10_sigmae08_shear_she
 #chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_SN10_opti_shear_shear_sys_sigmae0.05"
 chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_Ncl10_Ntomo10_shear_shear_cos_sigmae0.08"
 
-initcosmo("halofit")
+initcosmoDEu95CPL("halofit")
 # initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)
-initbins( 10, 30.0,    4000.0,     4000.0,      21.0,           10,         10)
+initbins( 10, 30.0,    4000.0,     4000.0,      21.0,           30,         30)
 initpriors_KL("photo_opti","shear_opti","none","none")
 initsurvey("WFIRST_KL")
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")

@@ -6,6 +6,8 @@ void init_priors_KL(char *Prior1, char *Prior2, char *Prior3, char *Prior4);
 void init_survey(char *surveyname);
 void init_galaxies(char *SOURCE_ZFILE, char *LENS_ZFILE, char *lensphotoz, char *sourcephotoz, char *galsample);
 void init_cosmo_runmode(char *runmode);
+void init_cosmo_runmode_DEu95CPL(char *runmode);
+void init_cosmo_runmode_DEl95CPL(char *runmode);
 void init_binning_fourier(int Ncl, double lmin, double lmax, double lmax_shear, double Rmin_bias, int Ntomo_source, int Ntomo_lens);
 void init_probes(char *probes);
 void init_clusters();
@@ -110,6 +112,32 @@ void init_cosmo_runmode(char *runmode)
   printf("Initializing Standard Runmode/Cosmology\n");
   printf("-------------------------------------------\n");
   set_cosmological_parameters_to_Planck_15_TT_TE_EE_lowP();
+  set_prior_cosmology(); // if external data sets are included, this routine centers the external data set on top of the fiducial model for the simulated analysis.
+
+  sprintf(pdeltaparams.runmode,"%s",runmode);
+  printf("pdeltaparams.runmode =%s\n",pdeltaparams.runmode);
+}
+
+void init_cosmo_runmode_DEu95CPL(char *runmode)
+{
+  printf("\n");
+  printf("-------------------------------------------\n");
+  printf("Initializing Standard Runmode/Cosmology\n");
+  printf("-------------------------------------------\n");
+  set_cosmological_parameters_to_Planck_15_TT_TE_EE_lowP_DEu95CPL();
+  set_prior_cosmology(); // if external data sets are included, this routine centers the external data set on top of the fiducial model for the simulated analysis.
+
+  sprintf(pdeltaparams.runmode,"%s",runmode);
+  printf("pdeltaparams.runmode =%s\n",pdeltaparams.runmode);
+}
+
+void init_cosmo_runmode_DEl95CPL(char *runmode)
+{
+  printf("\n");
+  printf("-------------------------------------------\n");
+  printf("Initializing Standard Runmode/Cosmology\n");
+  printf("-------------------------------------------\n");
+  set_cosmological_parameters_to_Planck_15_TT_TE_EE_lowP_DEl95CPL();
   set_prior_cosmology(); // if external data sets are included, this routine centers the external data set on top of the fiducial model for the simulated analysis.
 
   sprintf(pdeltaparams.runmode,"%s",runmode);

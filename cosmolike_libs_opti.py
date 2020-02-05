@@ -18,6 +18,12 @@ Double10 = double*10
 initcosmo=lib.init_cosmo_runmode
 initcosmo.argtypes=[ctypes.c_char_p]
 
+initcosmoDEu95CPL=lib.init_cosmo_runmode_DEu95CPL
+initcosmoDEu95CPL.argtypes=[ctypes.c_char_p]
+
+initcosmoDEl95CPL=lib.init_cosmo_runmode_DEl95CPL
+initcosmoDEl95CPL.argtypes=[ctypes.c_char_p]
+
 initbins=lib.init_binning_fourier
 initbins.argtypes=[ctypes.c_int, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int]
 
@@ -204,6 +210,34 @@ class InputCosmologyParams(IterableStruct):
         c.n_s = 0.9645
         c.w0 = -1.0
         c.wa = 0.0
+        c.omega_b = 0.0491685
+        c.h0 = 0.6727
+        c.MGSigma = 0.0
+        c.MGmu = 0.0
+        return c
+    
+    @classmethod
+    def DEu95CPL(cls):
+        c = cls()
+        c.omega_m = 0.3156
+        c.sigma_8 = 0.831
+        c.n_s = 0.9645
+        c.w0 = -1.249
+        c.wa = 0.59
+        c.omega_b = 0.0491685
+        c.h0 = 0.6727
+        c.MGSigma = 0.0
+        c.MGmu = 0.0
+        return c
+
+    @classmethod
+    def DEl95CPL(cls):
+        c = cls()
+        c.omega_m = 0.3156
+        c.sigma_8 = 0.831
+        c.n_s = 0.9645
+        c.w0 = -0.289
+        c.wa = -2.21
         c.omega_b = 0.0491685
         c.h0 = 0.6727
         c.MGSigma = 0.0
@@ -551,7 +585,7 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
     print varied_parameters
 
     #likelihood = LikelihoodFunctionWrapper(varied_parameters)
-    starting_point = InputCosmologyParams.fiducial().convert_to_vector_filter(varied_parameters)
+    starting_point = InputCosmologyParams.DEu95CPL().convert_to_vector_filter(varied_parameters)
     #starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
 
     std = InputCosmologyParams.fiducial_sigma().convert_to_vector_filter(varied_parameters)
