@@ -564,7 +564,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_%s_DEu95CPL",survey.name,like.probes,details);}
+  else {sprintf(filename,"datav/%s_%s_%s_DEl95CPL",survey.name,like.probes,details);}
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
     fprintf(F,"%d %le\n",i,pred[i]);
@@ -647,7 +647,7 @@ int main(int argc, char** argv)
   int i;
 /* here, do your time-consuming job */
 
-  init_cosmo_runmode_DEu95CPL("halofit");
+  init_cosmo_runmode_DEl95CPL("halofit");
   // init_binning_fourier: Ncl, lmin, lmax, lmax_shear , Rmin_bias, source tomo bin, lensing tomo bin
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);// WFIRST standard WL
   //init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
@@ -678,7 +678,7 @@ int main(int argc, char** argv)
   init_probes(argv[3]);
   
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21
-  if(strcmp(argv[2],"WFIRST_KL")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.249,0.59,0.0491685,0.6727,0.,0.,1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0); // WFIRST Grism: R=461*lambda[um]
+  if(strcmp(argv[2],"WFIRST_KL")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-0.289,-2.21,0.0491685,0.6727,0.,0.,1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0); // WFIRST Grism: R=461*lambda[um]
   else{
     if(strcmp(argv[1],"opti")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0);
     if(strcmp(argv[1],"pessi")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0);

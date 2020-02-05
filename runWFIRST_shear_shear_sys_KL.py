@@ -9,13 +9,13 @@ from schwimmbad import MPIPool
 file_source_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_KL_norm")
 file_lens_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm")
 #data_file = os.path.join(dirname, "datav/WFIRST_KL_shear_shear_opti_SPS002")
-data_file = os.path.join(dirname, "datav/WFIRST_KL_shear_shear_opti_Ntomo10_Ncl10_sigmae08")
+data_file = os.path.join(dirname, "datav/WFIRST_KL_shear_shear_opti_DEl95CPL")
 #cov_file = os.path.join(dirname, "cov/WFIRST_Tully_Fisher_SN10_sigmae0.05_shear_shear_inv")
-cov_file = os.path.join(dirname, "cov/WFIRST_KL_Ncl10_Ntomo10_sigmae08_shear_shear_inv")
+cov_file = os.path.join(dirname, "cov/WFIRST_KL_DEl95CPL_shear_shear_inv")
 #chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_SN10_opti_shear_shear_sys_sigmae0.05"
-chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_shear_shear_cos_sigmae08_Ncl10_Ntomo10_DEu95CPL"
+chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_shear_shear_cos_sigmae08_Ncl10_Ntomo10_DEl95CPL"
 
-initcosmo_DEu95CPL("halofit")
+initcosmo_DEl95CPL("halofit")
 # initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)
 initbins( 10, 30.0,    4000.0,     4000.0,      21.0,           10,         10)
 initpriors_KL("photo_opti","shear_opti","none","none")
