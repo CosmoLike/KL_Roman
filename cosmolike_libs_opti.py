@@ -21,6 +21,9 @@ initcosmo.argtypes=[ctypes.c_char_p]
 initcosmo_DEu95CPL=lib.init_cosmo_runmode_DEu95CPL
 initcosmo_DEu95CPL.argtypes=[ctypes.c_char_p]
 
+initcosmo_DEl95CPL=lib.init_cosmo_runmode_DEl95CPL
+initcosmo_DEl95CPL.argtypes=[ctypes.c_char_p]
+
 initbins=lib.init_binning_fourier
 initbins.argtypes=[ctypes.c_int, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_int, ctypes.c_int]
 
@@ -580,7 +583,7 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
     print varied_parameters
 
     #likelihood = LikelihoodFunctionWrapper(varied_parameters)
-    starting_point = InputCosmologyParams.DEu95CPL().convert_to_vector_filter(varied_parameters)
+    starting_point = InputCosmologyParams.DEl95CPL().convert_to_vector_filter(varied_parameters)
     #starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
 
     std = InputCosmologyParams.fiducial_sigma().convert_to_vector_filter(varied_parameters)
