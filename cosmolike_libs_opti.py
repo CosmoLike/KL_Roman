@@ -585,7 +585,7 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
     print varied_parameters
 
     #likelihood = LikelihoodFunctionWrapper(varied_parameters)
-    starting_point = InputCosmologyParams.DEu95CPL().convert_to_vector_filter(varied_parameters)
+    starting_point = InputCosmologyParams.DEl95CPL().convert_to_vector_filter(varied_parameters)
     #starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
 
     std = InputCosmologyParams.fiducial_sigma().convert_to_vector_filter(varied_parameters)

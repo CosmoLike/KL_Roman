@@ -9,9 +9,9 @@
 #PBS -l place=free:shared
 ### PBS -l cput=2800:00:00
 ### PBS -l walltime=5:00:00
-#PBS -l cput=2800:00:00
-#PBS -l walltime=5:00:00
-#PBS -N W1_KL_ss_cos
+#PBS -l cput=5600:00:00
+#PBS -l walltime=10:00:00
+#PBS -N W1_KL_ss_cos_30
 #PBS -e /home/u17/jiachuanxu/output/
 #PBS -o /home/u17/jiachuanxu/output/
 #PBS -m bea

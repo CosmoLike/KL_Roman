@@ -9,21 +9,21 @@ from numpy import linalg as LA
 import numpy as np
 
 # covariance matrix
-infile =['Total_Cov_Matrix/WFIRST_KL_ssss_cov_Ncl10_Ntomo10_sigmae08']
+infile =['Total_Cov_Matrix/WFIRST_KL_ssss_cov_Ncl10_Ntomo30_sigmae08_DEl95CPL']
 #infile =['/users/timeifler/Dropbox/cosmolike_store/WFIRST_forecasts/cov/cov_WFIRST_Ncl25_4clusterbins_nrichmin25_source_Dec17']
 
 # data vector
-data= ['/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/datav/WFIRST_KL_shear_shear_opti_Ntomo10_Ncl10_sigmae08']
+data= ['/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/datav/WFIRST_KL_shear_shear_opti_Ntomo30_Ncl10_DEl95CPL']
 
 # output file name
-outname=['WFIRST_KL_Ncl10_Ntomo10_sigmae08']
+outname=['WFIRST_KL_Ncl10_Ntomo30_sigmae08_DEl95CPL']
 
 # the numbers below can be computed knowing the data vector settings, e.g. 10 tomographic source bins results in 55 shear-shear power spectra. Or they can be read off when running the covariance code, i.e. type 'compute_covariance_fourier 100000' and look for the output mentioning number of ggl bins accepted and/or number of cluster weka lensing bins accepted. The default numbers below most likely don't correspond to your binning choices.
 nggl = 0 	# number of ggl power spectra
 ngcl = 0	# number of cluster-source galaxy power spectra
 nlens = 0 	# number of lens bins 
 nlenscl= 0 	# number of cluster redshift bins 
-nshear = 55 	# number of shear tomographic power spectra, sigma_{i=1}^{i=tomo.Nbin}
+nshear = 465 	# number of shear tomographic power spectra, sigma_{i=1}^{i=tomo.Nbin}
 ncl=10		# number of ell-bins
 nclgcl=0	# number of cluster ell-bins
 nrich=0		# number of richness bins

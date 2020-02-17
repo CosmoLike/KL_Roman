@@ -572,7 +572,7 @@ int main(int argc, char** argv)
 
   //RUN MODE setup
   //init_cosmo_runmode("emu");
-  init_cosmo_runmode_DEu95CPL("halofit");
+  init_cosmo_runmode_DEl95CPL("halofit");
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);
   init_binning_fourier(10, 30.0, 4000.0, 4000.0, 21.0, __NTOMO__, __NTOMO__);
 //  init_priors("photo_opti","shear_opti","none","none");
@@ -620,7 +620,7 @@ int main(int argc, char** argv)
     //sprintf(covparams.outdir,"/home/u17/timeifler/covparallel/"); 
     sprintf(covparams.outdir,"/extra/jiachuanxu/WFIRST_forecasts/covparallel/");
     printf("----------------------------------\n");  
-    sprintf(OUTFILE,"%s_%.2le_%.2le_ssss_cov_Ncl%02d_Ntomo%02d_Sige%.2e_DEu95CPL",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
+    sprintf(OUTFILE,"%s_%.2le_%.2le_ssss_cov_Ncl%02d_Ntomo%02d_Sige%.2e_DEl95CPL",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
     for (l=0;l<tomo.shear_Npowerspectra; l++){
       for (m=l;m<tomo.shear_Npowerspectra; m++){
         if(k==hit){ 
