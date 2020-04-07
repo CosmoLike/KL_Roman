@@ -215,12 +215,16 @@ int set_cosmology_params(double OMM, double S8, double NS, double W0,double WA, 
   cosmology.MGmu=MGmu;
   // Jiachuan Xu: increase the lower bound of Omega_m to avoid f_baryon > 1.0
   // which would make Tsqr_EH_wiggle return 0, and cause a bunch of errors
+  // And modify the limit of w0 wa, according to the upper / lower 2-sigma
+  // of Plank2018 TT_TE_EE_lowE_lensing+BAO/RSD+WL result (fig 30, page 43, Plank2018 VI)
+  // u95: (w0, wa) = (-1.249, 0.59); Delta = (-0.249, +0.59)
+  // l95: (wo, wa) = (-0.289,-2.21); Delta = (+0.711, -2.21)
   if (cosmology.Omega_m <= 0.095 || cosmology.Omega_m > 0.585) return 0;
   if (cosmology.omb < 0.005 || cosmology.omb > 0.095) return 0;
   if (cosmology.sigma_8 < 0.5 || cosmology.sigma_8 > 1.1) return 0;
   if (cosmology.n_spec < 0.84 || cosmology.n_spec > 1.06) return 0;
-  if (cosmology.w0 < -2.1 || cosmology.w0 > -0.0) return 0;
-  if (cosmology.wa < -2.6 || cosmology.wa > 2.6) return 0;
+  if (cosmology.w0 < (-2.1 + 0.711)|| cosmology.w0 > (-0.0 + 0.711) ) return 0;	// fiducial: -2.1 ~ -1 ~ 0.0
+  if (cosmology.wa < (-2.6 - 2.21) || cosmology.wa > (2.6 -2.21)    ) return 0;	// fiducial: -2.6 ~ 0. ~ 2.6
   if (cosmology.h0 < 0.4 || cosmology.h0 > 0.9) return 0;
   //CH BEGINS 
   //CH: to use for running planck15_BA0_w0_wa prior alone) 
