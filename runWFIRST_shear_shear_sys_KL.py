@@ -13,7 +13,7 @@ data_file = os.path.join(dirname, "datav/WFIRST_KL_shear_shear_opti_Ntomo30_Ncl1
 #cov_file = os.path.join(dirname, "cov/WFIRST_Tully_Fisher_SN10_sigmae0.05_shear_shear_inv")
 cov_file = os.path.join(dirname, "cov/WFIRST_KL_Ncl10_Ntomo30_sigmae08_DEl95CPL_shear_shear_inv")
 #chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_SN10_opti_shear_shear_sys_sigmae0.05"
-chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_Ncl10_Ntomo10_DEl95CPL_shear_shear_cos_sigmae0.08"
+chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_Ncl10_Ntomo30_DEl95CPL_shear_shear_cos_sigmae0.08"
 
 initcosmoDEl95CPL("halofit")
 # initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)
