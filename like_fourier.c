@@ -200,8 +200,8 @@ int set_cosmology_params(double OMM, double S8, double NS, double W0,double WA, 
   if (cosmology.omb < 0.005 || cosmology.omb > 0.095) return 0;
   if (cosmology.sigma_8 < 0.5 || cosmology.sigma_8 > 1.1) return 0;
   if (cosmology.n_spec < 0.84 || cosmology.n_spec > 1.06) return 0;
-  if (cosmology.w0 < -2.1+0.711 || cosmology.w0 > -0.0+0.711) return 0; // -2.1~-1~-0.0
-  if (cosmology.wa < -3.0-2.21 || cosmology.wa > 2.6-2.21) return 0; // -2.6~0~2.6
+  if (cosmology.w0 < (-2.1+0.711) || cosmology.w0 > (-0.0+0.711)) return 0; // -2.1~-1~-0.0
+  if (cosmology.wa < (-3.0-2.21) || cosmology.wa > (2.6-2.21)) return 0; // -2.6~0~2.6
   if (cosmology.h0 < 0.4 || cosmology.h0 > 0.9) return 0;
   //CH BEGINS 
   //CH: to use for running planck15_BA0_w0_wa prior alone) 
