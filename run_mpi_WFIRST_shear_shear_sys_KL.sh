@@ -35,6 +35,7 @@ export MPI_DSM_DISTRIBUTE
 echo $PBS_JOBNAME
 date
 #/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_opti.py
+make ocelote
 /usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_KL.py >& /home/u17/jiachuanxu/output/MCMC_output_KL.dat
 date
 #echo "Your job $PBS_JOBID $PBS_JOBNAME is finished!" | mail -s "Your job $PBS_JOBID $PBS_JOBNAME is finished!" jiachuanxu@email.arizona.edu
