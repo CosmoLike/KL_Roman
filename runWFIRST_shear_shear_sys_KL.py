@@ -13,11 +13,11 @@ data_file = os.path.join(dirname, "datav/WFIRST_KL_shear_shear_opti_grism_zdist"
 #cov_file = os.path.join(dirname, "cov/WFIRST_Tully_Fisher_SN10_sigmae0.05_shear_shear_inv")
 cov_file = os.path.join(dirname, "cov/WFIRST_KL_grism_zdist_shear_shear_inv")
 #chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_SN10_opti_shear_shear_sys_sigmae0.05"
-chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_shear_shear_cos_sigmae08_Ncl10_Ntomo10_grism_zdist"
+chain_file = "/xdisk/timeifler/mig2020//extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_shear_shear_cos_sigmae08_Ncl10_Ntomo10_grism_zdist"
 
 initcosmo("halofit")
 # initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)
-initbins( 10, 30.0,    4000.0,     4000.0,      21.0,           10,         10)
+initbins( 20, 30.0,    4000.0,     4000.0,      21.0,           10,         10)
 initpriors_KL("photo_opti","shear_opti","none","none")
 initsurvey("WFIRST_KL")
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
