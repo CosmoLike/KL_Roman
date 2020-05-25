@@ -408,7 +408,7 @@ double log_L_3x2pt_clusterN_clusterWL_GRS()
 
 double log_multi_like(double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, double PSHOT, double KSTAR)
 {
-  printf("%le %le\n",SPS1,CPS1);
+  //printf("%le %le\n",SPS1,CPS1);
   int i,j,k,m=0,l;
   static double *pred;
   static double *ell;
@@ -568,7 +568,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_%s_grism_Ntomo%2d_Ncl%2d",survey.name,like.probes,details,tomo.shear_Nbin,like.Ncl);}
+  else {sprintf(filename,"datav/%s_%s_%s_grism_Ntomo%2d_Ncl%2d_sigmae%.2f",survey.name,like.probes,details,tomo.shear_Nbin,like.Ncl,survey.sigma_e);}
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
     fprintf(F,"%d %le\n",i,pred[i]);
@@ -667,7 +667,7 @@ int main(int argc, char** argv)
     init_survey("WFIRST");
     survey.area   = 2000.0;
     survey.n_gal   = 8.0;
-    survey.sigma_e   = 0.08;
+    survey.sigma_e   = 0.05;
     sprintf(survey.name,"WFIRST_KL");
   }
   else{
@@ -682,7 +682,7 @@ int main(int argc, char** argv)
   init_probes(argv[3]);
   
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21
-  if(strcmp(argv[2],"WFIRST_KL")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,0.,-1.,0.0491685,0.6727,0.,0.,1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0); // WFIRST Grism: R=461*lambda[um]
+  if(strcmp(argv[2],"WFIRST_KL")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0); // WFIRST Grism: R=461*lambda[um]
   else{
     if(strcmp(argv[1],"opti")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0);
     if(strcmp(argv[1],"pessi")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0);

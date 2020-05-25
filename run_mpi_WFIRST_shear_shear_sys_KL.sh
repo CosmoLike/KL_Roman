@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -S /bin/bash
 #PBS -W group_list=cosmo
-#PBS -q high_pri
+#PBS -q standard
 ### Set the number of nodes,cores and memory that will be used for this job
 ### select=3 is the node count, ncpus=28 are the cores in each node,
 ### mem=168gb is memory per node, pcmem=6gb is the memory per core - optional
@@ -11,7 +11,7 @@
 ### PBS -l walltime=5:00:00
 #PBS -l cput=2800:00:00
 #PBS -l walltime=5:00:00
-#PBS -N W1_KL_ss_cos
+#PBS -N W1_KL_ss_cos_Ncl10_Ntomo10_sigmae0.05_KLnorm
 #PBS -e /home/u17/jiachuanxu/output/
 #PBS -o /home/u17/jiachuanxu/output/
 #PBS -m bea

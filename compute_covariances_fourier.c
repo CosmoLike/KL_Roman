@@ -577,7 +577,7 @@ int main(int argc, char** argv)
 //  init_priors("photo_opti","shear_opti","none","none");
   init_priors_KL("photo_opti","shear_opti","none","none");
   init_survey("WFIRST");
-  survey.sigma_e=0.08; // shape noise of KL
+  survey.sigma_e=0.05; // shape noise of KL
   //init_galaxies("zdistris/zdistribution_DESY1_source","zdistris/zdistribution_DESY1_lens", "none", "none", "DES_Y1");
   init_galaxies("zdistris/zdistri_WFIRST_grism_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");
 //  init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");
