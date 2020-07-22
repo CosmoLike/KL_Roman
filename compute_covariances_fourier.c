@@ -580,10 +580,10 @@ int main(int argc, char** argv)
   init_survey("WFIRST");
   survey.sigma_e=0.08; // shape noise of KL
   //init_galaxies("zdistris/zdistribution_DESY1_source","zdistris/zdistribution_DESY1_lens", "none", "none", "DES_Y1");
-  init_galaxies("zdistris/zdistri_WFIRST_KL_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");
+  init_galaxies("zdistris/zdistri_WFIRST_grism_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");
 //  init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");
   init_clusters();
-  init_IA("none", "GAMA");
+  init_IA("none", "none");
   
   //init_probes("all_2pt_clusterN_clusterWL");
   init_probes("shear_shear");
@@ -618,9 +618,9 @@ int main(int argc, char** argv)
     printf("area: %le n_source: %le n_lens: %le\n",survey.area,survey.n_gal,survey.n_lens);
 
     //sprintf(covparams.outdir,"/home/u17/timeifler/covparallel/"); 
-    sprintf(covparams.outdir,"/extra/jiachuanxu/WFIRST_forecasts/covparallel/");
+    sprintf(covparams.outdir,"/xdisk/timeifler/mig2020/extra/jiachuanxu/WFIRST_forecasts/covparallel/");
     printf("----------------------------------\n");  
-    sprintf(OUTFILE,"%s_%.2le_%.2le_ssss_cov_Ncl%02d_Ntomo%02d_Sige%.2e_DEl95CPL",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
+    sprintf(OUTFILE,"%s_Ngal%.2f_Area%.2f_ssss_cov_Ncl%02d_Ntomo%02d_Sige%.2e_zdistgrism_DEl95CPL",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
     for (l=0;l<tomo.shear_Npowerspectra; l++){
       for (m=l;m<tomo.shear_Npowerspectra; m++){
         if(k==hit){ 

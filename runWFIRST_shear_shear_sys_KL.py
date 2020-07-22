@@ -6,14 +6,14 @@ sys.path.append('/home/u17/jiachuanxu/CosmoLike/KL_WFIRST')
 from cosmolike_libs_opti import * 
 from schwimmbad import MPIPool
 
-file_source_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_KL_norm")
+file_source_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_grism_norm")
 file_lens_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm")
 #data_file = os.path.join(dirname, "datav/WFIRST_KL_shear_shear_opti_SPS002")
-data_file = os.path.join(dirname, "datav/WFIRST_KL_shear_shear_opti_Ntomo30_Ncl10_DEl95CPL")
+data_file = os.path.join(dirname, "datav/WFIRST_KL_shear_shear_opti_Ntomo30_Ncl10_zdistgrism_DEl95CPL")
 #cov_file = os.path.join(dirname, "cov/WFIRST_Tully_Fisher_SN10_sigmae0.05_shear_shear_inv")
-cov_file = os.path.join(dirname, "cov/WFIRST_KL_Ncl10_Ntomo30_sigmae08_DEl95CPL_shear_shear_inv")
+cov_file = os.path.join(dirname, "cov/WFIRST_KL_Ntomo30_Ncl10_sigmae0.08_grismzdist_DEl95CPL_shear_shear_inv")
 #chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_SN10_opti_shear_shear_sys_sigmae0.05"
-chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_Ncl10_Ntomo30_DEl95CPL_shear_shear_cos_sigmae0.08"
+chain_file = "/xdisk/timeifler/mig2020/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_KL_shear_shear_cos_Ntomo30_Ncl10_sigmae0.08_grismzdist_DEl95CPL"
 
 initcosmoDEl95CPL("halofit")
 # initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)

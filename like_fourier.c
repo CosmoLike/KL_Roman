@@ -224,7 +224,7 @@ int set_cosmology_params(double OMM, double S8, double NS, double W0,double WA, 
   if (cosmology.sigma_8 < 0.5 || cosmology.sigma_8 > 1.1) return 0;
   if (cosmology.n_spec < 0.84 || cosmology.n_spec > 1.06) return 0;
   if (cosmology.w0 < (-2.1 + 0.711)|| cosmology.w0 > (-0.0 + 0.711) ) return 0;	// fiducial: -2.1 ~ -1 ~ 0.0
-  if (cosmology.wa < (-2.6 - 2.21) || cosmology.wa > (2.6 -2.21)    ) return 0;	// fiducial: -2.6 ~ 0. ~ 2.6
+  if (cosmology.wa < (-2.6 - 2.21) || cosmology.wa > (2.6 - 2.21)    ) return 0;	// fiducial: -2.6 ~ 0. ~ 2.6
   if (cosmology.h0 < 0.4 || cosmology.h0 > 0.9) return 0;
   //CH BEGINS 
   //CH: to use for running planck15_BA0_w0_wa prior alone) 
@@ -565,7 +565,7 @@ void compute_data_vector(
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%d_Ncl%d_DEl95CPL",survey.name,like.probes,details,tomo.shear_Nbin, like.Ncl);}
+  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%d_Ncl%d_zdistgrism_DEl95CPL",survey.name,like.probes,details,tomo.shear_Nbin, like.Ncl);}
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
     fprintf(F,"%d %le\n",i,pred[i]);
@@ -665,7 +665,7 @@ int main(int argc, char** argv)
     survey.n_gal   = 51.0;
   }
   if(strcmp(argv[2],"WFIRST")==0) init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//standard WL
-  if(strcmp(argv[2],"WFIRST_KL")==0) init_galaxies("zdistris/zdistri_WFIRST_KL_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//WFIRST KL
+  if(strcmp(argv[2],"WFIRST_KL")==0) init_galaxies("zdistris/zdistri_WFIRST_grism_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//WFIRST KL
   init_clusters();
   init_IA("none", "none");
   init_probes(argv[3]);
@@ -682,7 +682,14 @@ int main(int argc, char** argv)
   }
   // Pass params array above to compute_data_vector
   // DEu95CPL w0=-1.249 wa=0.59 DEl95CPL w0=-0.289 wa=-2.21
-  if(strcmp(argv[2],"WFIRST_KL")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-0.289,-2.21,0.0491685,0.6727,0.,0.,gal_b, shear_zphot_b, 0.002,clustering_zphot_b, 0.002,shear_calib_b,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0); // WFIRST Grism: R=461*lambda[um]
+  if(strcmp(argv[2],"WFIRST_KL")==0){
+    compute_data_vector(argv[1],0.3156,0.831,0.9645,-0.289,-2.21,0.0491685,0.6727,0.,0.,
+      gal_b,
+      shear_zphot_b, 0.002,
+      clustering_zphot_b, 0.002,
+      shear_calib_b,
+      5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0); // WFIRST Grism: R=461*lambda[um]
+  }
   else{
     if(strcmp(argv[1],"opti")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,gal_b, shear_zphot_b, 0.01, clustering_zphot_b, 0.01,shear_calib_b, 5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0);
     if(strcmp(argv[1],"pessi")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,gal_b, shear_zphot_b, 0.05, clustering_zphot_b, 0.05, shear_calib_b, 5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0);
