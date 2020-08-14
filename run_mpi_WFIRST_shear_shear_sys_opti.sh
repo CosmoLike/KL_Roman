@@ -7,9 +7,9 @@
 ### mem=168gb is memory per node, pcmem=6gb is the memory per core - optional
 #PBS -l select=20:ncpus=28:mem=168GB
 #PBS -l place=free:shared
-#PBS -l cput=2800:00:00
-#PBS -l walltime=5:00:00
-#PBS -N WF_WL_ss_cos_o
+#PBS -l cput=4116:00:00
+#PBS -l walltime=7:00:00
+#PBS -N W1WLIABARY
 #PBS -e /home/u17/jiachuanxu/output/
 #PBS -o /home/u17/jiachuanxu/output/
 #PBS -m bea

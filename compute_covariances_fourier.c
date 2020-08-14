@@ -544,9 +544,9 @@ int main(int argc, char** argv)
   
   int N_scenarios=1;
 // when using standard WFIRST WL
-//  double scenario_table[1][3]={ {2000.0, 51.0, 66.0} };
+  double scenario_table[1][3]={ {2000.0, 51.0, 66.0} };
 // when using WFIRST KL
-  double scenario_table[1][3]={ {2000.0, 8.0, 66.0} };
+//  double scenario_table[1][3]={ {2000.0, 8.0, 66.0} };
   //static double scenario_table[15][2]={{1500.0,45.0},{2000.0,45.0},{2500.0,45.0},{3000.0,45.0},{3500.0,45.0},{4000.0,45.0},{10000.0,45.0},{18000.0,45.0},{2000.0,33.0},{2000.0,36.0},{2000.0,39.0},{2000.0,42.0},{2000.0,48.0},{2000.0,51.0},{2000.0,54.0}};
   // when using SNR=5 clustering sample
   //double scenario_table[1][3]={{2000.0,51.0,107.0}};
@@ -571,18 +571,18 @@ int main(int argc, char** argv)
   //RUN MODE setup
   //init_cosmo_runmode("emu");
   //init_cosmo_runmode("halofit");
-  init_cosmo_runmode_DEu95CPL("halofit");
+  init_cosmo_runmode("halofit");
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);
-  init_binning_fourier(10, 30.0, 4000.0, 4000.0, 21.0, 10, 10);
+  init_binning_fourier(20, 30.0, 4000.0, 4000.0, 21.0, 10, 10);
 //  init_priors("photo_opti","shear_opti","none","none");
-  init_priors_KL("photo_opti","shear_opti","none","none");
+  init_priors("photo_opti","shear_opti","none","none");
   init_survey("WFIRST");
-  survey.sigma_e=0.08; // shape noise of KL
-  //init_galaxies("zdistris/zdistribution_DESY1_source","zdistris/zdistribution_DESY1_lens", "none", "none", "DES_Y1");
-  init_galaxies("zdistris/zdistri_WFIRST_grism_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");
-//  init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");
+  survey.sigma_e=0.37; // shape noise of KL
+//  init_galaxies("zdistris/zdistri_WFIRST_grism_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "none", "none", "SN10");// KL
+  init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");
   init_clusters();
-  init_IA("none", "none");
+//  init_IA("NLA_HF", "GAMA");
+  init_IA("none", "GAMA");
   
   init_probes("shear_shear");
   k=1;
@@ -618,7 +618,7 @@ int main(int argc, char** argv)
     //sprintf(covparams.outdir,"/home/u17/timeifler/covparallel/"); 
     sprintf(covparams.outdir,"/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/covparallel/");
     printf("----------------------------------\n");  
-    sprintf(OUTFILE,"%s_Ngal%.2f_Area%.2f_ssss_cov_Ncl%d_Ntomo%d_Sige%.2f_grism_DEu95CPL",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
+    sprintf(OUTFILE,"%s_Ngal%.2f_Area%.2f_ssss_cov_Ncl%d_Ntomo%d_Sige%.2f_ia_yyy",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
     for (l=0;l<tomo.shear_Npowerspectra; l++){
       for (m=l;m<tomo.shear_Npowerspectra; m++){
         if(k==hit){ 

@@ -8,33 +8,41 @@ from schwimmbad import MPIPool
 
 file_source_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm")
 file_lens_z = os.path.join(dirname, "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm")
-data_file = os.path.join(dirname, "datav/WFIRST_shear_shear_opti")
+data_file = os.path.join(dirname, "datav/WFIRST_shear_shear_opti") # vanilla WL
+#data_file = os.path.join(dirname, "datav/WFIRST_shear_shear_opti_Ntomo10_Ncl20_sigmae0.37_dmo_ia")
 #cov_file = os.path.join(dirname, "cov/WFIRST+LSST_SN10_opti_shear_shear_inv")
 cov_file = os.path.join(dirname, "cov/WFIRST_WL_SN10_shear_shear_inv")
-chain_file = "/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_WL_SN10_opti_shear_shear_sys_opti"
+#cov_file = os.path.join(dirname, "cov/WFIRST_WL_Ntomo10_Ncl20_sigmae0.37_IA_shear_shear_inv")
+bary_file = os.path.join(dirname, "datav/WFIRST_shear_shear_opti_Ntomo10_Ncl20_sigmae0.37_ia")
+chain_file = "/xdisk/timeifler/mig2020/extra/jiachuanxu/WFIRST_forecasts/chains/like_WFIRST_WL_SN10_opti_shear_shear_cos_opti_ia_bary_oldcov_olddata_noIA"
 
 initcosmo("halofit")
 # initbins(Ncl, lmin,    lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens)
 initbins( 20, 30.0, 4000.0,     4000.0,      21.0,           10,         10)
-initpriors("photo_opti","shear_opti","none","none")
+#initpriors("photo_opti","shear_opti","none","none")
+initpriors_IA_bary("photo_opti","shear_opti","none","none",
+    3.0,1.2,3.8,2.0,# prior std for IA: A_ia, beta_ia, eta_ia, eta_highz, if gaussian
+    16.0,5.0,0.8)# prior std for baryon PCs: Q1, Q2, Q3, if gaussian
 initsurvey("WFIRST_WL")
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
 initclusters()
-initia("none","none")
+#initia("NLA_HF","GAMA")
+initia("none","GAMA")
 
 # test also with
 #initpriors("none","none","none","Planck")
 #initpriors("none","none","none","random")
 initprobes("shear_shear")
-initdatainv(cov_file ,data_file)
+initdatainvbary(cov_file ,data_file, bary_file)
 
 #sample_params=sample_LCDM_only()
-#sample_params= sample_cosmology_only()
-sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear())
+sample_params= sample_cosmology_only()
+#sample_params = sample_cosmology_shear_nuisance_IA(get_N_tomo_shear())
+#sample_params = sample_cosmology_shear_nuisance_IA_bary(get_N_tomo_shear()) # 35 sampled params
 #sample_params = sample_cosmology_2pt_nuisance(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
 
 #sample_main(sample_params,10000,560,1,chain_file, blind=False, pool=MPIPool())
-sample_main(sample_params,5000,560,1,chain_file+"_5000", blind=False, pool=MPIPool())
+sample_main(sample_params,2000,700,1,chain_file+"_2000", blind=False, pool=MPIPool())
 

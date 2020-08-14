@@ -43,7 +43,7 @@
 #include "../cosmolike_core/theory/external_prior.c"
 #include "../cosmolike_core/theory/GRS.c"
 #include "init_WFIRST_forecasts.c"
-
+#include "../cosmolike_core/theory/init_baryon.c"
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
 double C_cgl_tomo_sys(double ell_Cluster,int zl,int nN, int zs);
@@ -55,9 +55,9 @@ void set_data_cluster_N(double *data, int start);
 void set_data_cgl(double *ell_Cluster, double *data, int start);
 double log_L_3x2pt_clusterN_clusterWL_GRS_SN();
 double log_L_3x2pt_clusterN_clusterWL_GRS();
-void compute_data_vector(char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope);
-double log_multi_like(double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, double PSHOT, double KSTAR);
-void write_vector_wrapper(char *details, input_cosmo_params ic, input_nuisance_params in);
+void compute_data_vector(char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, char *bary_sce);
+double log_multi_like(double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, double PSHOT, double KSTAR, double Q1, double Q2, double Q3);
+void write_vector_wrapper(char *details, char *bary_sce, input_cosmo_params ic, input_nuisance_params in);
 double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in, input_nuisance_params_grs ingr);
 int get_N_tomo_shear(void);
 int get_N_tomo_clustering(void);
@@ -204,8 +204,8 @@ int set_cosmology_params(double OMM, double S8, double NS, double W0,double WA, 
   if (cosmology.omb < 0.005 || cosmology.omb > 0.095) return 0;
   if (cosmology.sigma_8 < 0.5 || cosmology.sigma_8 > 1.1) return 0;
   if (cosmology.n_spec < 0.84 || cosmology.n_spec > 1.06) return 0;
-  if (cosmology.w0 < (-2.1-0.249 )|| cosmology.w0 > (-0.0-0.249) ) return 0; // fiducial: -2.1 ~ -1 ~ 0.0
-  if (cosmology.wa < (-2.6+0.59) || cosmology.wa > (2.6+0.59)  ) return 0; // fiducial: -2.6 ~ 0. ~ 2.6
+  if (cosmology.w0 < (-2.1-0.0 )|| cosmology.w0 > (-0.0-0.0) ) return 0; // fiducial: -2.1 ~ -1 ~ 0.0
+  if (cosmology.wa < (-2.6+0.0) || cosmology.wa > (2.6+0.0)  ) return 0; // fiducial: -2.6 ~ 0. ~ 2.6
   if (cosmology.h0 < 0.4 || cosmology.h0 > 0.9) return 0;
   //CH BEGINS 
   //CH: to use for running planck15_BA0_w0_wa prior alone) 
@@ -406,7 +406,7 @@ double log_L_3x2pt_clusterN_clusterWL_GRS()
 }
 
 
-double log_multi_like(double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, double PSHOT, double KSTAR)
+double log_multi_like(double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, double PSHOT, double KSTAR, double Q1, double Q2, double Q3)
 {
   //printf("%le %le\n",SPS1,CPS1);
   int i,j,k,m=0,l;
@@ -414,7 +414,7 @@ double log_multi_like(double OMM, double S8, double NS, double W0,double WA, dou
   static double *ell;
   static double *ell_Cluster;
   static double darg;
-  double chisqr,a,log_L_prior=0.0;
+  double chisqr,a,log_L_prior=0.0, log_L=0.0;
   
   if(ell==0){
     pred= create_double_vector(0, like.Ndata-1);
@@ -461,10 +461,25 @@ double log_multi_like(double OMM, double S8, double NS, double W0,double WA, dou
   //   printf("nuisance %le %le %le\n",nuisance.shear_calibration_m[i],nuisance.bias_zphot_shear[i],nuisance.sigma_zphot_shear[i]);
   // }
 
-
+  // prior information
   if(like.wlphotoz!=0) log_L_prior+=log_L_wlphotoz();
   if(like.clphotoz!=0) log_L_prior+=log_L_clphotoz();
   if(like.shearcalib==1) log_L_prior+=log_L_shear_calib();
+  if(like.IA!=0) {
+    log_L = 0.0;
+    log_L -= pow((nuisance.A_ia - prior.A_ia[0])/prior.A_ia[1],2.0);
+    log_L -= pow((nuisance.beta_ia - prior.beta_ia[0])/prior.beta_ia[1],2.0);
+    log_L -= pow((nuisance.eta_ia - prior.eta_ia[0])/prior.eta_ia[1],2.0);
+    log_L -= pow((nuisance.eta_ia_highz - prior.eta_ia_highz[0])/prior.eta_ia_highz[1],2.0);
+    log_L_prior+=0.5*log_L;
+  }
+  if(like.baryons==1){
+    log_L = 0.0;
+    log_L -= pow((Q1 - prior.bary_Q1[0])/prior.bary_Q1[1],2.0);
+    log_L -= pow((Q2 - prior.bary_Q2[0])/prior.bary_Q2[1],2.0);
+    log_L -= pow((Q3 - prior.bary_Q3[0])/prior.bary_Q3[1],2.0);
+    log_L_prior+=0.5*log_L;
+  }
   //printf("%d %d %d %d\n",like.BAO,like.wlphotoz,like.clphotoz,like.shearcalib);
   // printf("logl %le %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz(),log_L_clusterMobs());
   int start=0;  
@@ -491,7 +506,8 @@ double log_multi_like(double OMM, double S8, double NS, double W0,double WA, dou
   chisqr=0.0;
   for (i=0; i<like.Ndata; i++){
     for (j=0; j<like.Ndata; j++){
-      a=(pred[i]-data_read(1,i))*invcov_read(1,i,j)*(pred[j]-data_read(1,j));
+      a=(pred[i]-data_read(1,i)+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i)) * \
+        invcov_read(1,i,j)*(pred[j]-data_read(1,j)+Q1*bary_read(1,0,j)+Q2*bary_read(1,1,j)+Q3*bary_read(1,2,j) );
       chisqr=chisqr+a;
     }
     // if (fabs(data_read(1,i)) < 1.e-25){
@@ -506,7 +522,7 @@ double log_multi_like(double OMM, double S8, double NS, double W0,double WA, dou
   return -0.5*chisqr+log_L_prior;
 }
 
-void compute_data_vector(char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5,double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q, double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope)
+void compute_data_vector(char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5,double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q, double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, char *bary_sce)
 {
 
   int i,j,k,m=0,l;
@@ -568,16 +584,18 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_%s_grism_Ntomo%2d_Ncl%2d_sigmae%.2f_DEu95CPL",survey.name,like.probes,details,tomo.shear_Nbin,like.Ncl,survey.sigma_e);}
+  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%2d_Ncl%2d_sigmae%.2f_%s_ia_test",survey.name,like.probes,details,tomo.shear_Nbin,like.Ncl,survey.sigma_e,bary_sce);}
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
-    fprintf(F,"%d %le\n",i,pred[i]);
+    //a = pred[i]+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i);
+    a = pred[i];
+    fprintf(F,"%d %le\n",i,a);
     //printf("%d %le\n",i,pred[i]);
   }
   fclose(F);
 }
 
-void write_vector_wrapper(char *details, input_cosmo_params ic, input_nuisance_params in)
+void write_vector_wrapper(char *details, char *bary_sce, input_cosmo_params ic, input_nuisance_params in)
 {
   compute_data_vector(details, ic.omega_m, ic.sigma_8, ic.n_s, ic.w0, ic.wa, ic.omega_b, ic.h0, ic.MGSigma, ic.MGmu,
     in.bias[0], in.bias[1], in.bias[2], in.bias[3],in.bias[4], in.bias[5], in.bias[6], in.bias[7],in.bias[8], in.bias[9], 
@@ -592,7 +610,7 @@ void write_vector_wrapper(char *details, input_cosmo_params ic, input_nuisance_p
     in.A_ia, in.beta_ia, in.eta_ia, in.eta_ia_highz,
     in.lf[0], in.lf[1], in.lf[2], in.lf[3], in.lf[4], in.lf[5],
     in.m_lambda[0], in.m_lambda[1], in.m_lambda[2], in.m_lambda[3],
-    in.m_lambda[4], in.m_lambda[5]);
+    in.m_lambda[4], in.m_lambda[5], bary_sce);
 }
 
 double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in,input_nuisance_params_grs ingr)
@@ -609,8 +627,9 @@ double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in,input_nu
     in.shear_m[5], in.shear_m[6], in.shear_m[7], in.shear_m[8], in.shear_m[9], 
     in.A_ia, in.beta_ia, in.eta_ia, in.eta_ia_highz,
     in.lf[0], in.lf[1], in.lf[2], in.lf[3], in.lf[4], in.lf[5], 
-    in.m_lambda[0], in.m_lambda[1], in.m_lambda[2], in.m_lambda[3],
-    in.m_lambda[4], in.m_lambda[5],ingr.grsbias[0],ingr.grsbias[1],ingr.grsbias[2],ingr.grsbias[3],ingr.grsbias[4],ingr.grsbias[5],ingr.grsbias[6],ingr.grssigmap[0],ingr.grssigmap[1],ingr.grssigmap[2],ingr.grssigmap[3],ingr.grssigmap[4],ingr.grssigmap[5],ingr.grssigmap[6],ingr.grssigmaz,ingr.grspshot,ingr.grskstar);
+    in.m_lambda[0], in.m_lambda[1], in.m_lambda[2], in.m_lambda[3], in.m_lambda[4], in.m_lambda[5],
+    ingr.grsbias[0],ingr.grsbias[1],ingr.grsbias[2],ingr.grsbias[3],ingr.grsbias[4],ingr.grsbias[5],ingr.grsbias[6],ingr.grssigmap[0],ingr.grssigmap[1],ingr.grssigmap[2],ingr.grssigmap[3],ingr.grssigmap[4],ingr.grssigmap[5],ingr.grssigmap[6],ingr.grssigmaz,ingr.grspshot,ingr.grskstar,
+    in.bary[0], in.bary[1], in.bary[2]);
   return like;
 }
 
@@ -647,15 +666,22 @@ void save_zdistr_lenses(int zl){
 int main(int argc, char** argv)
 {
   clock_t begin, end;
-  double time_spent,loglike=0.0;
+  double time_spent, loglike=0.0, init=0.0;
   int i;
 /* here, do your time-consuming job */
 
-  init_cosmo_runmode_DEu95CPL("halofit");
+  init_cosmo_runmode("halofit");
+  // baryon effects initialization
+  // This one is used for applying baryon effects from specific simulation
+  init_bary(argv[4]); //"dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",...
+  // This one is used for applying PCs reduced from a range of simulations
+  sprintf(like.BARY_FILE,"%s","datav/WFIRST_shear_shear_opti_Ntomo10_Ncl20_sigmae0.37_ia");
+  init = bary_read(0,1,1);
+
   // init_binning_fourier: Ncl, lmin, lmax, lmax_shear , Rmin_bias, source tomo bin, lensing tomo bin
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);// WFIRST standard WL
   //init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
-  init_binning_fourier(10,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 10
+  init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 10
   if(strcmp(argv[2],"WFIRST_KL")==0)
     init_priors_KL("photo_opti","shear_opti","none","none");
   else{
@@ -678,14 +704,14 @@ int main(int argc, char** argv)
   if(strcmp(argv[2],"WFIRST")==0) init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//standard WL
   if(strcmp(argv[2],"WFIRST_KL")==0) init_galaxies("zdistris/zdistri_WFIRST_grism_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//WFIRST KL
   init_clusters();
-  init_IA("none", "none");
+  init_IA("NLA_HF", "GAMA");
   init_probes(argv[3]);
   
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21
   if(strcmp(argv[2],"WFIRST_KL")==0){
     compute_data_vector(argv[1],
       // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
-      0.3156,0.831,0.9645,-1.249,0.59,0.0491685,0.6727,0.,0.,
+      0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
       // galaxy bias: b[0-9]
       1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
       // source galaxy photo-z bias[0-9] + std
@@ -696,16 +722,29 @@ int main(int argc, char** argv)
       0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
       // IA: A_ia, beta_ia, eta_ia, eta_ia_highz
       5.92,1.1,-0.47,0.0,
-      // luminosity function: LF_alpha, LF_P, LF_Q, FL_red_alpha, LF_red_P, LF_red_Q
+      // luminosity function: LF_alpha, LF_P, LF_Q, LF_red_alpha, LF_red_P, LF_red_Q
       0.0,0.0,0.0,0.0,0.0,0.0,
-      // mass function?: mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm
+      // cluster mass calibration: mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm
       3.207,0.993,0.0,0.456,
       // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope
-      0.0,0.0); // WFIRST Grism: R=461*lambda[um]
+      0.0,0.0,
+      argv[4]); // WFIRST Grism: R=461*lambda[um]
   }
   else{
-    if(strcmp(argv[1],"opti")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0);
-    if(strcmp(argv[1],"pessi")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0);
+    if(strcmp(argv[1],"opti")==0){
+      compute_data_vector(argv[1],
+      0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
+      1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,
+      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,
+      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,
+      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+      5.92,1.1,-0.47,0.0,
+      0.0,0.0,0.0,0.0,0.0,0.0,
+      3.207,0.993,0.0,0.456,
+      0.0, 0.0,
+      argv[4]);
+    }
+    if(strcmp(argv[1],"pessi")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0, argv[4]);
   }
   // init_data_inv("cov/WFIRST_3x2pt_inv","datav/WFIRST_all_2pt_fid_opti");
   

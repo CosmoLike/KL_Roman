@@ -1,7 +1,12 @@
 double invcov_read(int READ, int ci, int cj);
 double data_read(int READ, int ci);
+double bary_read(int READ, int PC, int cj);
 void init_data_inv(char *INV_FILE, char *DATA_FILE);
+void init_data_inv_bary(char *INV_FILE, char *DATA_FILE, char *BARY_FILE);
 void init_priors(char *cosmoPrior1, char *cosmoPrior2, char *cosmoPrior3, char *cosmoPrior4);
+void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4, 
+	double A_ia_Prior, double beta_ia_Prior, double eta_ia_Prior, double etaZ_ia_Prior, 
+	double Q1_Prior, double Q2_Prior, double Q3_Prior);
 void init_priors_KL(char *Prior1, char *Prior2, char *Prior3, char *Prior4);
 void init_survey(char *surveyname);
 void init_galaxies(char *SOURCE_ZFILE, char *LENS_ZFILE, char *lensphotoz, char *sourcephotoz, char *galsample);
@@ -104,6 +109,42 @@ double data_read(int READ, int ci)
   return data[ci];
 }
 
+double bary_read(int READ, int PC, int cj)
+{
+  int i,j, N_PC=6;
+  static double **bary =0;
+
+  if(READ==0 || bary == 0){
+    bary   = create_double_matrix(0, N_PC-1, 0, like.Ndata-1);      
+    FILE *F;
+    F=fopen(like.BARY_FILE,"r");
+    for (i=0;i<like.Ndata; i++){
+      fscanf(F,"%le %le %le %le %le %le\n",&bary[0][i],&bary[1][i],&bary[2][i],&bary[3][i],&bary[4][i],&bary[5][i]);  
+    }
+    fclose(F);
+    printf("FINISHED READING BARYON MATRIX\n");
+  }    
+  return bary[PC][cj];
+}
+
+void init_data_inv_bary(char *INV_FILE, char *DATA_FILE, char *BARY_FILE)
+{
+  double init;
+  printf("\n");
+  printf("---------------------------------------\n");
+  printf("Initializing data vector and covariance\n");
+  printf("---------------------------------------\n");
+
+  sprintf(like.INV_FILE,"%s",INV_FILE);
+  printf("PATH TO INVCOV: %s\n",like.INV_FILE);
+  sprintf(like.DATA_FILE,"%s",DATA_FILE);
+  printf("PATH TO DATA: %s\n",like.DATA_FILE);
+  sprintf(like.BARY_FILE,"%s",BARY_FILE);
+  printf("PATH TO BARYONS: %s\n",like.BARY_FILE);
+  init=data_read(0,1);
+  init=bary_read(0,1,1);
+  init=invcov_read(0,1,1);
+}
 
 void init_cosmo_runmode(char *runmode)
 {
@@ -203,6 +244,96 @@ void init_priors(char *Prior1, char *Prior2, char *Prior3, char *Prior4)
   }
   if(strcmp(Prior3,"GRS")==0) like.GRS=1;
   sprintf(like.ext_data,"%s",Prior4);
+}
+
+void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4, 
+	double A_ia_Prior, double beta_ia_Prior, double eta_ia_Prior, double etaZ_ia_Prior, 
+	double Q1_Prior, double Q2_Prior, double Q3_Prior)
+{
+  printf("\n");
+  printf("---------------------------------------\n");
+  printf("Initializing priors for marginalization\n");
+  printf("---------------------------------------\n");
+  // Initializing photo-z priors  
+  if(strcmp(Prior1,"photo_opti")==0){
+    set_wlphotoz_WFIRST_opti();
+    set_clphotoz_WFIRST_opti();
+  }
+  if(strcmp(Prior1,"photo_pessi")==0){
+    set_wlphotoz_WFIRST_pessi();
+    set_clphotoz_WFIRST_pessi();
+  }
+  if(strcmp(Prior1,"photo_KL")==0){
+    set_wlphotoz_WFIRST_KL();
+    set_clphotoz_WFIRST_KL();
+  }
+  // Initializing shear calibration priors
+  if(strcmp(Prior2,"shear_opti")==0){
+    set_shear_priors_WFIRST_opti();
+  }
+  if(strcmp(Prior2,"shear_pessi")==0){
+    set_shear_priors_WFIRST_pessi();
+  }
+  if(strcmp(Prior2,"shear_KL")==0){
+    set_shear_priors_WFIRST_KL();
+  }
+  if(strcmp(Prior3,"GRS")==0) like.GRS=1;
+  sprintf(like.ext_data,"%s",Prior4);
+  // Initializing IA priors
+  prior.A_ia[0]=5.92; 
+  prior.A_ia[1]=A_ia_Prior; 
+  
+  prior.beta_ia[0]=1.1; 
+  prior.beta_ia[1]=beta_ia_Prior; 
+  
+  prior.eta_ia[0]=-0.47; 
+  prior.eta_ia[1]=eta_ia_Prior; 
+  
+  prior.eta_ia_highz[0]=0.0; 
+  prior.eta_ia_highz[1]=etaZ_ia_Prior; 
+  like.IA=1;
+  // Initializing baryon effects priors
+  prior.bary_Q1[0]=0.0; 
+  prior.bary_Q1[1]=Q1_Prior; 
+
+  prior.bary_Q2[0]=0.0; 
+  prior.bary_Q2[1]=Q2_Prior; 
+
+  prior.bary_Q3[0]=0.0; 
+  prior.bary_Q3[1]=Q3_Prior; 
+  like.baryons=1;
+  // Confirmation
+  printf("\n");
+  printf("---------------------------------------\n");
+  printf("Shear Calibration Prior\n");
+  printf("Mean=%le, Sigma=%le\n",prior.shear_calibration_m[0][0],prior.shear_calibration_m[0][1]);
+
+  printf("\n");
+  printf("---------------------------------------\n");
+  printf("Photo-z priors Weak Lensing\n");
+  printf("Delta_z=%le, Sigma (Delta_z)=%le\n",prior.bias_zphot_shear[0][0],prior.bias_zphot_shear[0][1]);
+  printf("Sigma_z=%le, Sigma (Sigma_z)=%le\n",prior.sigma_zphot_shear[0][0],prior.sigma_zphot_shear[0][1]); 
+
+  printf("\n");
+  printf("---------------------------------------\n");
+  printf("Photo-z priors Clustering\n");
+  printf("Delta_z=%le, Sigma (Delta_z)=%le\n",prior.bias_zphot_clustering[0][0],prior.bias_zphot_clustering[0][1]);
+  printf("Sigma_z=%le, Sigma (Sigma_z)=%le\n",prior.sigma_zphot_clustering[0][0],prior.sigma_zphot_clustering[0][1]);
+
+  printf("\n");
+  printf("---------------------------------------\n");
+  printf("IA Priors\n");
+  printf("A_IA=%le, A_IA_Prior=%le\n",prior.A_ia[0],prior.A_ia[1]);
+  printf("beta_ia=%le, betaIA_Prior=%le\n",prior.beta_ia[0],prior.beta_ia[1]);
+  printf("eta_ia=%le, etaIA_Prior=%le\n",prior.eta_ia[0],prior.eta_ia[1]);
+  printf("eta_ia_highz=%le, etaZIA_Prior=%le\n",prior.eta_ia_highz[0],prior.eta_ia_highz[1]);
+
+  printf("\n");
+  printf("---------------------------------------\n");
+  printf("Baryon Priors\n");
+  printf("Q1=%le, Sigma (Q1)=%le\n",prior.bary_Q1[0],prior.bary_Q1[1]);
+  printf("Q2=%le, Sigma (Q2)=%le\n",prior.bary_Q2[0],prior.bary_Q2[1]);
+  printf("Q3=%le, Sigma (Q3)=%le\n",prior.bary_Q3[0],prior.bary_Q3[1]);
 }
 
 void init_priors_KL(char *Prior1, char *Prior2, char *Prior3, char *Prior4)

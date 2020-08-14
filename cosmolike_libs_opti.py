@@ -45,11 +45,17 @@ initpriors.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c
 initpriors_KL=lib.init_priors_KL
 initpriors_KL.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
 
+initpriors_IA_bary=lib.init_priors_IA_bary
+initpriors_IA_bary.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double]
+
 initprobes=lib.init_probes
 initprobes.argtypes=[ctypes.c_char_p]
 
 initdatainv=lib.init_data_inv
 initdatainv.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
+
+initdatainvbary=lib.init_data_inv_bary
+initdatainvbary.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
 
 get_N_tomo_shear = lib.get_N_tomo_shear
 get_N_tomo_shear.argtypes = []
@@ -288,6 +294,7 @@ class InputNuisanceParams(IterableStruct):
         ("eta_ia_highz", double),
         ("lf", double*6),
         ("m_lambda", double*6),
+        ("bary", double*3),
         ("grsbias", double*7),
         ("grssigmap", double*7),
         ("grssigmaz", double),
@@ -303,12 +310,13 @@ class InputNuisanceParams(IterableStruct):
         c.lens_z_bias[:] = np.repeat(0.0, 10)
         c.lens_z_s = 0.01
         c.shear_m[:] = np.repeat(0.0, 10)
-        c.A_ia = 5.92
-        c.beta_ia = 1.1
-        c.eta_ia = -0.47
-        c.eta_ia_highz = 0.0
+        c.A_ia = 5.92# 5.95 from Eifler et. al. 2020
+        c.beta_ia = 1.1# 1.1
+        c.eta_ia = -0.47# 0.49
+        c.eta_ia_highz = 0.0# 0.0
         c.lf[:] = np.repeat(0.0, 6)
         c.m_lambda[:] = [3.207, 0.993, 0.0, 0.456, 0.0, 0.0]
+        c.bary[:] = [0., 0., 0.]
         c.grsbias[:] = [1.538026692020565,1.862707210288686,2.213131761595241,2.617023657038295,2.975011712138650,3.376705680190931,3.725882076395691]
         c.grssigmap[:] = np.repeat(290.,7)
         c.grssigmaz = 0.001
@@ -331,6 +339,7 @@ class InputNuisanceParams(IterableStruct):
         c.eta_ia_highz = 0.0
         c.lf[:] = np.repeat(0.0, 6)
         c.m_lambda[:] = [3.207, 0.993, 0.0, 0.456, 0.0, 0.0]
+        c.bary[:] = [0., 0., 0.]
         c.grsbias[:] = [1.538026692020565,1.862707210288686,2.213131761595241,2.617023657038295,2.975011712138650,3.376705680190931,3.725882076395691]
         c.grssigmap[:] = np.repeat(290.,7)
         c.grssigmaz = 0.001
@@ -354,6 +363,7 @@ class InputNuisanceParams(IterableStruct):
         c.eta_ia_highz = 0.01
         c.lf[:] = np.repeat(0.005, 6)
         c.m_lambda[:] = [0.045, 0.045, 0.3, 0.045, 0.03, 0.1]
+        c.bary[:] = [3., 1., .15]
         c.grsbias[:] = np.repeat(0.15, 7)
         c.grssigmap[:] = np.repeat(20.0, 7)
         c.grssigmaz = 0.0002 # fid is 0.001 and can't be neg
@@ -376,6 +386,7 @@ class InputNuisanceParams(IterableStruct):
         c.eta_ia_highz = 0.01
         c.lf[:] = np.repeat(0.005, 6)
         c.m_lambda[:] = [0.045, 0.045, 0.3, 0.045, 0.03, 0.1]
+        c.bary[:] = [3., 1., .15]
         c.grsbias[:] = np.repeat(0.15, 7)
         c.grssigmap[:] = np.repeat(20.0, 7)
         c.grssigmaz = 0.0002 # fid is 0.001 and can't be neg
@@ -474,6 +485,31 @@ def sample_cosmology_shear_nuisance(tomo_N_shear,MG = False):
     varied_parameters.append('source_z_s')
     varied_parameters += ['shear_m_%d'%i for i in xrange(tomo_N_shear)]
     return varied_parameters
+
+def sample_cosmology_shear_nuisance_IA(tomo_N_shear,MG = False):
+    varied_parameters = sample_cosmology_only(MG)
+    varied_parameters += ['source_z_bias_%d'%i for i in xrange(tomo_N_shear)]
+    varied_parameters.append('source_z_s')
+    varied_parameters += ['shear_m_%d'%i for i in xrange(tomo_N_shear)]
+    varied_parameters.append('A_ia')
+    varied_parameters.append('beta_ia')
+    varied_parameters.append('eta_ia')
+    varied_parameters.append('eta_ia_highz')
+    return varied_parameters
+
+def sample_cosmology_shear_nuisance_IA_bary(tomo_N_shear,MG = False):
+    varied_parameters = sample_cosmology_only(MG)
+    varied_parameters += ['source_z_bias_%d'%i for i in xrange(tomo_N_shear)]
+    varied_parameters.append('source_z_s')
+    varied_parameters += ['shear_m_%d'%i for i in xrange(tomo_N_shear)]
+    varied_parameters.append('A_ia')
+    varied_parameters.append('beta_ia')
+    varied_parameters.append('eta_ia')
+    varied_parameters.append('eta_ia_highz')
+    varied_parameters += ['bary_%d'%i for i in xrange(3)]
+    return varied_parameters
+
+
 
 def sample_cosmology_clustering_nuisance(tomo_N_lens,MG = False):
     varied_parameters = sample_cosmology_only(MG)
@@ -582,13 +618,15 @@ def sample_cosmology_SN_WFIRST():
 def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blind=False, pool=None, KL=False):
     print varied_parameters
 
+    ### Choose your cosmology: Fiducial or DEu/l95CPL?
     #likelihood = LikelihoodFunctionWrapper(varied_parameters)
-    starting_point = InputCosmologyParams.DEu95CPL().convert_to_vector_filter(varied_parameters)
+    starting_point = InputCosmologyParams.fiducial().convert_to_vector_filter(varied_parameters)
     #starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
 
     std = InputCosmologyParams.fiducial_sigma().convert_to_vector_filter(varied_parameters)
     #std += InputNuisanceParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
 
+    ### Choose your nuisance: weak lensing or kinematic lensing?
     if KL:
         starting_point += InputNuisanceParams().fiducial_KL().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma_KL().convert_to_vector_filter(varied_parameters)

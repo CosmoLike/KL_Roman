@@ -2,7 +2,7 @@
 #PBS -S /bin/bash
 #PBS -V
 #PBS -W group_list=cosmo
-#PBS -q qualified
+#PBS -q standard
 #PBS -J 1-1540
 #PBS -l select=1:ncpus=1:mem=6GB
 #PBS -l place=free:shared
