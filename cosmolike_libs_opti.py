@@ -46,7 +46,12 @@ initpriors_KL=lib.init_priors_KL
 initpriors_KL.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
 
 initpriors_IA_bary=lib.init_priors_IA_bary
-initpriors_IA_bary.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double]
+initpriors_IA_bary.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, 
+    ctypes.c_bool, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, 
+    ctypes.c_bool, ctypes.c_double, ctypes.c_double, ctypes.c_double]
+
+initpriors_IA=lib.init_priors_IA
+initpriors_IA.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double]
 
 initprobes=lib.init_probes
 initprobes.argtypes=[ctypes.c_char_p]
@@ -277,8 +282,7 @@ class InputCosmologyParams(IterableStruct):
         c.MGSigma = 0.1
         c.MGmu = 0.2     
         return c
-
-
+"""
 class InputNuisanceParams(IterableStruct):
     section_name = "nuisance_parameters"
     _fields_ = [
@@ -395,6 +399,138 @@ class InputNuisanceParams(IterableStruct):
         return c        
 
 
+
+"""
+
+class InputNuisanceParams(IterableStruct):
+    section_name = "nuisance_parameters"
+    _fields_ = [
+        ("bias", double*10),
+        ("source_z_bias", double*10),
+        ("source_z_s", double),
+        ("lens_z_bias", double*10),
+        ("lens_z_s", double),
+        ("shear_m", double*10),
+        ("A_ia", double),
+        ("beta_ia", double),
+        ("eta_ia", double),
+        ("eta_ia_highz", double),
+        ("lf", double*6),
+        ("m_lambda", double*6),
+        ("cluster_c", double*4),
+        ("bary", double*3)
+    ]
+
+    @classmethod
+    def fiducial(cls):
+        c = cls()
+        c.bias[:] = [1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2]
+        c.source_z_bias[:] = np.repeat(0.0, 10)
+        c.source_z_s = 0.01
+        c.lens_z_bias[:] = np.repeat(0.0, 10)
+        c.lens_z_s = 0.01
+        c.shear_m[:] = np.repeat(0.0, 10)
+        c.A_ia = 5.92# 5.95 from Eifler et. al. 2020
+        c.beta_ia = 1.1# 1.1
+        c.eta_ia = -0.47# 0.49
+        c.eta_ia_highz = 0.0# 0.0
+        c.lf[:] = np.repeat(0.0, 6)
+        c.m_lambda[:] = [3.207, 0.993, 0.0, 0.456, 0.0, 0.0]
+        c.cluster_c[:] = [0., 0., 0., 0.]
+        c.bary[:] = [0., 0., 0.]
+        return c
+
+    @classmethod
+    def fiducial_KL(cls):
+        c = cls()
+        c.bias[:] = [1.3,1.35,1.4,1.45,1.5,1.55,1.6,1.65,1.7,1.75]
+        c.source_z_bias[:] = np.repeat(0.0, 10)
+        c.source_z_s = 0.002
+        c.lens_z_bias[:] = np.repeat(0.0, 10)
+        c.lens_z_s = 0.002
+        c.shear_m[:] = np.repeat(0.0, 10)
+        c.A_ia = 5.92
+        c.beta_ia = 1.1
+        c.eta_ia = -0.47
+        c.eta_ia_highz = 0.0
+        c.lf[:] = np.repeat(0.0, 6)
+        c.m_lambda[:] = [3.207, 0.993, 0.0, 0.456, 0.0, 0.0]
+        c.cluster_c[:] = [0., 0., 0., 0.]
+        c.bary[:] = [0., 0., 0.]
+        return c
+
+    
+    @classmethod
+    def fiducial_sigma(cls):
+        c = cls()
+        c.bias[:] = np.repeat(0.15, 10)
+        c.source_z_bias[:] = np.repeat(0.005, 10)
+        c.source_z_s = 0.002
+        c.lens_z_bias[:] = np.repeat(0.005, 10)
+        c.lens_z_s = 0.002
+        c.shear_m[:] = np.repeat(0.005, 10)
+        c.A_ia = 0.05
+        c.beta_ia = 0.01
+        c.eta_ia = 0.01
+        c.eta_ia_highz = 0.01
+        c.lf[:] = np.repeat(0.005, 6)
+        c.m_lambda[:] = [0.045, 0.045, 0.3, 0.045, 0.03, 0.1]
+        c.cluster_c[:] = [1., 1., 1., 1.]
+        c.bary[:] = [3., 1., .15]
+        return c        
+
+    @classmethod
+    def fiducial_sigma_KL(cls):
+        c = cls()
+        c.bias[:] = np.repeat(0.15, 10)
+        c.source_z_bias[:] = np.repeat(0.001, 10)
+        c.source_z_s = 0.0004
+        c.lens_z_bias[:] = np.repeat(0.001, 10)
+        c.lens_z_s = 0.0004
+        c.shear_m[:] = np.repeat(0.005, 10)
+        c.A_ia = 0.05
+        c.beta_ia = 0.01
+        c.eta_ia = 0.01
+        c.eta_ia_highz = 0.01
+        c.lf[:] = np.repeat(0.005, 6)
+        c.m_lambda[:] = [0.045, 0.045, 0.3, 0.045, 0.03, 0.1]
+        c.cluster_c[:] = [1., 1., 1., 1.]
+        c.bary[:] = [3., 1., .15]
+        return c        
+
+##########
+
+class InputNuisanceParamsGRS(IterableStruct):
+    section_name = "nuisance_parameters_GRS"
+    _fields_ = [
+        ("grsbias", double*7),
+        ("grssigmap", double*7),
+        ("grssigmaz", double),
+        ("grspshot", double),
+        ("grskstar", double),
+    ]
+
+    @classmethod
+    def fiducial(cls):
+        c = cls()
+        c.grsbias[:] = [1.538026692020565,1.862707210288686,2.213131761595241,2.617023657038295,
+                        2.975011712138650,3.376705680190931,3.725882076395691]
+        c.grssigmap[:] = np.repeat(290.,7)
+        c.grssigmaz = 0.001
+        c.grspshot = 0.0
+        c.grskstar = 0.24
+        return c
+
+    @classmethod
+    def fiducial_sigma(cls):
+        c = cls()
+        c.grsbias[:] = np.repeat(0.15, 7)
+        c.grssigmap[:] = np.repeat(20.0, 7)
+        c.grssigmaz = 0.0002 # fid is 0.001 and can't be neg
+        c.grspshot = 0.001 #fid is zero
+        c.grskstar = 0.05 # fid is 0.24
+        return c
+
 class LikelihoodFunctionWrapper(object):
     def __init__(self, varied_parameters, KL=False):
         self.varied_parameters = varied_parameters
@@ -404,21 +540,28 @@ class LikelihoodFunctionWrapper(object):
             self.KL_flag = False
 
 
-    def fill_varied(self, icp, inp, x):
+    def fill_varied(self, icp, inp, inpgrs, x):
         assert len(x) == len(self.varied_parameters), "Wrong number of parameters"
         i = 0
-        for s in [icp, inp]:
+        #print "filling %d params"%(len(x))
+        for s in [icp, inp, inpgrs]:
             for name, obj, length in s.iter_parameters():
                 if length==0:
                     if name in self.varied_parameters:
-                        setattr(s, name, x[i])        
+                        setattr(s, name, x[i])
+                        #print "Found %s! setting %s to %e [%d/%d]"%(name, name, x[i], i+1, len(x))
                         i+=1
+                    #else:
+                        #print "%s not found, next one..."%name
                 else:
                     for j in xrange(length):
                         name_i = name + "_" + str(j)
                         if name_i in self.varied_parameters:
+                            #print "Found %s! setting %s to %e [%d/%d]"%(name_i, name_i, x[i], i+1, len(x))
                             obj[j] = x[i]
                             i+=1
+                        #else:
+                            #print "%s not found, next one..."%name_i
 
     def __call__(self, x):
         icp = InputCosmologyParams.fiducial()
@@ -426,18 +569,21 @@ class LikelihoodFunctionWrapper(object):
             inp = InputNuisanceParams.fiducial_KL()
         else:
             inp = InputNuisanceParams.fiducial()
-        self.fill_varied(icp, inp, x)
+        inpgrs = InputNuisanceParamsGRS.fiducial()
+        # fill the param-struct with input values and default values
+        self.fill_varied(icp, inp, inpgrs, x)
         #icp.print_struct()
         #inp.print_struct()
+        #inpgrs.print_struct()
         #print
-        like = lib.log_like_wrapper(icp, inp)
+        like = lib.log_like_wrapper(icp, inp, inpgrs)
         #print "like before" , like
         if like < -1.0e+14:
             return -np.inf
         return like
 
 
-lib.log_like_wrapper.argtypes = [InputCosmologyParams, InputNuisanceParams]
+lib.log_like_wrapper.argtypes = [InputCosmologyParams, InputNuisanceParams, InputNuisanceParamsGRS]
 lib.log_like_wrapper.restype = double
 log_like_wrapper = lib.log_like_wrapper
 
@@ -629,11 +775,15 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
     ### Choose your nuisance: weak lensing or kinematic lensing?
     if KL:
         starting_point += InputNuisanceParams().fiducial_KL().convert_to_vector_filter(varied_parameters)
+        starting_point += InputNuisanceParamsGRS().fiducial().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma_KL().convert_to_vector_filter(varied_parameters)
+        std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         likelihood = LikelihoodFunctionWrapper(varied_parameters,KL=True)
     else:
         starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
+        starting_point += InputNuisanceParamsGRS().fiducial().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
+        std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         likelihood = LikelihoodFunctionWrapper(varied_parameters)
 
     p0 = emcee.utils.sample_ball(starting_point, std, size=nwalker)

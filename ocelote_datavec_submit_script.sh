@@ -13,13 +13,13 @@
 module load gsl/2/2.1
 
 cd $PBS_O_WORKDIR
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST shear_shear dmo >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST shear_shear mb2 >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST shear_shear illustris >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST shear_shear eagle >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST shear_shear HzAGN >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST shear_shear TNG100 >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST shear_shear owls_AGN >& /home/u17/jiachuanxu/output/job_output_datavec.log
+/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear dmo >& /home/u17/jiachuanxu/output/job_output_datavec.log
+/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear mb2 >& /home/u17/jiachuanxu/output/job_output_datavec.log
+/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear illustris >& /home/u17/jiachuanxu/output/job_output_datavec.log
+/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear eagle >& /home/u17/jiachuanxu/output/job_output_datavec.log
+/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear HzAGN >& /home/u17/jiachuanxu/output/job_output_datavec.log
+/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear TNG100 >& /home/u17/jiachuanxu/output/job_output_datavec.log
+/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear owls_AGN >& /home/u17/jiachuanxu/output/job_output_datavec.log
 
 
 

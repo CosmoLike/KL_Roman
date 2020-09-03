@@ -406,7 +406,20 @@ double log_L_3x2pt_clusterN_clusterWL_GRS()
 }
 
 
-double log_multi_like(double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, double PSHOT, double KSTAR, double Q1, double Q2, double Q3)
+double log_multi_like(
+  double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu,
+  double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10,
+  double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1,
+  double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1,
+  double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10,
+  double A_ia, double beta_ia, double eta_ia, double eta_ia_highz,
+  double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,
+  double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, 
+  double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, 
+  double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, 
+  double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, 
+  double PSHOT, double KSTAR,
+  double Q1, double Q2, double Q3)
 {
   //printf("%le %le\n",SPS1,CPS1);
   int i,j,k,m=0,l;
@@ -506,8 +519,13 @@ double log_multi_like(double OMM, double S8, double NS, double W0,double WA, dou
   chisqr=0.0;
   for (i=0; i<like.Ndata; i++){
     for (j=0; j<like.Ndata; j++){
-      a=(pred[i]-data_read(1,i)+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i)) * \
+      if(like.baryons==1){
+        a=(pred[i]-data_read(1,i)+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i)) * \
         invcov_read(1,i,j)*(pred[j]-data_read(1,j)+Q1*bary_read(1,0,j)+Q2*bary_read(1,1,j)+Q3*bary_read(1,2,j) );
+      }
+      else{
+        a=(pred[i]-data_read(1,i)) * invcov_read(1,i,j) * (pred[j]-data_read(1,j));
+      }
       chisqr=chisqr+a;
     }
     // if (fabs(data_read(1,i)) < 1.e-25){
@@ -518,7 +536,7 @@ double log_multi_like(double OMM, double S8, double NS, double W0,double WA, dou
     printf("error: chisqr = %le\n",chisqr);
     //exit(EXIT_FAILURE);
   }
-
+  //printf("************\nchisq - %le\nlog_L_prior - %le\n Q1 Q2 Q3 = %e %e %e\n IA params = %e %e %e %e\n************\n", -0.5*chisqr, log_L_prior, Q1, Q2, Q3, nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
   return -0.5*chisqr+log_L_prior;
 }
 
@@ -584,7 +602,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%2d_Ncl%2d_sigmae%.2f_%s_ia_test",survey.name,like.probes,details,tomo.shear_Nbin,like.Ncl,survey.sigma_e,bary_sce);}
+  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%2d_Ncl%2d_sigmae%.2f_%s",survey.name,like.probes,details,tomo.shear_Nbin,like.Ncl,survey.sigma_e,bary_sce);}
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
     //a = pred[i]+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i);
@@ -633,9 +651,8 @@ double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in,input_nu
   return like;
 }
 
-
-
-void save_zdistr_sources(int zs){
+void save_zdistr_sources(int zs)
+{
   double z,dz =(redshift.shear_zdistrpar_zmax-redshift.shear_zdistrpar_zmin)/300.0;
   printf("Printing redshift distribution n(z) for source redshift bin %d\n",zs);
   
@@ -662,7 +679,7 @@ void save_zdistr_lenses(int zl){
    }
 }
 
-
+// like_fourier ["opti"/"pessi"] ["WFIRST_WL"/"WFIRST_KL"] ["shear_shear"] ["dmo"/"mb2"/...]
 int main(int argc, char** argv)
 {
   clock_t begin, end;
@@ -675,13 +692,13 @@ int main(int argc, char** argv)
   // This one is used for applying baryon effects from specific simulation
   init_bary(argv[4]); //"dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",...
   // This one is used for applying PCs reduced from a range of simulations
-  sprintf(like.BARY_FILE,"%s","datav/WFIRST_shear_shear_opti_Ntomo10_Ncl20_sigmae0.37_ia");
-  init = bary_read(0,1,1);
+  //sprintf(like.BARY_FILE,"%s","datav/WFIRST_shear_shear_opti_Ntomo10_Ncl20_sigmae0.37_ia");
+  //init = bary_read(0,1,1);
 
   // init_binning_fourier: Ncl, lmin, lmax, lmax_shear , Rmin_bias, source tomo bin, lensing tomo bin
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);// WFIRST standard WL
   //init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
-  init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 10
+  init_binning_fourier(10,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 10
   if(strcmp(argv[2],"WFIRST_KL")==0)
     init_priors_KL("photo_opti","shear_opti","none","none");
   else{
@@ -689,22 +706,22 @@ int main(int argc, char** argv)
     if(strcmp(argv[1],"pessi")==0) init_priors("photo_pessi","shear_pessi","none","none");
   }
   // init survey
-  if(strcmp(argv[2],"WFIRST_KL")==0) {
-    init_survey("WFIRST");
-    survey.area   = 2000.0;
-    survey.n_gal   = 8.0;
-    survey.sigma_e   = 0.08;
-    sprintf(survey.name,"WFIRST_KL");
+  // WFIRST_WL or WFIRST_KL?
+  init_survey(argv[2]);
+  // customize shape noise here
+  survey.sigma_e = 0.08;
+  if(strcmp(argv[2],"WFIRST_WL")==0){
+     init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm",
+                   "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm",
+                   "gaussian", "gaussian", "SN10");//standard WL
   }
-  else{
-    init_survey(argv[2]);
-    survey.area   = 2000.0;
-    survey.n_gal   = 51.0;
+  if(strcmp(argv[2],"WFIRST_KL")==0){
+    init_galaxies("zdistris/zdistri_WFIRST_grism_norm",
+                  "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm",
+                  "gaussian", "gaussian", "SN10");//WFIRST KL
   }
-  if(strcmp(argv[2],"WFIRST")==0) init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//standard WL
-  if(strcmp(argv[2],"WFIRST_KL")==0) init_galaxies("zdistris/zdistri_WFIRST_grism_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//WFIRST KL
   init_clusters();
-  init_IA("NLA_HF", "GAMA");
+  init_IA("none", "GAMA");
   init_probes(argv[3]);
   
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21
@@ -744,7 +761,19 @@ int main(int argc, char** argv)
       0.0, 0.0,
       argv[4]);
     }
-    if(strcmp(argv[1],"pessi")==0) compute_data_vector(argv[1],0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0, argv[4]);
+    if(strcmp(argv[1],"pessi")==0){
+      compute_data_vector(argv[1],
+      0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
+      1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,
+      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
+      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
+      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+      5.92,1.1,-0.47,0.0,
+      0.0,0.0,0.0,0.0,0.0,0.0,
+      3.207,0.993,0.0,0.456,
+      0.0,0.0,
+      argv[4]);
+    }
   }
   // init_data_inv("cov/WFIRST_3x2pt_inv","datav/WFIRST_all_2pt_fid_opti");
   
