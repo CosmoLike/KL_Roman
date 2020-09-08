@@ -572,12 +572,12 @@ int main(int argc, char** argv)
 
   //RUN MODE setup
   //init_cosmo_runmode("emu");
-  init_cosmo_runmode_DEl95CPL("halofit");
+  init_cosmo_runmode("halofit");
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);
   init_binning_fourier(10, 30.0, 4000.0, 4000.0, 21.0, __NTOMO__, __NTOMO__);
 //  init_priors("photo_opti","shear_opti","none","none");
   init_priors_KL("photo_opti","shear_opti","none","none");
-  init_survey("WFIRST");
+  init_survey("WFIRST_KL");
   survey.sigma_e=0.08; // shape noise of KL
   //init_galaxies("zdistris/zdistribution_DESY1_source","zdistris/zdistribution_DESY1_lens", "none", "none", "DES_Y1");
   init_galaxies("zdistris/zdistri_WFIRST_grism_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");
@@ -620,7 +620,7 @@ int main(int argc, char** argv)
     //sprintf(covparams.outdir,"/home/u17/timeifler/covparallel/"); 
     sprintf(covparams.outdir,"/xdisk/timeifler/mig2020/extra/jiachuanxu/WFIRST_forecasts/covparallel/");
     printf("----------------------------------\n");  
-    sprintf(OUTFILE,"%s_Ngal%.2f_Area%.2f_ssss_cov_Ncl%02d_Ntomo%02d_Sige%.2e_zdistgrism_DEl95CPL",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
+    sprintf(OUTFILE,"%s_Ngal%.2f_Area%.2f_ssss_cov_Ncl%02d_Ntomo%02d_Sige%.2e_zdistgrism",survey.name,survey.n_gal,survey.area,like.Ncl,tomo.shear_Nbin, survey.sigma_e);
     for (l=0;l<tomo.shear_Npowerspectra; l++){
       for (m=l;m<tomo.shear_Npowerspectra; m++){
         if(k==hit){ 

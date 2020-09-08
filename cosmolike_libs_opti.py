@@ -45,11 +45,17 @@ initpriors.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c
 initpriors_KL=lib.init_priors_KL
 initpriors_KL.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
 
+initpriors_IA_bary=lib.init_priors_IA_bary
+initpriors_IA_bary.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double]
+
 initprobes=lib.init_probes
 initprobes.argtypes=[ctypes.c_char_p]
 
 initdatainv=lib.init_data_inv
 initdatainv.argtypes=[ctypes.c_char_p,ctypes.c_char_p]
+
+initdatainvbary=lib.init_data_inv_bary
+initdatainvbary.argtypes=[ctypes.c_char_p, ctypes.c_char_p, ctypes.c_char_p]
 
 get_N_tomo_shear = lib.get_N_tomo_shear
 get_N_tomo_shear.argtypes = []
