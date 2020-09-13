@@ -686,6 +686,22 @@ int main(int argc, char** argv)
 
   if(strcmp(argv[2],"WFIRST_WL")==0) init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//standard WL
   if(strcmp(argv[2],"WFIRST_KL")==0) init_galaxies("zdistris/zdistri_WFIRST_grism_norm","zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", "gaussian", "gaussian", "SN10");//WFIRST KL
+  // write the tomo bins boundary
+  /*
+  FILE *tomo_zdist;
+  char tomo_zdist_fname[500];
+  sprintf(tomo_zdist_fname, "zdistris/tomo_zdist_boundary_grism_norm_Ntomo30");
+  tomo_zdist = fopen(tomo_zdist_fname, "w");
+  if(tomo_zdist!=NULL){
+    fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\n");
+    for(int i=0; i<tomo.shear_Nbin; i++){
+      fprintf(tomo_zdist,"%d\t%.6f\t%.6f\n",i,tomo.shear_zmin[i],tomo.shear_zmax[i]);
+    }
+  }
+  fclose(tomo_zdist);
+  return 0;
+  */
+  // end writing tomo bins boundary
   init_clusters();
   init_IA("NLA_HF", "GAMA");
   init_probes(argv[3]);
