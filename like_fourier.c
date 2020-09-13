@@ -720,6 +720,22 @@ int main(int argc, char** argv)
                   "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm",
                   "gaussian", "gaussian", "SN10");//WFIRST KL
   }
+  // write redshift boundary of each tomo bin
+  /*
+  FILE *tomo_zdist;
+  char tomo_zdist_fname[500];
+  sprintf(tomo_zdist_fname, "zdistris/tomo_zdist_boundary_LSST+WFIRST_source_norm_Ntomo10");
+  tomo_zdist = fopen(tomo_zdist_fname, "w");
+  if(tomo_zdist!=NULL){
+    fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\n");
+    for(int i=0; i<tomo.shear_Nbin; i++){
+      fprintf(tomo_zdist,"%d\t%.6f\t%.6f\n",i,tomo.shear_zmin[i],tomo.shear_zmax[i]);
+    }
+  }
+  fclose(tomo_zdist);
+  return 0;
+  */
+  // end writing tomo boundary
   init_clusters();
   init_IA("none", "GAMA");
   init_probes(argv[3]);
