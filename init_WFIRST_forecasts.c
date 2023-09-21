@@ -34,12 +34,16 @@ void set_wlphotoz_WFIRST_KL();
 void set_clphotoz_WFIRST_KL();
 void set_wlphotoz_WFIRST_pessi();
 void set_clphotoz_WFIRST_pessi();
+void set_wlphotoz_DESI2_KL();
+void set_clphotoz_DESI2_KL();
 
 void set_shear_priors_WFIRST_KL();
+void set_shear_priors_DESI2_KL();
 void set_shear_priors_WFIRST_opti();
 void set_shear_priors_WFIRST_pessi();
 void set_survey_parameters_to_WFIRST_WL();
 void set_survey_parameters_to_WFIRST_KL();
+void set_survey_parameters_to_DESI2_KL();
 
 void init_clusterMobs();
 void set_equal_tomo_bins();
@@ -266,9 +270,13 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
     set_wlphotoz_WFIRST_pessi();
     set_clphotoz_WFIRST_pessi();
   }
-  if(strcmp(Prior1,"photo_KL")==0){
+  if(strcmp(Prior1,"spec_WFIRST")==0){
     set_wlphotoz_WFIRST_KL();
     set_clphotoz_WFIRST_KL();
+  }
+  if(strcmp(Prior1,"spec_DESI2")==0){
+    set_wlphotoz_DESI2_KL();
+    set_clphotoz_DESI2_KL();
   }
   // Initializing shear calibration priors
   if(strcmp(Prior2,"shear_opti")==0){
@@ -277,8 +285,11 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
   if(strcmp(Prior2,"shear_pessi")==0){
     set_shear_priors_WFIRST_pessi();
   }
-  if(strcmp(Prior2,"shear_KL")==0){
+  if(strcmp(Prior2,"shear_KL_WFIRST")==0){
     set_shear_priors_WFIRST_KL();
+  }
+  if(strcmp(Prior2,"shear_KL_DESI2")==0){
+    set_shear_priors_DESI2_KL();
   }
   if(strcmp(Prior3,"GRS")==0) like.GRS=1;
   sprintf(like.ext_data,"%s",Prior4);
@@ -361,9 +372,13 @@ void init_priors_IA(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
     set_wlphotoz_WFIRST_pessi();
     set_clphotoz_WFIRST_pessi();
   }
-  if(strcmp(Prior1,"photo_KL")==0){
+  if(strcmp(Prior1,"spec_WFIRST")==0){
     set_wlphotoz_WFIRST_KL();
     set_clphotoz_WFIRST_KL();
+  }
+  if(strcmp(Prior1,"spec_DESI2")==0){
+    set_wlphotoz_DESI2_KL();
+    set_clphotoz_DESI2_KL();
   }
   // Initializing shear calibration priors
   if(strcmp(Prior2,"shear_opti")==0){
@@ -372,8 +387,11 @@ void init_priors_IA(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
   if(strcmp(Prior2,"shear_pessi")==0){
     set_shear_priors_WFIRST_pessi();
   }
-  if(strcmp(Prior2,"shear_KL")==0){
+  if(strcmp(Prior2,"shear_KL_WFIRST")==0){
     set_shear_priors_WFIRST_KL();
+  }
+  if(strcmp(Prior2,"shear_KL_DESI2")==0){
+    set_shear_priors_DESI2_KL();
   }
   if(strcmp(Prior3,"GRS")==0) like.GRS=1;
   sprintf(like.ext_data,"%s",Prior4);
@@ -424,19 +442,19 @@ void init_priors_KL(char *Prior1, char *Prior2, char *Prior3, char *Prior4)
   printf("Initializing priors for marginalization\n");
   printf("---------------------------------------\n");
     
-  if(strcmp(Prior1,"photo_opti")==0){
+  if(strcmp(Prior1,"spec_WFIRST")==0){
     set_wlphotoz_WFIRST_KL();
     set_clphotoz_WFIRST_KL();
   }
-  if(strcmp(Prior1,"photo_pessi")==0){
-    set_wlphotoz_WFIRST_KL();
-    set_clphotoz_WFIRST_KL();
+  if(strcmp(Prior1,"spec_DESI2")==0){
+    set_wlphotoz_DESI2_KL();
+    set_clphotoz_DESI2_KL();
   }
-  if(strcmp(Prior2,"shear_opti")==0){
+  if(strcmp(Prior2,"shear_KL_WFIRST")==0){
     set_shear_priors_WFIRST_KL();
   }
-  if(strcmp(Prior2,"shear_pessi")==0){
-    set_shear_priors_WFIRST_KL();
+  if(strcmp(Prior2,"shear_KL_DESI2")==0){
+    set_shear_priors_DESI2_KL();
   }
   if(strcmp(Prior3,"GRS")==0) like.GRS=1;
   sprintf(like.ext_data,"%s",Prior4);
@@ -455,6 +473,7 @@ void init_survey(char *surveyname)
   if(strcmp(surveyname,"WFIRST")==0) set_survey_parameters_to_WFIRST();
   if(strcmp(surveyname,"WFIRST_WL")==0) set_survey_parameters_to_WFIRST_WL();
   if(strcmp(surveyname,"WFIRST_KL")==0) set_survey_parameters_to_WFIRST_KL();
+  if(strcmp(surveyname,"DESI2_KL")==0) set_survey_parameters_to_DESI2_KL();
 
   printf("Survey set to %s\n",survey.name);
   printf("Survey area: %le deg^2\n",survey.area);
@@ -1034,6 +1053,27 @@ void set_wlphotoz_WFIRST_KL()
   }
   like.wlphotoz=1;
 }
+void set_wlphotoz_DESI2_KL()
+{
+  int i;
+  printf("\n");
+  printf("Source sample: DESI-II KL spec-z uncertainty initialized\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    nuisance.bias_zphot_shear[i]=0.0;
+    nuisance.sigma_zphot_shear[i]=0.0005; 
+    printf("nuisance.bias_zphot_shear[%d]=%le\n",i,nuisance.bias_zphot_shear[i]);
+    printf("nuisance.sigma_zphot_shear[%d]=%le\n",i,nuisance.sigma_zphot_shear[i]);
+    // center of Gaussian priors
+    prior.bias_zphot_shear[i][0]=nuisance.bias_zphot_shear[i];
+    prior.sigma_zphot_shear[i][0]=nuisance.sigma_zphot_shear[i];
+    // rms width of Gaussian priors
+    prior.bias_zphot_shear[i][1] = 0.0001;
+    prior.sigma_zphot_shear[i][1]= 0.0001;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_shear[i][0],prior.bias_zphot_shear[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_shear[i][0],prior.sigma_zphot_shear[i][1]); 
+  }
+  like.wlphotoz=1;
+}
 
 
 
@@ -1103,6 +1143,27 @@ void set_clphotoz_WFIRST_KL()
   }
   like.clphotoz=1;
 }
+void set_clphotoz_DESI2_KL()
+{
+  int i;
+  printf("\n");
+  printf("Lens sample: DESI-II KL spec-z uncertainty initialized\n");
+  for (i=0;i<tomo.clustering_Nbin; i++){
+    nuisance.bias_zphot_clustering[i]=0.0;
+    nuisance.sigma_zphot_clustering[i]=0.0005; 
+    printf("nuisance.bias_zphot_clustering[%d]=%le\n",i,nuisance.bias_zphot_clustering[i]);
+    printf("nuisance.sigma_zphot_clustering[%d]=%le\n",i,nuisance.sigma_zphot_clustering[i]);
+    // center of Gaussian priors
+    prior.bias_zphot_clustering[i][0]=nuisance.bias_zphot_clustering[i];
+    prior.sigma_zphot_clustering[i][0]=nuisance.sigma_zphot_clustering[i];
+    // rms width of Gaussian priors
+    prior.bias_zphot_clustering[i][1] = 0.0001;
+    prior.sigma_zphot_clustering[i][1]= 0.0001;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_clustering[i][0],prior.bias_zphot_clustering[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_clustering[i][0],prior.sigma_zphot_clustering[i][1]); 
+  }
+  like.clphotoz=1;
+}
 
 void set_clphotoz_WFIRST_pessi()
 {
@@ -1140,6 +1201,17 @@ void set_shear_priors_WFIRST_opti()
 }
 
 void set_shear_priors_WFIRST_KL()
+{
+  int i;
+  printf("Setting Gaussian shear calibration Priors stage 4\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    prior.shear_calibration_m[i][0] = 0.0;
+    prior.shear_calibration_m[i][1] = 0.0004;
+    printf("Mean=%le, Sigma=%le\n",prior.shear_calibration_m[i][0],prior.shear_calibration_m[i][1]);
+  }
+  like.shearcalib=1;
+}
+void set_shear_priors_DESI2_KL()
 {
   int i;
   printf("Setting Gaussian shear calibration Priors stage 4\n");
@@ -1200,4 +1272,16 @@ void set_survey_parameters_to_WFIRST_KL()
   survey.m_lim=28.0;
   sprintf(survey.Kcorrect_File,"../zdistris/k+e.dat");
   sprintf(survey.name,"WFIRST_KL");
+}
+
+void set_survey_parameters_to_DESI2_KL()
+{
+  survey.area   = 14000.;
+  survey.n_gal   = 0.05;
+  survey.sigma_e   = 0.05;
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor=1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim=19.5;
+  sprintf(survey.Kcorrect_File,"../zdistris/k+e.dat");
+  sprintf(survey.name,"DESI2_KL");
 }
