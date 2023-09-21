@@ -549,6 +549,7 @@ int main(int argc, char** argv)
   // The DESI BGS is 14000 deg2, can be smaller than that
   double survey_area[3] = {3500.0, 7000.0, 14000.0};
   int N_scenarios_area = sizeof(survey_area)/sizeof(double);
+  printf("%d survey area scenarios\n", N_scenarios_area);
   // Four sets of target selection criteria, each with different n(z)
   double source_density[4] = {0.0644, 0.0531, 0.0431, 0.0353};
   // example, zdistris/zdistri_WFIRST_grism_norm
@@ -559,11 +560,13 @@ int main(int argc, char** argv)
     "zdistris/zdistri_DESI2_KL_sample4",
   };
   int N_scenarios_selection = sizeof(source_density)/sizeof(double);
+  printf("%d target selection scenarios\n", N_scenarios_selection);
   // Four shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
   // selection here.
   double shape_noise_rms[4] = {0.2, 0.04, 0.06, 0.10};
   int N_scenarios_shape_noise = sizeof(shape_noise_rms)/sizeof(double);
+  printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
   // Lens galaxies not used, set to random value
   float lens_density = 66.0;
   // Start with 4 source tomo bins 
@@ -587,11 +590,6 @@ int main(int argc, char** argv)
   init_cosmo_runmode("halofit");
   init_binning_fourier(Nell, ell_min, ell_max, ell_max, Rmin_bias, 
     Ntomo_source, Ntomo_lens);
-  init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
-  init_clusters(); // not used if we don't have clusters
-  init_IA("none", "GAMA");// not used for covmat
-  init_probes("shear_shear");
-  sprintf(covparams.outdir, "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara/");
 
   k=1;
   //set l-bins for shear, ggl, clustering, clusterWL
@@ -625,8 +623,9 @@ int main(int argc, char** argv)
     temp -= i_shape_noise * N_scenarios_shape_noise;
     assert(temp==0);
 
-    // init survey name, area, n_gal, shape noise, magnitude limit, K-correction
+    init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
     init_survey("DESI2_KL");
+    // init survey name, area, n_gal, shape noise, magnitude limit, K-correction
     sprintf(survey.name, "%s_%d%d%d", "DESI2_KL", i_area, i_selection, i_shape_noise);
     survey.area = survey_area[i_area];
     survey.n_gal = source_density[i_selection];
@@ -635,6 +634,11 @@ int main(int argc, char** argv)
     init_galaxies(dndz[i_selection], 
       "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", 
       "gaussian", "gaussian", "SN10");// the last arg is lens sample
+    init_clusters(); // not used if we don't have clusters
+    init_IA("none", "GAMA");// not used for covmat
+    init_probes("shear_shear");
+    sprintf(covparams.outdir, "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara/");
+
     printf("----------------------------------\n");  
     printf("area: %le n_source: %le n_lens: %le\n",survey.area,survey.n_gal,survey.n_lens);
     printf("----------------------------------\n");

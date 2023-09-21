@@ -219,7 +219,7 @@ void init_binning_fourier(int Ncl, double lmin, double lmax, double lmax_shear, 
   } 
   Cluster.lbin = k;
   Cluster.l_max = lmax; //clusters go to highly nonlin as std
-  printf("%le %le %d\n",Cluster.l_min,Cluster.l_max,Cluster.lbin);
+  //printf("%le %le %d\n",Cluster.l_min,Cluster.l_max,Cluster.lbin);
   like.lmax_kappacmb = 2999.;
   
   printf("number of ell bins Ncl: %d\n",like.Ncl);
