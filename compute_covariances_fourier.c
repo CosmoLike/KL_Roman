@@ -615,12 +615,12 @@ int main(int argc, char** argv)
 
   for(t=0;t<N_scenarios;t++){
     int temp = t;
-    int i_area = temp/N_scenarios;
-    temp -= i_area * N_scenarios;
-    int i_selection = temp/(N_scenarios_selection*N_scenarios_shape_noise);
-    temp -= i_selection * N_scenarios_selection*N_scenarios_shape_noise;
-    int i_shape_noise = temp/N_scenarios_shape_noise;
-    temp -= i_shape_noise * N_scenarios_shape_noise;
+    int i_area = temp/(N_scenarios_selection*N_scenarios_shape_noise);
+    temp -= i_area * N_scenarios_selection * N_scenarios_shape_noise;
+    int i_selection = temp/N_scenarios_shape_noise;
+    temp -= i_selection * N_scenarios_shape_noise;
+    int i_shape_noise = temp;
+    temp -= i_shape_noise;
     assert(temp==0);
 
     init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
