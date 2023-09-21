@@ -648,7 +648,8 @@ int main(int argc, char** argv)
       sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
       for (l=0; l<tomo.shear_Npowerspectra; l++){
         for (m=l;m<tomo.shear_Npowerspectra; m++){
-          if(k==hit){ 
+          if(k==hit){
+            printf("catch k=%d\n", hit); 
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
