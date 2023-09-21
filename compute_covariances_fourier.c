@@ -542,7 +542,6 @@ int main(int argc, char** argv)
   int i,l,m,n,o,s,p,nl1,t,k;
   char OUTFILE[400],filename[400];
   
-  int N_scenarios=1;
   // Setting Scenarios (survey area, source density, lens density)
   // As a comparison, LSST (12300 deg2) assumes 15 bins from ell=20 to 3000
   // Roman HLIS (5000 deg2) assumes 20 bins from ell=30 to 4000
