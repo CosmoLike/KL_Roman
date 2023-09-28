@@ -570,7 +570,7 @@ int main(int argc, char** argv)
   // Lens galaxies not used, set to random value
   float lens_density = 66.0;
   // Start with 4 source tomo bins 
-  int Ntomo_source = 4;
+  int Ntomo_source[4] = {4, 4, 4, 3};
   // Lens galaxies not used, set to random value
   int Ntomo_lens = 10;
   double Rmin_bias = 21.0; // not used 
@@ -578,6 +578,7 @@ int main(int argc, char** argv)
   int Nell = 15;
   double ell_min = 20.0;
   double ell_max = 3000.0;
+  double ell_max_shear = 3000.0;
   // Now count how many scenarios
   int N_scenarios = N_scenarios_area * N_scenarios_selection *\
     N_scenarios_shape_noise;
@@ -586,25 +587,20 @@ int main(int argc, char** argv)
   int hit=atoi(argv[1]);
   Ntable.N_a=20;
 
-  //RUN MODE setup
-  init_cosmo_runmode("halofit");
-  init_binning_fourier(Nell, ell_min, ell_max, ell_max, Rmin_bias, 
-    Ntomo_source, Ntomo_lens);
-
   k=1;
   //set l-bins for shear, ggl, clustering, clusterWL
-  double logdl=(log(like.lmax)-log(like.lmin))/like.Ncl;
+  double logdl=(log(ell_max)-log(ell_min))/Nell;
   double *ell, *dell, *ell_Cluster, *dell_Cluster;
-  ell=create_double_vector(0,like.Ncl-1);
-  dell=create_double_vector(0,like.Ncl-1);
+  ell=create_double_vector(0,Nell-1);
+  dell=create_double_vector(0,Nell-1);
   ell_Cluster=create_double_vector(0,Cluster.lbin-1);
   dell_Cluster=create_double_vector(0,Cluster.lbin-1);
   int j=0;
-  for(i=0;i<like.Ncl;i++){
-    ell[i]=exp(log(like.lmin)+(i+0.5)*logdl);
-    dell[i]=exp(log(like.lmin)+(i+1)*logdl)-exp(log(like.lmin)+(i*logdl));
-    if(ell[i]<like.lmax_shear) printf("%le\n",ell[i]);
-    if(ell[i]>like.lmax_shear){
+  for(i=0;i<Nell;i++){
+    ell[i]=exp(log(ell_min)+(i+0.5)*logdl);
+    dell[i]=exp(log(ell_min)+(i+1)*logdl)-exp(log(ell_min)+(i*logdl));
+    if(ell[i]<ell_max_shear) printf("%le\n",ell[i]);
+    if(ell[i]>ell_max_shear){
       ell_Cluster[j]=ell[i];
       dell_Cluster[j]=dell[i];
       printf("%le %le\n",ell[i],ell_Cluster[j]);
@@ -623,6 +619,10 @@ int main(int argc, char** argv)
     temp -= i_shape_noise;
     assert(temp==0);
 
+    //RUN MODE setup
+    init_cosmo_runmode("halofit");
+    init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, 
+    Ntomo_source[i_selection], Ntomo_lens);
     init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
     init_survey("DESI2_KL");
     // init survey name, area, n_gal, shape noise, magnitude limit, K-correction
