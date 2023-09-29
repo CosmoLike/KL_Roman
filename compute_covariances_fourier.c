@@ -547,30 +547,39 @@ int main(int argc, char** argv)
   // Roman HLIS (5000 deg2) assumes 20 bins from ell=30 to 4000
   // Three sets of survey area settings
   // The DESI BGS is 14000 deg2, can be smaller than that
-  double survey_area[3] = {3500.0, 7000.0, 14000.0};
-  int N_scenarios_area = sizeof(survey_area)/sizeof(double);
-  printf("%d survey area scenarios\n", N_scenarios_area);
+  double survey_area = 14000.0;
+  // We do not sample survey area any more, just scale that!
+  //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
+  //printf("%d survey area scenarios\n", N_scenarios_area);
   // Four sets of target selection criteria, each with different n(z)
-  double source_density[4] = {0.0644, 0.0531, 0.0431, 0.0353};
+  //double source_density[4] = {0.0644, 0.0531, 0.0431, 0.0353};
+  double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
   // example, zdistris/zdistri_WFIRST_grism_norm
-  char dndz[4][100] = {
-    "zdistris/zdistri_DESI2_KL_sample1",
-    "zdistris/zdistri_DESI2_KL_sample2", 
-    "zdistris/zdistri_DESI2_KL_sample3", 
-    "zdistris/zdistri_DESI2_KL_sample4",
+  char dndz[6][100] = {
+    //"zdistris/zdistri_DESI2_KL_sample1",
+    //"zdistris/zdistri_DESI2_KL_sample2", 
+    //"zdistris/zdistri_DESI2_KL_sample3", 
+    //"zdistris/zdistri_DESI2_KL_sample4",
+    "zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
+    "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
+    "zdistris/zdistri_DESI2_KL_BGS_Any_sample1_v2",
+    "zdistris/zdistri_DESI2_KL_BGS_Any_sample2_v2",
+    "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
+    "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   };
+  // Start with 4 source tomo bins 
+  int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
   int N_scenarios_selection = sizeof(source_density)/sizeof(double);
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // Four shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
   // selection here.
-  double shape_noise_rms[4] = {0.2, 0.04, 0.06, 0.10};
+  double shape_noise_rms[6] = {0.20*1.4142, 0.04*1.4142, 0.06*1.4142, 
+                               0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
   int N_scenarios_shape_noise = sizeof(shape_noise_rms)/sizeof(double);
   printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
   // Lens galaxies not used, set to random value
   float lens_density = 66.0;
-  // Start with 4 source tomo bins 
-  int Ntomo_source[4] = {4, 4, 4, 3};
   // Lens galaxies not used, set to random value
   int Ntomo_lens = 10;
   double Rmin_bias = 21.0; // not used 
@@ -580,8 +589,7 @@ int main(int argc, char** argv)
   double ell_max = 3000.0;
   double ell_max_shear = 3000.0;
   // Now count how many scenarios
-  int N_scenarios = N_scenarios_area * N_scenarios_selection *\
-    N_scenarios_shape_noise;
+  int N_scenarios = N_scenarios_selection * N_scenarios_shape_noise;
   //double scenario_table[1][3]={ {2000.0, 8.0, 66.0} };
 
   int hit=atoi(argv[1]);
@@ -611,8 +619,6 @@ int main(int argc, char** argv)
 
   for(t=0;t<N_scenarios;t++){
     int temp = t;
-    int i_area = temp/(N_scenarios_selection*N_scenarios_shape_noise);
-    temp -= i_area * N_scenarios_selection * N_scenarios_shape_noise;
     int i_selection = temp/N_scenarios_shape_noise;
     temp -= i_selection * N_scenarios_shape_noise;
     int i_shape_noise = temp;
@@ -626,8 +632,8 @@ int main(int argc, char** argv)
     init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
     init_survey("DESI2_KL");
     // init survey name, area, n_gal, shape noise, magnitude limit, K-correction
-    sprintf(survey.name, "%s_%d%d%d", "DESI2_KL", i_area, i_selection, i_shape_noise);
-    survey.area = survey_area[i_area];
+    sprintf(survey.name, "%s_%d%d", "DESI2_KL_v2", i_selection, i_shape_noise);
+    survey.area = survey_area;
     survey.n_gal = source_density[i_selection];
     survey.sigma_e = shape_noise_rms[i_shape_noise];
     // init source and lens n(z) and photo-z 
@@ -637,10 +643,12 @@ int main(int argc, char** argv)
     init_clusters(); // not used if we don't have clusters
     init_IA("none", "GAMA");// not used for covmat
     init_probes("shear_shear");
-    sprintf(covparams.outdir, "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara/");
+    sprintf(covparams.outdir, 
+      "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");
 
     printf("----------------------------------\n");  
-    printf("area: %le n_source: %le n_lens: %le\n",survey.area,survey.n_gal,survey.n_lens);
+    printf("area: %le n_source: %le n_lens: %le\n",
+      survey.area,survey.n_gal,survey.n_lens);
     printf("----------------------------------\n");
     /******************************* START ************************************/
     /********************** cosmic shear - cosmic shear  **********************/
