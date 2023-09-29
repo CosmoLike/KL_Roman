@@ -27,61 +27,42 @@ for i in range(N_area):
 				print(f'File {infile} does not exist! Continue')
 				continue
 			outname = DATA_DIR+"invcov/"+infile_fmt%(i,j,k,Ncl,N_tomo)
-
-			# data vector
-			data= ['/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/datav/WFIRST_shear_shear_opti_Ntomo10_Ncl20_sigmae0.37_dmo_ia']
-
+			### Set data vector dimensions
 			nggl = 0 	# number of ggl power spectra
 			ngcl = 0	# number of cluster-source galaxy power spectra
 			nlens = 0 	# number of lens bins 
 			nlenscl= 0 	# number of cluster redshift bins 
-			nshear = (N_tomo+1)*N_tomo/2 # number of shear tomographic power spectra
+			nshear = (N_tomo+1)*N_tomo/2 # # of shear tomo power spectra
 			ncl=Ncl		# number of ell-bins
 			nclgcl=0	# number of cluster ell-bins
 			nrich=0		# number of richness bins
-
-
 			ndata = (nshear+nggl+nlens)*ncl+nlenscl*nrich+nrich*ngcl*nclgcl
 			n2pt = (nshear+nggl+nlens)*ncl 
 			ncluster = nlenscl*nrich 
 			n2ptcl=n2pt+ncluster
 			nclusterN_WL=ncluster+nrich*ngcl*nclgcl
 			print(f'Data Vector Size = {ndata}')
+			### Just use all-1 mask for new
 			mask = np.ones(ndata)
-			#datafile= np.genfromtxt()
-			#mask = np.zeros(ndata)
-			#for i in range(0,datafile.shape[0]):
-			#		if (datafile[i,1] >1.0e-15): 
-			#			mask[i]=1.0
-			#	for m in mask:
-			#		m = 1.0
-  	
-  			covfile = np.genfromtxt(infile)
+			### Read covariance matrix
+			covfile = np.genfromtxt(infile)
   			_ndata = int(np.max(covfile[:,0])+1)
   			assert _ndata == ndata, f'Inconsistent Ndata {ndata} v.s. {_ndata}'
 			cov = np.zeros((ndata,ndata))
-
 			for l in range(0,covfile.shape[0]):
 				bin1, bin2 = int(covfile[l,0]), int(covfile[l,1])
 				cov_g, cov_ng = covfile[l,8], covfile[l,9]
 			  	cov[bin1, bin2] = cov_g+cov_ng
 			  	cov[bin2, bin1] = cov_g+cov_ng
-	 
-	
+			### And calculate correlation matrix
 			cor = cov/np.outer(LA.diag(cov)**0.5, LA.diag(cov)**0.5)
-
 			# for i in range(0,ndata):
 			#     for j in range(0,ndata):
 			#     	if (cov[i,i]*cov[j,j] >0):
 			#        		cor[i,j] = cov[i,j]/math.sqrt(cov[i,i]*cov[j,j])
-
 			a = np.sort(LA.eigvals(cor[:,:]))
 			print("Eigenvalues range of corrmat (%.3e, %.3e)"%(np.min(a), np.max(a)))
 			print("Negative eigenvalues of corrmat:{}".format(a[a<0]))
-			#for i in range(0,a.shape[0]):
-			#	if (a[i]< 0.0): print a[i]
-
-
 			# ############### invert shear covariance #################
 			inv = LA.inv(cov[0:nshear*ncl,0:nshear*ncl])
 			a = np.sort(LA.eigvals(cov[0:nshear*ncl,0:nshear*ncl]))
@@ -165,14 +146,15 @@ for i in range(N_area):
 			  		f.write("%d %d %e\n" %( i,j, inv[i,j]))
 			f.close()
 			'''
+			### Plot correlation matrix or covariance matrix
 			if plot_corrmat:
-				labels = (
+				labels = [
 	r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',
 	# r'$C^{g \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',
 	# r'$C^{gg}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',
 	# r'$N^{c}\left(r,z_{\mathrm{c}_i}\right)$',
 	# r'$C^{c \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',
-				)
+				]
 				ticks = np.zeros(2)
 				ticks[1] = nshear*ncl
 				# ticks[2] = (nshear+nggl)*ncl
@@ -207,16 +189,3 @@ for i in range(N_area):
 				plt.colorbar(im)
 				#plt.show()
 				plt.savefig("test_imgs/"+outname+".png", format="png")
-				
-				# plt.figure()
-				# #plt.imshow(np.log10(cov[0:1500,2000:]), interpolation="nearest",vmin=-25, vmax=-10)
-				# plt.imshow(np.log10(cov[:,:]), interpolation="nearest",vmin=-25, vmax=-10)
-				# #plt.imshow(cor[n2ptcl:n2ptcl+200,300:nshear*ncl], interpolation="nearest",vmax=0.5)
-				# plt.colorbar()
-				# plt.show()
-
-	
-
-
-
-
