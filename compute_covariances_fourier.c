@@ -574,7 +574,7 @@ int main(int argc, char** argv)
   // Four shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
   // selection here.
-  double shape_noise_rms[6] = {0.20*1.4142, 0.04*1.4142, 0.06*1.4142, 
+  double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
                                0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
   int N_scenarios_shape_noise = sizeof(shape_noise_rms)/sizeof(double);
   printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
