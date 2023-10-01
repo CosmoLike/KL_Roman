@@ -659,7 +659,11 @@ int main(int argc, char** argv)
           if(k==hit){
             printf("catch k=%d\n", hit); 
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
               run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
             }
@@ -677,7 +681,11 @@ int main(int argc, char** argv)
           if(k==hit){
 			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
               run_cov_ggl(OUTFILE,covparams.outdir,ell,dell,l,m,k);
             }
@@ -694,7 +702,11 @@ int main(int argc, char** argv)
           if(k==hit){ 
             printf("catch k=%d\n", hit); 
 			sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
               run_cov_clustering(OUTFILE,covparams.outdir,ell,dell,l,m,k);
             }
@@ -711,7 +723,11 @@ int main(int argc, char** argv)
           if(k==hit){
 			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
               run_cov_clustering_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
             }
@@ -728,7 +744,11 @@ int main(int argc, char** argv)
           if(k==hit){
 			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
               run_cov_clustering_ggl(OUTFILE,covparams.outdir,ell,dell,l,m,k);
             }
@@ -745,7 +765,11 @@ int main(int argc, char** argv)
           if(k==hit){
 			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
               run_cov_ggl_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
             }
@@ -766,7 +790,11 @@ int main(int argc, char** argv)
           if(k==hit){
 			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
               run_cov_N_N (OUTFILE,covparams.outdir,l,m,k);
             }
@@ -783,7 +811,11 @@ int main(int argc, char** argv)
           if(k==hit){
 			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
               run_cov_cgl_cgl (OUTFILE,covparams.outdir,ell_Cluster,dell_Cluster,l,m,k);
             }
@@ -800,7 +832,11 @@ int main(int argc, char** argv)
           if(k==hit){
 			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
               run_cov_cgl_N (OUTFILE,covparams.outdir,ell_Cluster,dell_Cluster,l,m,k);
             }
@@ -817,7 +853,11 @@ int main(int argc, char** argv)
           if(k==hit){
 			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
              run_cov_shear_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
            }
@@ -834,7 +874,11 @@ int main(int argc, char** argv)
             if(k==hit){
 			  printf("catch k=%d\n", hit);
               sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-              if (fopen(filename, "r") != NULL){exit(1);}
+              if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
               else {
                 run_cov_shear_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
               }
@@ -851,7 +895,11 @@ int main(int argc, char** argv)
           if(k==hit){
 			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
              run_cov_ggl_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
             }
@@ -868,7 +916,11 @@ int main(int argc, char** argv)
             if(k==hit){
 			  printf("catch k=%d\n", hit);
               sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-              if (fopen(filename, "r") != NULL){exit(1);}
+              if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
               else {
                 run_cov_ggl_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
               }
@@ -885,7 +937,11 @@ int main(int argc, char** argv)
           if(k==hit){
 			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){exit(1);}
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
             else {
              run_cov_cl_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);          
             }
@@ -902,7 +958,7 @@ int main(int argc, char** argv)
             if(k==hit){
 			  printf("catch k=%d\n", hit);
               sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-              if (fopen(filename, "r") != NULL){exit(1);}
+              if (fopen(filename, "r") != NULL){printf("File %s already exist! Forced not to overwrite!\n", filename);exit(1)}
               else {
                 run_cov_cl_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
               }
