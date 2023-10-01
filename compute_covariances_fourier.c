@@ -958,7 +958,11 @@ int main(int argc, char** argv)
             if(k==hit){
 			  printf("catch k=%d\n", hit);
               sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-              if (fopen(filename, "r") != NULL){printf("File %s already exist! Forced not to overwrite!\n", filename);exit(1)}
+              if (fopen(filename, "r") != NULL){
+				printf("File %s already exist! Forced not to overwrite!\n", 
+					filename);
+				exit(1);
+			  }
               else {
                 run_cov_cl_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
               }
