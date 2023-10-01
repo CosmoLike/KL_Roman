@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import sys
+import sys, os
 import math, numpy as np
 import matplotlib
 matplotlib.use('Agg')
@@ -10,52 +10,60 @@ import numpy as np
 
 # covariance matrix
 DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
-infile_fmt = "DESI2_KL_%d%d%d_ssss_cov_Ncl%d_Ntomo%d"
+infile_fmt = "DESI2_KL_v2_%d%d_ssss_cov_Ncl%d_Ntomo%d"
+outfile_fmt = "DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
 Ncl = 15
-N_area = 3
-N_selection = 4
-N_tomo_list = [4, 4, 4, 3]
-N_shape_noise = 4
+Area_list = [14000,]
+N_area = 1
+N_selection = 6
+N_tomo_list = [4, 4, 4, 4, 4, 4]
+Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])*3600
+N_shape_noise = 6
+SN_list = [0.20*1.4142, 0.04*1.4142, 0.06*1.4142, 0.10*1.4142, 0.20*1.4142, 0.30*1.4142]
 plot_corrmat = True
 
-for i in range(N_area):
-	for j in range(N_selection):
-		N_tomo = N_tomo_list[j]
-		for k in range(N_shape_noise):
-			infile = DATA_DIR+"cov/"+infile_fmt%(i,j,k,Ncl,N_tomo)
+for iArea in range(N_area):
+	Area = Area_list[iArea]
+	for jSelect in range(N_selection):
+		N_tomo = N_tomo_list[jSelect]
+		Nsrc = Nsrc_list[jSelect]
+		for kSN in range(N_shape_noise):
+			SN = SN_list[kSN]
+			fig_title = "$\Omega_s=$%d deg$^{2}$, $n_\mathrm{src}=$%d deg$^{-2}$, $\sigma_\epsilon^\mathrm{rms}$=%.2f"%(Area, Nsrc, SN)
+			infile = DATA_DIR+"cov/"+infile_fmt%(jSelect,kSN,Ncl,N_tomo)
 			if not os.path.exists(infile):
 				print(f'File {infile} does not exist! Continue')
 				continue
-			outname = DATA_DIR+"invcov/"+infile_fmt%(i,j,k,Ncl,N_tomo)
+			outname = DATA_DIR+"invcov/"+outfile_fmt%(jSelect,kSN,Ncl,N_tomo)
 			### Set data vector dimensions
 			nggl = 0 	# number of ggl power spectra
 			ngcl = 0	# number of cluster-source galaxy power spectra
 			nlens = 0 	# number of lens bins 
 			nlenscl= 0 	# number of cluster redshift bins 
-			nshear = (N_tomo+1)*N_tomo/2 # # of shear tomo power spectra
-			ncl=Ncl		# number of ell-bins
+			nshear = int((N_tomo+1)*N_tomo/2) # # of shear tomo power spectra
+			ncl=int(Ncl)		# number of ell-bins
 			nclgcl=0	# number of cluster ell-bins
 			nrich=0		# number of richness bins
-			ndata = (nshear+nggl+nlens)*ncl+nlenscl*nrich+nrich*ngcl*nclgcl
-			n2pt = (nshear+nggl+nlens)*ncl 
-			ncluster = nlenscl*nrich 
-			n2ptcl=n2pt+ncluster
-			nclusterN_WL=ncluster+nrich*ngcl*nclgcl
+			ndata = int((nshear+nggl+nlens)*ncl+nlenscl*nrich+nrich*ngcl*nclgcl)
+			n2pt = int((nshear+nggl+nlens)*ncl)
+			ncluster = int(nlenscl*nrich)
+			n2ptcl=int(n2pt+ncluster)
+			nclusterN_WL=int(ncluster+nrich*ngcl*nclgcl)
 			print(f'Data Vector Size = {ndata}')
 			### Just use all-1 mask for new
 			mask = np.ones(ndata)
 			### Read covariance matrix
 			covfile = np.genfromtxt(infile)
-  			_ndata = int(np.max(covfile[:,0])+1)
-  			assert _ndata == ndata, f'Inconsistent Ndata {ndata} v.s. {_ndata}'
+			_ndata = int(np.max(covfile[:,0])+1)
+			assert _ndata == ndata, f'Inconsistent Ndata {ndata} v.s. {_ndata}'
 			cov = np.zeros((ndata,ndata))
 			for l in range(0,covfile.shape[0]):
 				bin1, bin2 = int(covfile[l,0]), int(covfile[l,1])
 				cov_g, cov_ng = covfile[l,8], covfile[l,9]
-			  	cov[bin1, bin2] = cov_g+cov_ng
-			  	cov[bin2, bin1] = cov_g+cov_ng
+				cov[bin1, bin2] = cov_g+cov_ng
+				cov[bin2, bin1] = cov_g+cov_ng
 			### And calculate correlation matrix
-			cor = cov/np.outer(LA.diag(cov)**0.5, LA.diag(cov)**0.5)
+			cor = cov/np.outer(np.diagonal(cov)**0.5, np.diagonal(cov)**0.5)
 			# for i in range(0,ndata):
 			#     for j in range(0,ndata):
 			#     	if (cov[i,i]*cov[j,j] >0):
@@ -67,10 +75,10 @@ for i in range(N_area):
 			inv = LA.inv(cov[0:nshear*ncl,0:nshear*ncl])
 			a = np.sort(LA.eigvals(cov[0:nshear*ncl,0:nshear*ncl]))
 			print("Eigvals range of covmat (%.3e, %.3e)"%(np.min(a), np.max(a)))
-			f = open(outname, "w")
+			f = open(outname, 'w')
 			for i in range(0,nshear*ncl):
 			  	for j in range(0,nshear*ncl):
-			  		f.write("%d %d %e\n" %(i,j, inv[i,j]*mask[i]*mask[j]))
+			  		f.write("%d %d %e\n" %(i, j, inv[i,j]*mask[i]*mask[j]))
 			f.close()
 			'''	
 			# ############### invert clustering covariance #################
@@ -163,7 +171,7 @@ for i in range(N_area):
 				# ticks[5] = ndata
 				tickx = 0.5*(ticks[:-1]+ticks[1:])
 
-				cor = cov/np.outer(LA.diag(cov)**0.5, LA.diag(cov)**0.5)
+				cor = cov/np.outer(np.diagonal(cov)**0.5, np.diagonal(cov)**0.5)
 				cor = cor*np.outer(mask, mask)
 				# cor = np.zeros((ndata,ndata))
 				# for i in range(0,ndata):
@@ -180,7 +188,9 @@ for i in range(N_area):
 				plt.subplot(1, 1, 1)
 				ax = plt.gca()
 				# im = ax.imshow(np.log10(cov[:,:]), interpolation="nearest",vmin=-25, vmax=-10)
-				im = ax.imshow(cor, interpolation='nearest', origin='lower', vmin=-1, vmax=1)
+				im = ax.imshow(cor, interpolation='nearest', origin='lower', vmin=-1, vmax=1,
+								cmap='seismic')
+				ax.set_title(fig_title, fontsize=16)
 				plt.xticks(tickx, labels,fontsize=fs)
 				plt.yticks(tickx-0.5, labels,fontsize=fs)
 				#plt.tick_params(axis = 'x',length = 0, pad = 15)
@@ -188,4 +198,5 @@ for i in range(N_area):
 
 				plt.colorbar(im)
 				#plt.show()
-				plt.savefig("test_imgs/"+outname+".png", format="png")
+				figfilename_fmt = "test_imgs/"+outfile_fmt+".png"
+				plt.savefig(figfilename_fmt%(jSelect,kSN,Ncl,N_tomo), format="png")
