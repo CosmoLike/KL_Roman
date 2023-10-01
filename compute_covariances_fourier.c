@@ -675,6 +675,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.ggl_Npowerspectra; l++){
         for (m=l;m<tomo.ggl_Npowerspectra; m++){
           if(k==hit){
+			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
@@ -691,7 +692,8 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.clustering_Npowerspectra; l++){ //auto bins only for now!
         for (m=l;m<tomo.clustering_Npowerspectra; m++){
           if(k==hit){ 
-            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            printf("catch k=%d\n", hit); 
+			sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
               run_cov_clustering(OUTFILE,covparams.outdir,ell,dell,l,m,k);
@@ -707,6 +709,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.clustering_Npowerspectra; l++){
         for (m=0;m<tomo.shear_Npowerspectra; m++){
           if(k==hit){
+			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
@@ -723,6 +726,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.clustering_Npowerspectra; l++){
         for (m=0;m<tomo.ggl_Npowerspectra; m++){
           if(k==hit){
+			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
@@ -739,6 +743,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.ggl_Npowerspectra; l++){
         for (m=0;m<tomo.shear_Npowerspectra; m++){
           if(k==hit){
+			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
@@ -759,6 +764,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.cluster_Nbin; l++){
         for (m=0;m<tomo.cluster_Nbin; m++){
           if(k==hit){
+			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
@@ -775,6 +781,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.cgl_Npowerspectra; l++){
         for (m=0;m<tomo.cgl_Npowerspectra; m++){
           if(k==hit){
+			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
@@ -791,6 +798,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.cgl_Npowerspectra; l++){
         for (m=0;m<tomo.cluster_Nbin; m++){
           if(k==hit){
+			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
@@ -807,6 +815,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.shear_Npowerspectra; l++){
         for (m=0;m<tomo.cluster_Nbin; m++){
           if(k==hit){
+			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
@@ -823,6 +832,7 @@ int main(int argc, char** argv)
      for (l=0;l<tomo.shear_Npowerspectra; l++){
         for (m=0;m<tomo.cgl_Npowerspectra; m++){
             if(k==hit){
+			  printf("catch k=%d\n", hit);
               sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
               if (fopen(filename, "r") != NULL){exit(1);}
               else {
@@ -839,6 +849,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.ggl_Npowerspectra; l++){
         for (m=0;m<tomo.cluster_Nbin; m++){
           if(k==hit){
+			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
@@ -855,6 +866,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.ggl_Npowerspectra; l++){
         for (m=0;m<tomo.cgl_Npowerspectra; m++){
             if(k==hit){
+			  printf("catch k=%d\n", hit);
               sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
               if (fopen(filename, "r") != NULL){exit(1);}
               else {
@@ -871,6 +883,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.clustering_Npowerspectra; l++){
         for (m=0;m<tomo.cluster_Nbin; m++){
           if(k==hit){
+			printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){exit(1);}
             else {
@@ -887,6 +900,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.clustering_Npowerspectra; l++){
         for (m=0;m<tomo.cgl_Npowerspectra; m++){
             if(k==hit){
+			  printf("catch k=%d\n", hit);
               sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
               if (fopen(filename, "r") != NULL){exit(1);}
               else {

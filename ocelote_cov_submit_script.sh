@@ -1,23 +1,27 @@
 #!/bin/bash
-#PBS -S /bin/bash
-#PBS -V
-#PBS -W group_list=cosmo
-#PBS -q standard
-#PBS -J 1-3
-#PBS -l select=1:ncpus=1:mem=6GB
-#PBS -l place=free:shared
-#PBS -l walltime=1:00:00
-#PBS -N WL_W1st_KL_cov
-#PBS -e /home/u17/jiachuanxu/output/
-#PBS -o /home/u17/jiachuanxu/output/
 
-module load gsl/2/2.1
-module load mpich/ge/gcc/64/3.2.1
-module load openmpi
+#SBATCH --job-name=covDESI
+###SBATCH --output=covDESIKL-%A_%a.out
+#SBATCH --array=1-990
+#SBATCH --nodes=1
+#SBATCH --ntasks=4
+#SBATCH --cpus-per-task=4
+#SBATCH --partition=high_priority
+#SBATCH --qos=user_qos_timeifler
+#SBATCH --account=timeifler
+#SBATCH --time=240:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=jiachuanxu@arizona.edu
 
-cd $PBS_O_WORKDIR
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./compute_covariances_fourier $PBS_ARRAY_INDEX >& /home/u17/jiachuanxu/output/job_output_$PBS_ARRAY_INDEX.log
-
+module load gsl
+module load openmpi3
+WORKDIR=/home/u17/jiachuanxu/CosmoLike/KL_WFIRST
+cd ${WORKDIR}
+for (( c=0; c<2; c++ ))
+do
+	hit=$(( ${SLURM_ARRAY_TASK_ID} + c * 990 ))
+	./compute_covariances_fourier ${hit}
+done
 
 
 
