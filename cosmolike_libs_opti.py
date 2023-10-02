@@ -445,9 +445,9 @@ class InputNuisanceParams(IterableStruct):
         c = cls()
         c.bias[:] = [1.3,1.35,1.4,1.45,1.5,1.55,1.6,1.65,1.7,1.75]
         c.source_z_bias[:] = np.repeat(0.0, 10)
-        c.source_z_s = 0.002
+        c.source_z_s = 0.0005
         c.lens_z_bias[:] = np.repeat(0.0, 10)
-        c.lens_z_s = 0.002
+        c.lens_z_s = 0.0005
         c.shear_m[:] = np.repeat(0.0, 10)
         c.A_ia = 5.92
         c.beta_ia = 1.1
@@ -483,10 +483,10 @@ class InputNuisanceParams(IterableStruct):
     def fiducial_sigma_KL(cls):
         c = cls()
         c.bias[:] = np.repeat(0.15, 10)
-        c.source_z_bias[:] = np.repeat(0.001, 10)
-        c.source_z_s = 0.0004
-        c.lens_z_bias[:] = np.repeat(0.001, 10)
-        c.lens_z_s = 0.0004
+        c.source_z_bias[:] = np.repeat(0.00025, 10)
+        c.source_z_s = 0.0001
+        c.lens_z_bias[:] = np.repeat(0.00025, 10)
+        c.lens_z_s = 0.0001
         c.shear_m[:] = np.repeat(0.005, 10)
         c.A_ia = 0.05
         c.beta_ia = 0.01

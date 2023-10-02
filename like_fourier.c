@@ -45,6 +45,10 @@
 #include "init_WFIRST_forecasts.c"
 #include "../cosmolike_core/theory/init_baryon.c"
 
+#define _WRITE_NZ_TOMO_ 1
+#define _COMPUTE_DATAVECTOR_ 1
+#define _COMPUTE_LIKELIHOOD_ 0
+
 double C_shear_tomo_sys(double ell,int z1,int z2);
 double C_cgl_tomo_sys(double ell_Cluster,int zl,int nN, int zs);
 double C_gl_tomo_sys(double ell,int zl,int zs);
@@ -602,7 +606,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%2d_Ncl%2d_sigmae%.2f_%s",survey.name,like.probes,details,tomo.shear_Nbin,like.Ncl,survey.sigma_e,bary_sce);}
+  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%2d_Ncl%2d_%s",survey.name,like.probes,details,tomo.shear_Nbin,like.Ncl,bary_sce);}
   /*F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
     //a = pred[i]+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i);
@@ -679,139 +683,147 @@ void save_zdistr_lenses(int zl){
    }
 }
 
-// like_fourier ["opti"/"pessi"] ["WFIRST_WL"/"WFIRST_KL"] ["shear_shear"] ["dmo"/"mb2"/...]
 int main(int argc, char** argv)
 {
+  /* Usage: ./like_fourier [i_selection] [i_SN] ["shear_shear"] ["dmo"/"mb2"/...]
+    - i_selection: index of the target selection scenarios, [0, 5]
+    - i_SN: index of the shape noise scenarios, [0, 5]
+    - "shear_shear": flag for the likelihood to run
+    - "dmo"/"mb2"/...: baryon contamination scenario to used
+  */
   clock_t begin, end;
   double time_spent, loglike=0.0, init=0.0;
   int i;
-/* here, do your time-consuming job */
+
+  double survey_area = 14000.0;
+  // 6 sets of target selections results in different src density [/arcmin2]
+  double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
+  int N_scenarios_selection = sizeof(source_density)/sizeof(double);
+  char dndz[6][100] = {
+    "zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
+    "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
+    "zdistris/zdistri_DESI2_KL_BGS_Any_sample1_v2",
+    "zdistris/zdistri_DESI2_KL_BGS_Any_sample2_v2",
+    "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
+    "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
+  };
+  int Ntomo_source = 4;
+  printf("%d target selection scenarios\n", N_scenarios_selection);
+  // 6 sets of shape noise, used to refer to covariance matrix only
+  double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
+                               0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
+  int N_scenarios_shape_noise = sizeof(shape_noise_rms)/sizeof(double);
+  printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
+  // Lens galaxies not used, set to random value
+  double lens_density = 66.0;
+  // Lens galaxies not used, set to random value
+  int Ntomo_lens = 10;
+  double Rmin_bias = 21.0; // not used 
+  // 15 ell bins in Fourier space, from 20 to 3000
+  int Nell = 15;
+  double ell_min = 20.0;
+  double ell_max = 3000.0;
+  double ell_max_shear = 3000.0;
+  // Now count how many scenarios
+  int N_scenarios = N_scenarios_selection * N_scenarios_shape_noise;
+
+  int i_Selection = atoi(argv[1]);
+  int i_SN = atoi(argv[2]);
+  /* here, do your time-consuming job */
 
   init_cosmo_runmode("halofit");
   // baryon effects initialization
   // This one is used for applying baryon effects from specific simulation
-  init_bary(argv[4]); //"dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",...
+  // Available choices:
+  // "dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",...
+  init_bary(argv[4]);
   // This one is used for applying PCs reduced from a range of simulations
   //sprintf(like.BARY_FILE,"%s","datav/WFIRST_shear_shear_opti_Ntomo10_Ncl20_sigmae0.37_ia");
   //init = bary_read(0,1,1);
 
-  // init_binning_fourier: Ncl, lmin, lmax, lmax_shear , Rmin_bias, source tomo bin, lensing tomo bin
-  //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);// WFIRST standard WL
-  //init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
-  init_binning_fourier(10,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 10
-  if(strcmp(argv[2],"WFIRST_KL")==0)
-    init_priors_KL("photo_opti","shear_opti","none","none");
-  else{
-    if(strcmp(argv[1],"opti")==0) init_priors("photo_opti","shear_opti","none","none");
-    if(strcmp(argv[1],"pessi")==0) init_priors("photo_pessi","shear_pessi","none","none");
-  }
-  // init survey
-  // WFIRST_WL or WFIRST_KL?
-  init_survey(argv[2]);
+  init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, 
+    Rmin_bias, Ntomo_source, Ntomo_lens);
+  init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
+  init_survey("DESI2_KL");
   // customize shape noise here
-  survey.sigma_e = 0.08;
-  if(strcmp(argv[2],"WFIRST_WL")==0){
-     init_galaxies("zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm",
-                   "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm",
-                   "gaussian", "gaussian", "SN10");//standard WL
-  }
-  if(strcmp(argv[2],"WFIRST_KL")==0){
-    init_galaxies("zdistris/zdistri_WFIRST_grism_norm",
-                  "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm",
-                  "gaussian", "gaussian", "SN10");//WFIRST KL
-  }
-  // write redshift boundary of each tomo bin
-  /*
-  FILE *tomo_zdist;
-  char tomo_zdist_fname[500];
-  sprintf(tomo_zdist_fname, "zdistris/tomo_zdist_boundary_LSST+WFIRST_source_norm_Ntomo10");
-  tomo_zdist = fopen(tomo_zdist_fname, "w");
-  if(tomo_zdist!=NULL){
-    fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\n");
-    for(int i=0; i<tomo.shear_Nbin; i++){
-      fprintf(tomo_zdist,"%d\t%.6f\t%.6f\n",i,tomo.shear_zmin[i],tomo.shear_zmax[i]);
+  survey.sigma_e = shape_noise_rms[i_SN];
+  init_galaxies(dndz[i_Selection], 
+      "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", 
+      "gaussian", "gaussian", "SN10");// the last arg is lens sample
+  
+  #if _WRITE_NZ_TOMO_ == 1
+    // write redshift boundary of each tomo bin
+    FILE *tomo_zdist;
+    char tomo_zdist_fname[500];
+    sprintf(tomo_zdist_fname, "zdistris/tomo_zdist_DESI2KL_source");
+    tomo_zdist = fopen(tomo_zdist_fname, "w");
+    if(tomo_zdist!=NULL){
+      fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\n");
+      for(int i=0; i<tomo.shear_Nbin; i++){
+        fprintf(tomo_zdist,"%d\t%.6f\t%.6f\n",i,tomo.shear_zmin[i],tomo.shear_zmax[i]);
+      }
     }
-  }
-  fclose(tomo_zdist);
-  return 0;
-  */
-  // end writing tomo boundary
+    fclose(tomo_zdist);
+  #endif
+
   init_clusters();
   init_IA("none", "GAMA");
   init_probes(argv[3]);
   
+  /* compute fiducial data vector */
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21
-  if(strcmp(argv[2],"WFIRST_KL")==0){
-    compute_data_vector(argv[1],
-      // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
-      0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
-      // galaxy bias: b[0-9]
-      1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
-      // source galaxy photo-z bias[0-9] + std
-      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,
-      // lens galaxy photo-z bias[0-9] + std
-      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,
-      // additive shear calibration bias[0-9]
-      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-      // IA: A_ia, beta_ia, eta_ia, eta_ia_highz
-      5.92,1.1,-0.47,0.0,
-      // luminosity function: LF_alpha, LF_P, LF_Q, LF_red_alpha, LF_red_P, LF_red_Q
-      0.0,0.0,0.0,0.0,0.0,0.0,
-      // cluster mass calibration: mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm
-      3.207,0.993,0.0,0.456,
-      // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope
-      0.0,0.0,
-      argv[4]); // WFIRST Grism: R=461*lambda[um]
-  }
-  else{
-    if(strcmp(argv[1],"opti")==0){
-      compute_data_vector(argv[1],
-      0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
-      1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,
-      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,
-      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,
-      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-      5.92,1.1,-0.47,0.0,
-      0.0,0.0,0.0,0.0,0.0,0.0,
-      3.207,0.993,0.0,0.456,
-      0.0, 0.0,
-      argv[4]);
-    }
-    if(strcmp(argv[1],"pessi")==0){
-      compute_data_vector(argv[1],
-      0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
-      1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,
-      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
-      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
-      0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
-      5.92,1.1,-0.47,0.0,
-      0.0,0.0,0.0,0.0,0.0,0.0,
-      3.207,0.993,0.0,0.456,
-      0.0,0.0,
-      argv[4]);
-    }
-  }
-  // init_data_inv("cov/WFIRST_3x2pt_inv","datav/WFIRST_all_2pt_fid_opti");
-  
-
-  // begin = clock();
-  // loglike=log_multi_like(0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.0005,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.207,0.993,0.0,0.456,0.0,0.0);
-  // printf("%le\n",loglike);
-  // // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
-  // // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
-  // end = clock();
-  // time_spent = (double)(end - begin) / CLOCKS_PER_SEC;      
-  // printf("timespent %le\n",time_spent);
-  
-  //CH BEGINS
-  //for testing Planck15_BAO_w0wa prior alone
-  //compute_data_vector("fid",3.50989e-01,8.04675e-01,9.64061e-01,-5.05518e-01,-1.46884e+00,5.46245e-02,6.39839e-01,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.72+log(1.e+14*0.7),1.08,0.0,0.25,0.9,0.9,0.9,0.9);
-  //expect 0.0 for the following
-  //log_multi_like(3.50989e-01,8.04675e-01.1,9.64061e-01,-5.05518e-01,-1.46884e+00,5.46245e-02,6.39839e-01,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.72+log(1.e+14*0.7),1.08,0.0,0.25,0.9,0.9,0.9,0.9);
-  //expect -13.195605 for the following
-  //log_multi_like(0.35449914, 0.81272201,0.97370111, -0.51057289,-1.48353327,0.05517077,0.64623714,0.,0.,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.01,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.92,1.1,-0.47,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.72+log(1.e+14*0.7),1.08,0.0,0.25,0.9,0.9,0.9,0.9); 
-  //CH ENDS
-  
+  // NOTE: different target selections have different data vectors
+  #if _COMPUTE_DATAVECTOR_ == 1
+  compute_data_vector(argv[1],
+    // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
+    0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
+    // galaxy bias: b[0-9]
+    1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
+    // source galaxy photo-z bias[0-9] + std
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,
+    // lens galaxy photo-z bias[0-9] + std
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,
+    // additive shear calibration bias[0-9]
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+    // IA: A_ia, beta_ia, eta_ia, eta_ia_highz
+    5.92,1.1,-0.47,0.0,
+    // lumi function: LF_alpha, LF_P, LF_Q, LF_red_alpha, LF_red_P, LF_red_Q
+    0.0,0.0,0.0,0.0,0.0,0.0,
+    // clus: mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm
+    3.207,0.993,0.0,0.456,
+    // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope, baryon scenario
+    0.0, 0.0, argv[4]);
+  #endif
+  /* compute example likelihood evaluation */
+  #if _COMPUTE_LIKELIHOOD_ == 1
+  init_data_inv("cov/WFIRST_3x2pt_inv","datav/WFIRST_all_2pt_fid_opti");
+  begin = clock();
+  loglike=log_multi_like(
+    // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
+    0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,
+    // galaxy bias: b[0-9]
+    1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,
+    // source galaxy photo-z bias[0-9] + std
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
+    // lens galaxy photo-z bias[0-9] + std
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.0005,
+    // additive shear calibration bias[0-9]
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
+    // IA: A_ia, beta_ia, eta_ia, eta_ia_highz
+    5.92,1.1,-0.47,0.0,
+    // lumi function: LF_alpha, LF_P, LF_Q, LF_red_alpha, LF_red_P, LF_red_Q
+    0.0,0.0,0.0,0.0,0.0,0.0,
+    // clus: mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm
+    3.207,0.993,0.0,0.456,
+    // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope, baryon scenario
+    0.0,0.0);
+  printf("%le\n",loglike);
+  // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
+  // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
+  end = clock();
+  time_spent = (double)(end - begin) / CLOCKS_PER_SEC;      
+  printf("timespent %le\n",time_spent);
+  #endif
   return 0;
 }
 

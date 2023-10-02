@@ -43,7 +43,7 @@ void set_shear_priors_WFIRST_opti();
 void set_shear_priors_WFIRST_pessi();
 void set_survey_parameters_to_WFIRST_WL();
 void set_survey_parameters_to_WFIRST_KL();
-void set_survey_parameters_to_DESI2_KL();
+void set_survey_parameters_to_DESI2_KL(char *surveyname);
 
 void init_clusterMobs();
 void set_equal_tomo_bins();
@@ -473,7 +473,7 @@ void init_survey(char *surveyname)
   if(strcmp(surveyname,"WFIRST")==0) set_survey_parameters_to_WFIRST();
   if(strcmp(surveyname,"WFIRST_WL")==0) set_survey_parameters_to_WFIRST_WL();
   if(strcmp(surveyname,"WFIRST_KL")==0) set_survey_parameters_to_WFIRST_KL();
-  if(strcmp(surveyname,"DESI2_KL")==0) set_survey_parameters_to_DESI2_KL();
+  if(strncmp(surveyname,"DESI2_KL",8)==0) set_survey_parameters_to_DESI2_KL(surveyname);
 
   printf("Survey set to %s\n",survey.name);
   printf("Survey area: %le deg^2\n",survey.area);
@@ -1274,14 +1274,21 @@ void set_survey_parameters_to_WFIRST_KL()
   sprintf(survey.name,"WFIRST_KL");
 }
 
-void set_survey_parameters_to_DESI2_KL()
+void set_survey_parameters_to_DESI2_KL(char *surveyname)
 {
+  // example surveyname: DESI2_KL_00
+  double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
+  double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
+                               0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
+  int iSelect = atoi(surveyname[9]);
+  int iSN = atoi(surveyname[10]);
+  printf("Setting target selection %d and shape noise %d\n", iSelect, iSN);
   survey.area   = 14000.;
-  survey.n_gal   = 0.05;
-  survey.sigma_e   = 0.05;
+  survey.n_gal   = source_density[iSelect];
+  survey.sigma_e   = shape_noise_rms[iSN];
   survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
   survey.n_gal_conversion_factor=1.0/constants.arcmin/constants.arcmin;
   survey.m_lim=19.5;
   sprintf(survey.Kcorrect_File,"../zdistris/k+e.dat");
-  sprintf(survey.name,"DESI2_KL");
+  sprintf(survey.name,surveyname);
 }

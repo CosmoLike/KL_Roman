@@ -551,9 +551,12 @@ int main(int argc, char** argv)
   // We do not sample survey area any more, just scale that!
   //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
   //printf("%d survey area scenarios\n", N_scenarios_area);
-  // Four sets of target selection criteria, each with different n(z)
+  // Six sets of target selection criteria, each with different n(z)
+  int N_scenarios_selection = 6;
+  // Start with 4 source tomo bins 
+  int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
   //double source_density[4] = {0.0644, 0.0531, 0.0431, 0.0353};
-  double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
+  //double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
   // example, zdistris/zdistri_WFIRST_grism_norm
   char dndz[6][100] = {
     //"zdistris/zdistri_DESI2_KL_sample1",
@@ -567,16 +570,15 @@ int main(int argc, char** argv)
     "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
     "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   };
-  // Start with 4 source tomo bins 
-  int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
-  int N_scenarios_selection = sizeof(source_density)/sizeof(double);
+  //int N_scenarios_selection = sizeof(source_density)/sizeof(double);
   printf("%d target selection scenarios\n", N_scenarios_selection);
-  // Four shape noise scenarios
+  // Six shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
   // selection here.
-  double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
-                               0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
-  int N_scenarios_shape_noise = sizeof(shape_noise_rms)/sizeof(double);
+  // double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
+  //                              0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
+  //int N_scenarios_shape_noise = sizeof(shape_noise_rms)/sizeof(double);
+  int N_scenarios_shape_noise = 6;
   printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
   // Lens galaxies not used, set to random value
   float lens_density = 66.0;
@@ -629,13 +631,15 @@ int main(int argc, char** argv)
     init_cosmo_runmode("halofit");
     init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, 
     Ntomo_source[i_selection], Ntomo_lens);
+    char _surveyname[10];
+    sprintf(_surveyname, "DESI2_KL_%d%d", i_selection, i_shape_noise);
     init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
-    init_survey("DESI2_KL");
+    init_survey(_surveyname);
     // init survey name, area, n_gal, shape noise, magnitude limit, K-correction
-    sprintf(survey.name, "%s_%d%d", "DESI2_KL_v2", i_selection, i_shape_noise);
-    survey.area = survey_area;
-    survey.n_gal = source_density[i_selection];
-    survey.sigma_e = shape_noise_rms[i_shape_noise];
+    //sprintf(survey.name, "%s_%d%d", "DESI2_KL_v2", i_selection, i_shape_noise);
+    //survey.area = survey_area;
+    //survey.n_gal = source_density[i_selection];
+    //survey.sigma_e = shape_noise_rms[i_shape_noise];
     // init source and lens n(z) and photo-z 
     init_galaxies(dndz[i_selection], 
       "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", 
