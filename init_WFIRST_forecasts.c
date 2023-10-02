@@ -1282,8 +1282,8 @@ void set_survey_parameters_to_DESI2_KL(char *surveyname)
                                0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
   char _iSelect[2];
   char _iSN[2];
-  strncpy(_iSelect, surveyname[9], 1);
-  strncpy(_iSN, surveyname[10], 1);
+  strncpy(_iSelect, surveyname+9, 1);
+  strncpy(_iSN, surveyname+10, 1);
   int iSelect = atoi(_iSelect);
   int iSN = atoi(_iSN);
   printf("Setting target selection %d and shape noise %d\n", iSelect, iSN);
