@@ -695,10 +695,11 @@ int main(int argc, char** argv)
   double time_spent, loglike=0.0, init=0.0;
   int i;
 
-  double survey_area = 14000.0;
+  //double survey_area = 14000.0;
   // 6 sets of target selections results in different src density [/arcmin2]
-  double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
-  int N_scenarios_selection = sizeof(source_density)/sizeof(double);
+  //double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
+  //int N_scenarios_selection = sizeof(source_density)/sizeof(double);
+  int N_scenarios_selection = 6;
   char dndz[6][100] = {
     "zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
     "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
@@ -710,10 +711,11 @@ int main(int argc, char** argv)
   int Ntomo_source = 4;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
-  double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
-                               0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
-  int N_scenarios_shape_noise = sizeof(shape_noise_rms)/sizeof(double);
-  printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
+  //double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
+  //                             0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
+  int N_scenarios_shape_noise = 6;
+  //int N_scenarios_shape_noise = sizeof(shape_noise_rms)/sizeof(double);
+  //printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
   // Lens galaxies not used, set to random value
   double lens_density = 66.0;
   // Lens galaxies not used, set to random value
@@ -729,6 +731,8 @@ int main(int argc, char** argv)
 
   int i_Selection = atoi(argv[1]);
   int i_SN = atoi(argv[2]);
+  char strat[20];
+  sprintf(strat, "DESI2_KL_%d%d", i_Selection, i_SN);
   /* here, do your time-consuming job */
 
   init_cosmo_runmode("halofit");
@@ -744,9 +748,9 @@ int main(int argc, char** argv)
   init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, 
     Rmin_bias, Ntomo_source, Ntomo_lens);
   init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
-  init_survey("DESI2_KL");
+  init_survey(strat);
   // customize shape noise here
-  survey.sigma_e = shape_noise_rms[i_SN];
+  //survey.sigma_e = shape_noise_rms[i_SN];
   init_galaxies(dndz[i_Selection], 
       "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", 
       "gaussian", "gaussian", "SN10");// the last arg is lens sample
@@ -755,7 +759,8 @@ int main(int argc, char** argv)
     // write redshift boundary of each tomo bin
     FILE *tomo_zdist;
     char tomo_zdist_fname[500];
-    sprintf(tomo_zdist_fname, "zdistris/tomo_zdist_DESI2KL_source");
+    sprintf(tomo_zdist_fname, 
+      "zdistris/tomo_zdist_src_DESI2KL_%d", i_Selection);
     tomo_zdist = fopen(tomo_zdist_fname, "w");
     if(tomo_zdist!=NULL){
       fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\n");
