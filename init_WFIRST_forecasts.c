@@ -476,8 +476,9 @@ void init_survey(char *surveyname)
   if(strncmp(surveyname,"DESI2_KL",8)==0) set_survey_parameters_to_DESI2_KL(surveyname);
 
   printf("Survey set to %s\n",survey.name);
-  printf("Survey area: %le deg^2\n",survey.area);
-  printf("Source Galaxy Density: %le galaxies/arcmin^2\n",survey.n_gal); 
+  printf("Survey area: %f deg^2\n",survey.area);
+  printf("Source Galaxy Density: %f galaxies/arcmin^2\n",survey.n_gal);
+  printf("Shape noise rms: %f", survey.sigma_e);
 }
 
 
