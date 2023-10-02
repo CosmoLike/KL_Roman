@@ -1280,8 +1280,8 @@ void set_survey_parameters_to_DESI2_KL(char *surveyname)
   double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
   double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
                                0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
-  char *_iSelect[2];
-  char *_iSN[2];
+  char _iSelect[2];
+  char _iSN[2];
   strncpy(_iSelect, surveyname[9], 1);
   strncpy(_iSN, surveyname[10], 1);
   int iSelect = atoi(_iSelect);
