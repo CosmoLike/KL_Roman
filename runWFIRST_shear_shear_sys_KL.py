@@ -34,21 +34,20 @@ nz_src_files = [
     "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
 ]
 nz_lens_file = "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm"
-
-data_vector_file = "datav/DESI2_KL_v2_%d_ss_Ncl%d_Ntomo%d_LCDM+Eagle"
+data_vector_file = "datav/DESI2_KL_%d0_shear_shear_Ntomo%d_Ncl%d_eagle"
 invcovmat_file = "invcov/DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
-baryon_PCS_file = "datav/DESI2_KL_v2_%d_ss_Ncl%d_Ntomo%d.pca"
+baryon_PCS_file = "datav/DESI2_KL_%d%d_shear_shear_Ntomo%d_Ncl%d.pca"
 chain_output_file = "chains/DESI2_KL_v2_%d%d_ss_Ncl%d_Ntomo%d"
 
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files[args.iSelection])
 file_lens_z = os.path.join(dirname, nz_lens_file)
 data_file = os.path.join(dirname, 
-    data_vector_file%(args.iSelection, Ncl, Ntomo_src))
-cov_file = os.path.join(dirname, 
+    data_vector_file%(args.iSelection, Ntomo_src, Ncl))
+cov_file = os.path.join(outdirname, 
     invcovmat_file%(args.iSelection, args.iSN, Ncl, Ntomo_src))
 bary_file = os.path.join(dirname, 
-    baryon_PCS_file%(args.iSelection, Ncl, Ntomo_src))
+    baryon_PCS_file%(args.iSelection, args.iSN, Ntomo_src, Ncl))
 chain_file = os.path.join(outdirname, 
     chain_output_file%(args.iSelection, args.iSN, Ncl, Ntomo_src))
 
