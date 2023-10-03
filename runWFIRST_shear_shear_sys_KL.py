@@ -73,5 +73,5 @@ sample_params += ['bary_%d'%i for i in xrange(3)]
 #sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
 
-sample_main(sample_params,7000,700,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
+sample_main(sample_params,8000,400,1,chain_file+"_8000", blind=False, pool=MPIPool(), KL=True)
 
