@@ -49,6 +49,7 @@
 #define _WRITE_DATA_VECTOR_ 0
 #define _COMPUTE_DATAVECTOR_ 1
 #define _COMPUTE_LIKELIHOOD_ 0
+#define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
 double C_cgl_tomo_sys(double ell_Cluster,int zl,int nN, int zs);
@@ -448,28 +449,28 @@ double log_multi_like(
     }
   }
   if (set_cosmology_params(OMM,S8,NS,W0,WA,OMB,H0,MGSigma,MGmu)==0){
-    printf("Cosmology out of bounds\n");
+    if(_VERBOSE_==1){printf("Cosmology out of bounds\n");}
     return -1.0e15;
   }
   set_nuisance_shear_calib(M1,M2,M3,M4,M5,M6,M7,M8,M9,M10);
   if (set_nuisance_shear_photoz(SP1,SP2,SP3,SP4,SP5,SP6,SP7,SP8,SP9,SP10,SPS1)==0){
-    printf("Shear photo-z sigma too small\n");
+    if(_VERBOSE_==1){printf("Shear photo-z sigma too small\n");}
     return -1.0e15;
   }
   if (set_nuisance_clustering_photoz(CP1,CP2,CP3,CP4,CP5,CP6,CP7,CP8,CP9,CP10,CPS1)==0){
-    printf("Clustering photo-z sigma too small\n");
+    if(_VERBOSE_==1){printf("Clustering photo-z sigma too small\n");}
     return -1.0e15;
   }
   if (set_nuisance_ia(A_ia,beta_ia,eta_ia,eta_ia_highz,LF_alpha,LF_P,LF_Q,LF_red_alpha,LF_red_P,LF_red_Q)==0){
-    printf("IA parameters out of bounds\n");
+    if(_VERBOSE_==1){printf("IA parameters out of bounds\n");}
     return -1.0e15; 
   }
   if (set_nuisance_gbias(B1,B2,B3,B4,B5,B6,B7,B8,B9,B10)==0){
-    printf("Bias out of bounds\n");
+    if(_VERBOSE_==1){printf("Bias out of bounds\n");}
     return -1.0e15;
   }
   if (set_nuisance_cluster_Mobs(mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm, mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope)==0){
-    printf("Mobs out of bounds\n");
+    if(_VERBOSE_==1){printf("Mobs out of bounds\n");}
     return -1.0e15;
   }
        
