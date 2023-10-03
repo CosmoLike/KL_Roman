@@ -1,27 +1,25 @@
 #!/bin/bash
-#PBS -S /bin/bash
-#PBS -V
-#PBS -W group_list=cosmo
-#PBS -q standard
-#PBS -l select=1:ncpus=1:mem=1GB
-#PBS -l place=free:shared
-#PBS -l walltime=1:00:00
-#PBS -N KL_W1st_data_vec
-#PBS -e /home/u17/jiachuanxu/output/
-#PBS -o /home/u17/jiachuanxu/output/
 
-module load gsl/2/2.1
+#SBATCH --job-name=dvDESI
+###SBATCH --output=dvDESIKL-%A_%a.out
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --partition=high_priority
+#SBATCH --qos=user_qos_timeifler
+#SBATCH --account=timeifler
+#SBATCH --time=04:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=jiachuanxu@arizona.edu
 
-cd $PBS_O_WORKDIR
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear dmo >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear mb2 >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear illustris >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear eagle >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear HzAGN >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear TNG100 >& /home/u17/jiachuanxu/output/job_output_datavec.log
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./like_fourier opti WFIRST_KL shear_shear owls_AGN >& /home/u17/jiachuanxu/output/job_output_datavec.log
-
-
-
-
-
+module load gsl
+module load openmpi3
+WORKDIR=/home/u17/jiachuanxu/CosmoLike/KL_WFIRST
+cd ${WORKDIR}
+for (( c=0; c<6; c++ ))
+do
+	for bary in dmo mb2 illustris eagle HzAGN TNG100 cowls_AGN cowls_AGN_T8p5 cowls_AGN_T8p7 BAHAMAS BAHAMAS_T7p6 BAHAMAS_T8p0
+	do
+		./like_fourier ${c} 0 shear_shear ${bary}
+	done
+done
