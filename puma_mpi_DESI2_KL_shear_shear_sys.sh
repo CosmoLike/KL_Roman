@@ -20,9 +20,8 @@ echo "SLURM_ARRAY_TASK_ID = ${SLURM_ARRAY_TASK_ID}"
 echo "Target Selection Scenario = ${iSELECT}"
 echo "Shape Noise Scenario = ${iSN}"
 
-module purge > /dev/null 2>&1
 module load gsl
-module load mpich
+module swap openmpi3 mpich/3.3.1
 module load anaconda
 conda init bash
 source ~/.bashrc
