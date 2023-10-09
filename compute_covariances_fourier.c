@@ -608,6 +608,7 @@ int main(int argc, char** argv)
   ell_Cluster=create_double_vector(0,Cluster.lbin-1);
   dell_Cluster=create_double_vector(0,Cluster.lbin-1);
   int j=0;
+  printf("Ell array:\n");
   for(i=0;i<Nell;i++){
     ell[i]=exp(log(ell_min)+(i+0.5)*logdl);
     dell[i]=exp(log(ell_min)+(i+1)*logdl)-exp(log(ell_min)+(i*logdl));
@@ -680,6 +681,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              return 0;
             }
           }
           k=k+1;
@@ -693,7 +695,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.ggl_Npowerspectra; l++){
         for (m=l;m<tomo.ggl_Npowerspectra; m++){
           if(k==hit){
-			printf("catch k=%d\n", hit);
+			      printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -702,6 +704,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_ggl(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              return 0;
             }
           }
           k=k+1;
@@ -715,7 +718,7 @@ int main(int argc, char** argv)
         for (m=l;m<tomo.clustering_Npowerspectra; m++){
           if(k==hit){ 
             printf("catch k=%d\n", hit); 
-			sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+			      sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
                       filename);
@@ -723,6 +726,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_clustering(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              return 0;
             }
           }
           k=k+1;
@@ -735,7 +739,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.clustering_Npowerspectra; l++){
         for (m=0;m<tomo.shear_Npowerspectra; m++){
           if(k==hit){
-			printf("catch k=%d\n", hit);
+			      printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -744,6 +748,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_clustering_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              return 0;
             }
           }
           k=k+1;
@@ -756,7 +761,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.clustering_Npowerspectra; l++){
         for (m=0;m<tomo.ggl_Npowerspectra; m++){
           if(k==hit){
-			printf("catch k=%d\n", hit);
+			      printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -765,6 +770,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_clustering_ggl(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              return 0;
             }
           }
           k=k+1;
@@ -777,7 +783,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.ggl_Npowerspectra; l++){
         for (m=0;m<tomo.shear_Npowerspectra; m++){
           if(k==hit){
-			printf("catch k=%d\n", hit);
+			      printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -786,6 +792,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_ggl_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              return 0;
             }
           }
           k=k+1;
@@ -802,7 +809,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.cluster_Nbin; l++){
         for (m=0;m<tomo.cluster_Nbin; m++){
           if(k==hit){
-			printf("catch k=%d\n", hit);
+			      printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -811,6 +818,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_N_N (OUTFILE,covparams.outdir,l,m,k);
+              return 0;
             }
           }
           k=k+1;
@@ -823,7 +831,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.cgl_Npowerspectra; l++){
         for (m=0;m<tomo.cgl_Npowerspectra; m++){
           if(k==hit){
-			printf("catch k=%d\n", hit);
+			      printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -832,6 +840,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_cgl_cgl (OUTFILE,covparams.outdir,ell_Cluster,dell_Cluster,l,m,k);
+              return 0;
             }
           }
           k=k+1;
@@ -844,7 +853,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.cgl_Npowerspectra; l++){
         for (m=0;m<tomo.cluster_Nbin; m++){
           if(k==hit){
-			printf("catch k=%d\n", hit);
+			      printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -853,6 +862,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_cgl_N (OUTFILE,covparams.outdir,ell_Cluster,dell_Cluster,l,m,k);
+              return 0;
             }
           }
           k=k+1;
@@ -865,7 +875,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.shear_Npowerspectra; l++){
         for (m=0;m<tomo.cluster_Nbin; m++){
           if(k==hit){
-			printf("catch k=%d\n", hit);
+			      printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -874,6 +884,7 @@ int main(int argc, char** argv)
             }
             else {
              run_cov_shear_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
+             return 0;
            }
          }
          k=k+1;
@@ -886,7 +897,7 @@ int main(int argc, char** argv)
      for (l=0;l<tomo.shear_Npowerspectra; l++){
         for (m=0;m<tomo.cgl_Npowerspectra; m++){
             if(k==hit){
-			  printf("catch k=%d\n", hit);
+			        printf("catch k=%d\n", hit);
               sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
               if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -895,6 +906,7 @@ int main(int argc, char** argv)
             }
               else {
                 run_cov_shear_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
+                return 0;
               }
             }
             k=k+1;
@@ -907,7 +919,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.ggl_Npowerspectra; l++){
         for (m=0;m<tomo.cluster_Nbin; m++){
           if(k==hit){
-			printf("catch k=%d\n", hit);
+			      printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -916,6 +928,7 @@ int main(int argc, char** argv)
             }
             else {
              run_cov_ggl_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
+             return 0;
             }
           }
           k=k+1;
@@ -928,7 +941,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.ggl_Npowerspectra; l++){
         for (m=0;m<tomo.cgl_Npowerspectra; m++){
             if(k==hit){
-			  printf("catch k=%d\n", hit);
+			        printf("catch k=%d\n", hit);
               sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
               if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -937,6 +950,7 @@ int main(int argc, char** argv)
             }
               else {
                 run_cov_ggl_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
+                return 0;
               }
             }       
             k=k+1;
@@ -949,7 +963,7 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.clustering_Npowerspectra; l++){
         for (m=0;m<tomo.cluster_Nbin; m++){
           if(k==hit){
-			printf("catch k=%d\n", hit);
+			      printf("catch k=%d\n", hit);
             sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
             if (fopen(filename, "r") != NULL){
               printf("File %s already exist! Forced not to overwrite!\n",
@@ -957,7 +971,8 @@ int main(int argc, char** argv)
               exit(1);
             }
             else {
-             run_cov_cl_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);          
+             run_cov_cl_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
+             return 0;
             }
           } 
           k=k+1;
@@ -970,15 +985,16 @@ int main(int argc, char** argv)
       for (l=0;l<tomo.clustering_Npowerspectra; l++){
         for (m=0;m<tomo.cgl_Npowerspectra; m++){
             if(k==hit){
-			  printf("catch k=%d\n", hit);
+			        printf("catch k=%d\n", hit);
               sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
               if (fopen(filename, "r") != NULL){
-				printf("File %s already exist! Forced not to overwrite!\n", 
-					filename);
-				exit(1);
-			  }
+				        printf("File %s already exist! Forced not to overwrite!\n", 
+					       filename);
+				        exit(1);
+			        }
               else {
                 run_cov_cl_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
+                return 0;
               }
             }
             k=k+1;
@@ -991,6 +1007,6 @@ int main(int argc, char** argv)
   printf("-----------------\n");
   printf("PROGRAM EXECUTED\n");
   printf("-----------------\n");
-  return 0;   
+  return 0; 
 }
 

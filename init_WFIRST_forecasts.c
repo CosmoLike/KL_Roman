@@ -1432,7 +1432,7 @@ void set_clphotoz_LSST_Y10()
 void set_shear_priors_LSST_Y1()
 {
   int i;
-  printf("Setting Gaussian shear calibration Priors LSST Y1\n");
+  printf("\nSetting Gaussian shear calibration Priors LSST Y1\n");
   for (i=0;i<tomo.shear_Nbin; i++){
     prior.shear_calibration_m[i][0] = 0.0;
     prior.shear_calibration_m[i][1] = 0.013;
@@ -1443,7 +1443,7 @@ void set_shear_priors_LSST_Y1()
 void set_shear_priors_LSST_Y10()
 {
   int i;
-  printf("Setting Gaussian shear calibration Priors LSST Y10\n");
+  printf("\nSetting Gaussian shear calibration Priors LSST Y10\n");
   for (i=0;i<tomo.shear_Nbin; i++){
     prior.shear_calibration_m[i][0] = 0.0;
     prior.shear_calibration_m[i][1] = 0.003;
