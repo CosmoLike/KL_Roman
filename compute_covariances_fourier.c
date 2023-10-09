@@ -662,7 +662,7 @@ int main(int argc, char** argv)
       "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");
 
     printf("----------------------------------\n");  
-    printf("area: %le n_source: %le n_lens: %le\n",
+    printf("area: %.2f n_source: %.2f n_lens: %.2f\n",
       survey.area,survey.n_gal,survey.n_lens);
     printf("----------------------------------\n");
     /******************************* START ************************************/
@@ -681,7 +681,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
-              return 0;
+              printf("Exit normally!\n");return 0;
             }
           }
           k=k+1;
@@ -704,7 +704,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_ggl(OUTFILE,covparams.outdir,ell,dell,l,m,k);
-              return 0;
+              printf("Exit normally!\n");return 0;
             }
           }
           k=k+1;
@@ -726,7 +726,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_clustering(OUTFILE,covparams.outdir,ell,dell,l,m,k);
-              return 0;
+              printf("Exit normally!\n");return 0;
             }
           }
           k=k+1;
@@ -748,7 +748,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_clustering_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
-              return 0;
+              printf("Exit normally!\n");return 0;
             }
           }
           k=k+1;
@@ -770,7 +770,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_clustering_ggl(OUTFILE,covparams.outdir,ell,dell,l,m,k);
-              return 0;
+              printf("Exit normally!\n");return 0;
             }
           }
           k=k+1;
@@ -792,7 +792,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_ggl_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
-              return 0;
+              printf("Exit normally!\n");return 0;
             }
           }
           k=k+1;
@@ -818,7 +818,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_N_N (OUTFILE,covparams.outdir,l,m,k);
-              return 0;
+              printf("Exit normally!\n");return 0;
             }
           }
           k=k+1;
@@ -840,7 +840,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_cgl_cgl (OUTFILE,covparams.outdir,ell_Cluster,dell_Cluster,l,m,k);
-              return 0;
+              printf("Exit normally!\n");return 0;
             }
           }
           k=k+1;
@@ -862,7 +862,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_cgl_N (OUTFILE,covparams.outdir,ell_Cluster,dell_Cluster,l,m,k);
-              return 0;
+              printf("Exit normally!\n");return 0;
             }
           }
           k=k+1;
@@ -884,7 +884,7 @@ int main(int argc, char** argv)
             }
             else {
              run_cov_shear_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
-             return 0;
+             printf("Exit normally!\n");return 0;
            }
          }
          k=k+1;
@@ -906,7 +906,7 @@ int main(int argc, char** argv)
             }
               else {
                 run_cov_shear_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
-                return 0;
+                printf("Exit normally!\n");return 0;
               }
             }
             k=k+1;
@@ -928,7 +928,7 @@ int main(int argc, char** argv)
             }
             else {
              run_cov_ggl_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
-             return 0;
+             printf("Exit normally!\n");return 0;
             }
           }
           k=k+1;
@@ -950,7 +950,7 @@ int main(int argc, char** argv)
             }
               else {
                 run_cov_ggl_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
-                return 0;
+                printf("Exit normally!\n");return 0;
               }
             }       
             k=k+1;
@@ -972,7 +972,7 @@ int main(int argc, char** argv)
             }
             else {
              run_cov_cl_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
-             return 0;
+             printf("Exit normally!\n");return 0;
             }
           } 
           k=k+1;
@@ -994,7 +994,7 @@ int main(int argc, char** argv)
 			        }
               else {
                 run_cov_cl_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
-                return 0;
+                printf("Exit normally!\n");return 0;
               }
             }
             k=k+1;
