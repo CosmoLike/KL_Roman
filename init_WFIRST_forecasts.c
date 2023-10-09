@@ -36,14 +36,23 @@ void set_wlphotoz_WFIRST_pessi();
 void set_clphotoz_WFIRST_pessi();
 void set_wlphotoz_DESI2_KL();
 void set_clphotoz_DESI2_KL();
+void set_wlphotoz_LSST_Y1();
+void set_clphotoz_LSST_Y1();
+void set_wlphotoz_LSST_Y10();
+void set_clphotoz_LSST_Y10();
 
 void set_shear_priors_WFIRST_KL();
 void set_shear_priors_DESI2_KL();
 void set_shear_priors_WFIRST_opti();
 void set_shear_priors_WFIRST_pessi();
+void set_shear_priors_LSST_Y1();
+void set_shear_priors_LSST_Y10();
+
 void set_survey_parameters_to_WFIRST_WL();
 void set_survey_parameters_to_WFIRST_KL();
 void set_survey_parameters_to_DESI2_KL(char *surveyname);
+void set_survey_parameters_to_LSST_Y1();
+void set_survey_parameters_to_LSST_Y10();
 
 void init_clusterMobs();
 void set_equal_tomo_bins();
@@ -270,6 +279,14 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
     set_wlphotoz_WFIRST_pessi();
     set_clphotoz_WFIRST_pessi();
   }
+  if(strcmp(Prior1,"photo_LSST_Y1")==0){
+    set_wlphotoz_LSST_Y1();
+    set_clphotoz_LSST_Y1();
+  }
+  if(strcmp(Prior1,"photo_LSST_Y10")==0){
+    set_wlphotoz_LSST_Y10();
+    set_clphotoz_LSST_Y10();
+  }
   if(strcmp(Prior1,"spec_WFIRST")==0){
     set_wlphotoz_WFIRST_KL();
     set_clphotoz_WFIRST_KL();
@@ -284,6 +301,12 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
   }
   if(strcmp(Prior2,"shear_pessi")==0){
     set_shear_priors_WFIRST_pessi();
+  }
+  if(strcmp(Prior2,"shear_LSST_Y1")==0){
+    set_shear_priors_LSST_Y1();
+  }
+  if(strcmp(Prior2,"shear_LSST_Y10")==0){
+    set_shear_priors_LSST_Y10();
   }
   if(strcmp(Prior2,"shear_KL_WFIRST")==0){
     set_shear_priors_WFIRST_KL();
@@ -469,6 +492,8 @@ void init_survey(char *surveyname)
   printf("-------------------------------\n");
 
   if(strcmp(surveyname,"LSST")==0) set_survey_parameters_to_LSST();
+  if(strcmp(surveyname,"LSST_Y1")==0) set_survey_parameters_to_LSST_Y1();
+  if(strcmp(surveyname,"LSST_Y10")==0) set_survey_parameters_to_LSST_Y10();
   if(strcmp(surveyname,"Euclid")==0) set_survey_parameters_to_Euclid();
   if(strcmp(surveyname,"WFIRST")==0) set_survey_parameters_to_WFIRST();
   if(strcmp(surveyname,"WFIRST_WL")==0) set_survey_parameters_to_WFIRST_WL();
@@ -1296,4 +1321,133 @@ void set_survey_parameters_to_DESI2_KL(char *surveyname)
   survey.m_lim=19.5;
   sprintf(survey.Kcorrect_File,"../zdistris/k+e.dat");
   sprintf(survey.name,surveyname);
+}
+
+void set_survey_parameters_to_LSST_Y1()
+{ // Table F1 and Appendix C1 in DESC SRD
+  survey.area   = 12300.0;
+  survey.n_gal   = 11.112;
+  survey.sigma_e   = 0.37;  
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor=1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim=24.5;
+  sprintf(survey.name,"LSST_Y1");
+}
+
+void set_survey_parameters_to_LSST_Y10()
+{ // Table F1 and Appendix C1 in DESC SRD
+  survey.area   = 14300.0;
+  survey.n_gal   = 27.737;
+  survey.sigma_e   = 0.37;  
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor=1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim=26.0;
+  sprintf(survey.name,"LSST_Y10");
+}
+
+void set_wlphotoz_LSST_Y1()
+{
+  int i;
+  printf("\n");
+  printf("Source sample: LSST Y1 photoz uncertainty initialized\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    nuisance.bias_zphot_shear[i]=0.0;
+    nuisance.sigma_zphot_shear[i]=0.05; 
+    printf("nuisance.bias_zphot_shear[%d]=%le\n",i,nuisance.bias_zphot_shear[i]);
+    printf("nuisance.sigma_zphot_shear[%d]=%le\n",i,nuisance.sigma_zphot_shear[i]);
+    // center of Gaussian priors
+    prior.bias_zphot_shear[i][0]=nuisance.bias_zphot_shear[i];
+    prior.sigma_zphot_shear[i][0]=nuisance.sigma_zphot_shear[i];
+    // rms width of Gaussian priors
+    prior.bias_zphot_shear[i][1] = 0.002;
+    prior.sigma_zphot_shear[i][1]= 0.006;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_shear[i][0],prior.bias_zphot_shear[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_shear[i][0],prior.sigma_zphot_shear[i][1]); 
+  }
+  like.wlphotoz=1;
+}
+void set_wlphotoz_LSST_Y10()
+{
+  int i;
+  printf("\n");
+  printf("Source sample: LSST Y10 photoz uncertainty initialized\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    nuisance.bias_zphot_shear[i]=0.0;
+    nuisance.sigma_zphot_shear[i]=0.05; 
+    printf("nuisance.bias_zphot_shear[%d]=%le\n",i,nuisance.bias_zphot_shear[i]);
+    printf("nuisance.sigma_zphot_shear[%d]=%le\n",i,nuisance.sigma_zphot_shear[i]);
+    // center of Gaussian priors
+    prior.bias_zphot_shear[i][0]=nuisance.bias_zphot_shear[i];
+    prior.sigma_zphot_shear[i][0]=nuisance.sigma_zphot_shear[i];
+    // rms width of Gaussian priors
+    prior.bias_zphot_shear[i][1] = 0.001;
+    prior.sigma_zphot_shear[i][1]= 0.003;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_shear[i][0],prior.bias_zphot_shear[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_shear[i][0],prior.sigma_zphot_shear[i][1]); 
+  }
+  like.wlphotoz=1;
+}
+void set_clphotoz_LSST_Y1()
+{
+  int i;
+  printf("\n");
+  printf("Lens sample: LSST Y1 photoz uncertainty initialized\n");
+  for (i=0;i<tomo.clustering_Nbin; i++){
+    nuisance.bias_zphot_clustering[i]=0.0;
+    nuisance.sigma_zphot_clustering[i]=0.03; 
+    printf("nuisance.bias_zphot_clustering[%d]=%le\n",i,nuisance.bias_zphot_clustering[i]);
+    printf("nuisance.sigma_zphot_clustering[%d]=%le\n",i,nuisance.sigma_zphot_clustering[i]);
+    // center of Gaussian priors
+    prior.bias_zphot_clustering[i][0]=nuisance.bias_zphot_clustering[i];
+    prior.sigma_zphot_clustering[i][0]=nuisance.sigma_zphot_clustering[i];
+    // rms width of Gaussian priors
+    prior.bias_zphot_clustering[i][1] = 0.002;
+    prior.sigma_zphot_clustering[i][1]= 0.006;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_clustering[i][0],prior.bias_zphot_clustering[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_clustering[i][0],prior.sigma_zphot_clustering[i][1]); 
+  }
+  like.clphotoz=1;
+}
+void set_clphotoz_LSST_Y10()
+{
+  int i;
+  printf("\n");
+  printf("Lens sample: LSST Y10 photoz uncertainty initialized\n");
+  for (i=0;i<tomo.clustering_Nbin; i++){
+    nuisance.bias_zphot_clustering[i]=0.0;
+    nuisance.sigma_zphot_clustering[i]=0.03; 
+    printf("nuisance.bias_zphot_clustering[%d]=%le\n",i,nuisance.bias_zphot_clustering[i]);
+    printf("nuisance.sigma_zphot_clustering[%d]=%le\n",i,nuisance.sigma_zphot_clustering[i]);
+    // center of Gaussian priors
+    prior.bias_zphot_clustering[i][0]=nuisance.bias_zphot_clustering[i];
+    prior.sigma_zphot_clustering[i][0]=nuisance.sigma_zphot_clustering[i];
+    // rms width of Gaussian priors
+    prior.bias_zphot_clustering[i][1] = 0.001;
+    prior.sigma_zphot_clustering[i][1]= 0.003;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_clustering[i][0],prior.bias_zphot_clustering[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_clustering[i][0],prior.sigma_zphot_clustering[i][1]); 
+  }
+  like.clphotoz=1;
+}
+void set_shear_priors_LSST_Y1()
+{
+  int i;
+  printf("Setting Gaussian shear calibration Priors LSST Y1\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    prior.shear_calibration_m[i][0] = 0.0;
+    prior.shear_calibration_m[i][1] = 0.013;
+    printf("Mean=%le, Sigma=%le\n",prior.shear_calibration_m[i][0],prior.shear_calibration_m[i][1]);
+  }
+  like.shearcalib=1;
+}
+void set_shear_priors_LSST_Y10()
+{
+  int i;
+  printf("Setting Gaussian shear calibration Priors LSST Y10\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    prior.shear_calibration_m[i][0] = 0.0;
+    prior.shear_calibration_m[i][1] = 0.003;
+    printf("Mean=%le, Sigma=%le\n",prior.shear_calibration_m[i][0],prior.shear_calibration_m[i][1]);
+  }
+  like.shearcalib=1;
 }

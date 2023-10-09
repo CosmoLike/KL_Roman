@@ -547,38 +547,39 @@ int main(int argc, char** argv)
   // Roman HLIS (5000 deg2) assumes 20 bins from ell=30 to 4000
   // Three sets of survey area settings
   // The DESI BGS is 14000 deg2, can be smaller than that
-  double survey_area = 14000.0;
+  //double survey_area = 14000.0;
+  int N_scenarios_area = 2;
+  double survey_area[2] = {12300.0, 14300.0};
+  char survey_names[2][100] = {"LSST_Y1", "LSST_Y10"};
   // We do not sample survey area any more, just scale that!
   //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
   //printf("%d survey area scenarios\n", N_scenarios_area);
   // Six sets of target selection criteria, each with different n(z)
-  int N_scenarios_selection = 6;
+  int N_scenarios_selection = 2;
   // Start with 4 source tomo bins 
-  int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
-  //double source_density[4] = {0.0644, 0.0531, 0.0431, 0.0353};
-  //double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
+  //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
+  int Ntomo_source[2] = {10, 10};
   // example, zdistris/zdistri_WFIRST_grism_norm
-  char dndz[6][100] = {
-    //"zdistris/zdistri_DESI2_KL_sample1",
-    //"zdistris/zdistri_DESI2_KL_sample2", 
-    //"zdistris/zdistri_DESI2_KL_sample3", 
-    //"zdistris/zdistri_DESI2_KL_sample4",
-    "zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
-    "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
-    "zdistris/zdistri_DESI2_KL_BGS_Any_sample1_v2",
-    "zdistris/zdistri_DESI2_KL_BGS_Any_sample2_v2",
-    "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
-    "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
+  // char dndz[6][100] = {
+  //   //"zdistris/zdistri_DESI2_KL_sample1",
+  //   //"zdistris/zdistri_DESI2_KL_sample2", 
+  //   //"zdistris/zdistri_DESI2_KL_sample3", 
+  //   //"zdistris/zdistri_DESI2_KL_sample4",
+  //   "zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
+  //   "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
+  //   "zdistris/zdistri_DESI2_KL_BGS_Any_sample1_v2",
+  //   "zdistris/zdistri_DESI2_KL_BGS_Any_sample2_v2",
+  //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
+  //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
+  // };
+  char dndz[2][100] = {
+    "zdistris/src_LSSTY1", "zdistris/src_LSSTY10"
   };
-  //int N_scenarios_selection = sizeof(source_density)/sizeof(double);
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // Six shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
   // selection here.
-  // double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
-  //                              0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
-  //int N_scenarios_shape_noise = sizeof(shape_noise_rms)/sizeof(double);
-  int N_scenarios_shape_noise = 6;
+  int N_scenarios_shape_noise = 1;
   printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
   // Lens galaxies not used, set to random value
   float lens_density = 66.0;
@@ -591,7 +592,8 @@ int main(int argc, char** argv)
   double ell_max = 3000.0;
   double ell_max_shear = 3000.0;
   // Now count how many scenarios
-  int N_scenarios = N_scenarios_selection * N_scenarios_shape_noise;
+  //int N_scenarios = N_scenarios_selection * N_scenarios_shape_noise;
+  int N_scenarios = 2;
   //double scenario_table[1][3]={ {2000.0, 8.0, 66.0} };
 
   int hit=atoi(argv[1]);
@@ -620,20 +622,29 @@ int main(int argc, char** argv)
 
 
   for(t=0;t<N_scenarios;t++){
-    int temp = t;
-    int i_selection = temp/N_scenarios_shape_noise;
-    temp -= i_selection * N_scenarios_shape_noise;
-    int i_shape_noise = temp;
-    temp -= i_shape_noise;
-    assert(temp==0);
+    // int temp = t;
+    // int i_selection = temp/N_scenarios_shape_noise;
+    // temp -= i_selection * N_scenarios_shape_noise;
+    // int i_shape_noise = temp;
+    // temp -= i_shape_noise;
+    // assert(temp==0);
+    int i_selection = t;
+    int i_SN = 0;
 
     //RUN MODE setup
     init_cosmo_runmode("halofit");
     init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, 
     Ntomo_source[i_selection], Ntomo_lens);
     char _surveyname[10];
-    sprintf(_surveyname, "DESI2_KL_%d%d", i_selection, i_shape_noise);
-    init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
+    //sprintf(_surveyname, "DESI2_KL_%d%d", i_selection, i_shape_noise);
+    sprintf(_surveyname, survey_names[i_selection]);
+    char _photoz_prior[100];
+    char _shearm_prior[100];
+    sprintf(_photoz_prior, "photo_%s", _surveyname);
+    sprintf(_shearm_prior, "shear_%s", _surveyname);
+    init_priors_KL(_photoz_prior, _shearm_prior,"none","none",
+      
+      );
     init_survey(_surveyname);
     // init survey name, area, n_gal, shape noise, magnitude limit, K-correction
     //sprintf(survey.name, "%s_%d%d", "DESI2_KL_v2", i_selection, i_shape_noise);
@@ -642,7 +653,7 @@ int main(int argc, char** argv)
     //survey.sigma_e = shape_noise_rms[i_shape_noise];
     // init source and lens n(z) and photo-z 
     init_galaxies(dndz[i_selection], 
-      "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm", 
+      "zdistris/lens_LSSTY1", 
       "gaussian", "gaussian", "SN10");// the last arg is lens sample
     init_clusters(); // not used if we don't have clusters
     init_IA("none", "GAMA");// not used for covmat
