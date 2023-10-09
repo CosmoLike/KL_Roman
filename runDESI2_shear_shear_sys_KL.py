@@ -1,5 +1,3 @@
-#!/home/u17/jiachuanxu/python2_virtualenv/bin/python2.6
-
 import sys
 sys.path.append('/home/u17/jiachuanxu/CosmoLike/KL_WFIRST')
 
