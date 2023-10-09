@@ -640,8 +640,8 @@ int main(int argc, char** argv)
     sprintf(_surveyname, survey_names[i_selection]);
     char _photoz_prior[100];
     char _shearm_prior[100];
-    sprintf(_photoz_prior, "photo_%s", _surveyname);
-    sprintf(_shearm_prior, "shear_%s", _surveyname);
+    sprintf(_photoz_prior, "photo_%s", survey_names[i_selection]);
+    sprintf(_shearm_prior, "shear_%s", survey_names[i_selection]);
     init_priors_KL(_photoz_prior, _shearm_prior,"none","none",
       
       );
