@@ -34,7 +34,7 @@ nz_src_files = [
     "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
 ]
 nz_lens_file = "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm"
-data_vector_file = "datav/DESI2_KL_%d0_shear_shear_Ntomo%d_Ncl%d_eagle"
+data_vector_file = "datav/DESI2_KL_%d0_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
 baryon_PCS_file = "datav/DESI2_KL_%d%d_shear_shear_Ntomo%d_Ncl%d.pca"
 chain_output_file = "chains/DESI2_KL_v2_%d%d_ss_Ncl%d_Ntomo%d"
