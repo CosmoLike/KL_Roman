@@ -656,7 +656,7 @@ int main(int argc, char** argv)
       "zdistris/lens_LSSTY1", 
       "gaussian", "gaussian", "SN10");// the last arg is lens sample
     init_clusters(); // not used if we don't have clusters
-    init_IA("none", "GAMA");// not used for covmat
+    init_IA("NLA_HF", "GAMA");// KL assumes no IA; WL assumes NLA_HF
     init_probes("shear_shear");
     sprintf(covparams.outdir, 
       "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");

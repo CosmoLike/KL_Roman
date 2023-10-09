@@ -643,7 +643,7 @@ def sample_cosmology_shear_nuisance_IA(tomo_N_shear,MG = False):
     varied_parameters.append('eta_ia_highz')
     return varied_parameters
 
-def sample_cosmology_shear_nuisance_IA_bary(tomo_N_shear,MG = False):
+def sample_cosmology_shear_nuisance_IA_bary(tomo_N_shear,MG = False, NPCs=3):
     varied_parameters = sample_cosmology_only(MG)
     varied_parameters += ['source_z_bias_%d'%i for i in xrange(tomo_N_shear)]
     varied_parameters.append('source_z_s')
@@ -652,7 +652,7 @@ def sample_cosmology_shear_nuisance_IA_bary(tomo_N_shear,MG = False):
     varied_parameters.append('beta_ia')
     varied_parameters.append('eta_ia')
     varied_parameters.append('eta_ia_highz')
-    varied_parameters += ['bary_%d'%i for i in xrange(3)]
+    varied_parameters += ['bary_%d'%i for i in xrange(NPCs)]
     return varied_parameters
 
 
