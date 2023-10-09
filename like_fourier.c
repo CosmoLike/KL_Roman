@@ -45,8 +45,8 @@
 #include "init_WFIRST_forecasts.c"
 #include "../cosmolike_core/theory/init_baryon.c"
 
-#define _WRITE_NZ_TOMO_ 0
-#define _WRITE_DATA_VECTOR_ 0
+#define _WRITE_NZ_TOMO_ 1
+#define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
 #define _COMPUTE_LIKELIHOOD_ 0
 #define _VERBOSE_ 0 
@@ -699,7 +699,6 @@ int main(int argc, char** argv)
   double time_spent, loglike=0.0, init=0.0;
   int i;
 
-  //double survey_area = 14000.0;
   // 6 sets of target selections results in different src density [/arcmin2]
   //double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
   //int N_scenarios_selection = sizeof(source_density)/sizeof(double);
@@ -717,10 +716,8 @@ int main(int argc, char** argv)
   int Ntomo_source = 10;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
-  //double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
-  //                             0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
+  // detailed settings are stored in `set_survey_parameters_to_DESI2_KL()`
   int N_scenarios_shape_noise = 1;
-  //int N_scenarios_shape_noise = sizeof(shape_noise_rms)/sizeof(double);
   //printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
   // Lens galaxies not used, set to random value
   double lens_density = 66.0;
