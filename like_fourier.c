@@ -757,8 +757,8 @@ int main(int argc, char** argv)
   //init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
   char _photoz_prior[100];
   char _shearm_prior[100];
-  sprintf(_photoz_prior, "photo_%s", _surveyname);
-  sprintf(_shearm_prior, "shear_%s", _surveyname);
+  sprintf(_photoz_prior, "photo_%s", strat);
+  sprintf(_shearm_prior, "shear_%s", strat);
   init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
     false, 3.0, 1.2, 3.8, 2.0, true, 16, 1.9, 0.7);
   init_survey(strat);
