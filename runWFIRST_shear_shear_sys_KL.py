@@ -56,7 +56,7 @@ initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
 #initpriors_KL("photo_opti","shear_opti","none","none")
 initpriors_IA_bary("spec_DESI2", "shear_KL_DESI2", "none", "none", 
     False, 3.0, 1.2, 3.8, 2.0, 
-    True, 16.0, 5.0, 0.8)
+    True, 20.0, 6.0, 2.0)
 initsurvey(strat)
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
 initclusters()
@@ -67,7 +67,8 @@ initdatainvbary(cov_file ,data_file, bary_file)
 #sample_params=sample_LCDM_only()
 #sample_params= sample_cosmology_only()
 sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear())
-sample_params += ['bary_%d'%i for i in xrange(3)]
+# Fix Q3, not constraining that
+sample_params += ['bary_%d'%i for i in xrange(2)]
 #print "Dim of param space: ", len(sample_params)
 #sample_params = sample_cosmology_2pt_nuisance(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
