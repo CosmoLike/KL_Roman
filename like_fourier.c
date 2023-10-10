@@ -499,6 +499,9 @@ double log_multi_like(
     log_L -= pow((Q3 - prior.bary_Q3[0])/prior.bary_Q3[1],2.0);
     log_L_prior+=0.5*log_L;
   }
+  if(like.Planck15_BAO_H070p6_JLA_w0wa==1){
+    log_L_prior += log_L_PlanckBAOJLA_w0wa();
+  }
   //printf("%d %d %d %d\n",like.BAO,like.wlphotoz,like.clphotoz,like.shearcalib);
   // printf("logl %le %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz(),log_L_clusterMobs());
   int start=0;  
