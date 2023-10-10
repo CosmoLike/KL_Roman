@@ -60,6 +60,8 @@ void init_IA(char *model,char *lumfct);
 
 void set_galaxies_DES_Y1();
 
+double log_L_PlanckBAOJLA_w0wa();
+
 int count_rows(char* filename,const char delimiter){
   FILE *file = fopen (filename, "r" );
   char line [1000];
@@ -259,7 +261,24 @@ void init_priors(char *Prior1, char *Prior2, char *Prior3, char *Prior4)
     set_shear_priors_WFIRST_pessi();
   }
   if(strcmp(Prior3,"GRS")==0) like.GRS=1;
+  // external probes
   sprintf(like.ext_data,"%s",Prior4);
+  if(strcmp(Prior4, "Planck15_BAO_H070p6_JLA_w0wa")==0){
+    printf("Set external prior to Planck+BAO+JLA (w0-wa)\n");
+    like.Planck15_BAO_H070p6_JLA_w0wa=1;  
+  } 
+  // else if(strcmp(Prior4,"Planck18_BAO_Riess18_Pantheon_w0wa")==0){
+  //   like.Planck18_BAO_Riess18_Pantheon_w0wa=1;  
+  // } 
+  // else if(strcmp(Prior4,"Planck18_BAO_w0wa")==0){
+  //   like.Planck18_BAO_w0wa=1; 
+  // } 
+  // else if(strcmp(Prior4,"Planck18_w0")==0){
+  //   like.Planck18_w0=1;          
+  // } 
+  else {
+    printf("Error from like_fourier.c: Prior4 can only be Planck, Planck15_BAO_w0wa, Planck15_BAO_H070p6_JLA_w0wa, Planck18_BAO_Riess18_Pantheon_w0wa, Planck18_BAO_w0wa, or Planck18_w0."); //CH: no real error handling.
+  }
 }
 
 void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4, 
@@ -315,7 +334,24 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
     set_shear_priors_DESI2_KL();
   }
   if(strcmp(Prior3,"GRS")==0) like.GRS=1;
+  // external probes
   sprintf(like.ext_data,"%s",Prior4);
+  if(strcmp(Prior4, "Planck15_BAO_H070p6_JLA_w0wa")==0){
+    printf("Set external prior to Planck+BAO+JLA (w0-wa)\n");
+    like.Planck15_BAO_H070p6_JLA_w0wa=1;  
+  } 
+  // else if(strcmp(Prior4,"Planck18_BAO_Riess18_Pantheon_w0wa")==0){
+  //   like.Planck18_BAO_Riess18_Pantheon_w0wa=1;  
+  // } 
+  // else if(strcmp(Prior4,"Planck18_BAO_w0wa")==0){
+  //   like.Planck18_BAO_w0wa=1; 
+  // } 
+  // else if(strcmp(Prior4,"Planck18_w0")==0){
+  //   like.Planck18_w0=1;          
+  // } 
+  else {
+    printf("Error from like_fourier.c: Prior4 can only be Planck, Planck15_BAO_w0wa, Planck15_BAO_H070p6_JLA_w0wa, Planck18_BAO_Riess18_Pantheon_w0wa, Planck18_BAO_w0wa, or Planck18_w0."); //CH: no real error handling.
+  }
   if(IA_flag){
     // Initializing IA priors
     prior.A_ia[0]=5.92; 
@@ -417,7 +453,24 @@ void init_priors_IA(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
     set_shear_priors_DESI2_KL();
   }
   if(strcmp(Prior3,"GRS")==0) like.GRS=1;
+  // external probes
   sprintf(like.ext_data,"%s",Prior4);
+  if(strcmp(Prior4, "Planck15_BAO_H070p6_JLA_w0wa")==0){
+    printf("Set external prior to Planck+BAO+JLA (w0-wa)\n");
+    like.Planck15_BAO_H070p6_JLA_w0wa=1;  
+  } 
+  // else if(strcmp(Prior4,"Planck18_BAO_Riess18_Pantheon_w0wa")==0){
+  //   like.Planck18_BAO_Riess18_Pantheon_w0wa=1;  
+  // } 
+  // else if(strcmp(Prior4,"Planck18_BAO_w0wa")==0){
+  //   like.Planck18_BAO_w0wa=1; 
+  // } 
+  // else if(strcmp(Prior4,"Planck18_w0")==0){
+  //   like.Planck18_w0=1;          
+  // } 
+  else {
+    printf("Error from like_fourier.c: Prior4 can only be Planck, Planck15_BAO_w0wa, Planck15_BAO_H070p6_JLA_w0wa, Planck18_BAO_Riess18_Pantheon_w0wa, Planck18_BAO_w0wa, or Planck18_w0."); //CH: no real error handling.
+  }
   // Initializing IA priors
   prior.A_ia[0]=5.92; 
   prior.A_ia[1]=A_ia_Prior; 
@@ -480,7 +533,24 @@ void init_priors_KL(char *Prior1, char *Prior2, char *Prior3, char *Prior4)
     set_shear_priors_DESI2_KL();
   }
   if(strcmp(Prior3,"GRS")==0) like.GRS=1;
+  // external probes
   sprintf(like.ext_data,"%s",Prior4);
+  if(strcmp(Prior4, "Planck15_BAO_H070p6_JLA_w0wa")==0){
+    printf("Set external prior to Planck+BAO+JLA (w0-wa)\n");
+    like.Planck15_BAO_H070p6_JLA_w0wa=1;  
+  } 
+  // else if(strcmp(Prior4,"Planck18_BAO_Riess18_Pantheon_w0wa")==0){
+  //   like.Planck18_BAO_Riess18_Pantheon_w0wa=1;  
+  // } 
+  // else if(strcmp(Prior4,"Planck18_BAO_w0wa")==0){
+  //   like.Planck18_BAO_w0wa=1; 
+  // } 
+  // else if(strcmp(Prior4,"Planck18_w0")==0){
+  //   like.Planck18_w0=1;          
+  // } 
+  else {
+    printf("Error from like_fourier.c: Prior4 can only be Planck, Planck15_BAO_w0wa, Planck15_BAO_H070p6_JLA_w0wa, Planck18_BAO_Riess18_Pantheon_w0wa, Planck18_BAO_w0wa, or Planck18_w0."); //CH: no real error handling.
+  }
 }
 
 
@@ -1450,4 +1520,33 @@ void set_shear_priors_LSST_Y10()
     printf("Mean=%le, Sigma=%le\n",prior.shear_calibration_m[i][0],prior.shear_calibration_m[i][1]);
   }
   like.shearcalib=1;
+}
+
+double log_L_PlanckBAOJLA_w0wa()
+{
+  double log_L = 0.;
+  int n_param = 7;
+  // https://github.com/CosmoLike/DESC_SRD/blob/master/fisher.py
+  double table[7][7] = {
+    {8.52889541e+03,9.34266060e-03,2.21513407e+00,1.85008170e+01,6.12185662e+00,1.17720010e+02,5.30670581e+01},
+    {9.34266060e-03,3.34475078e+01,3.79135616e-01,-8.02192934e-02,5.88736315e-02,-8.69202865e+01,-7.08029577e+00},
+    {2.21513407e+00,3.79135616e-01,2.48739187e+02,-7.46022981e+00,-2.69922217e+00,-1.19693897e+02,4.78085262e+00},
+    {1.85008170e+01,-8.02192934e-02,-7.46022981e+00,8.42937127e+01,1.68856256e+01,-4.89063661e+01,-8.77194357e+00},
+    {6.12185662e+00,5.88736315e-02,-2.69922217e+00,1.68856256e+01,9.55489400e+00,5.27704214e+00,-1.38597499e+00},
+    {1.17720010e+02,-8.69202865e+01,-1.19693897e+02,-4.89063661e+01,5.27704214e+00,7.17777988e+04,3.08491105e+03},
+    {5.30670581e+01,-7.08029577e+00,4.78085262e+00,-8.77194357e+00,-1.38597499e+00,3.08491105e+03,5.32751808e+02}
+  };
+  double param_fid[n_param], param_diff[n_param];
+    
+  param_diff[0] = cosmology.Omega_m-prior.Omega_m; 
+  param_diff[1] = cosmology.sigma_8-prior.sigma_8; 
+  param_diff[2] = cosmology.n_spec-prior.n_spec; 
+  param_diff[3] = cosmology.w0-prior.w0;
+  param_diff[4] = cosmology.wa-prior.wa;
+  param_diff[5] = cosmology.omb-prior.omb;
+  param_diff[6] = cosmology.h0-prior.h0;
+  
+  log_L = -0.5*do_matrix_mult_invcov(n_param,table, param_diff);
+
+  return log_L;
 }
