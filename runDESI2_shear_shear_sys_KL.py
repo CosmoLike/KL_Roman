@@ -39,7 +39,7 @@ invcovmat_file = "invcov/DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
 baryon_PCS_file = "datav/DESI2_KL_%d%d_shear_shear_Ntomo%d_Ncl%d.pca"
 #chain_output_file = "chains/DESI2_KL_v2_PlanckBAOJLA_%d%d_ss_Ncl%d_Ntomo%d"
 chain_output_file = "chains/DESI2_KL_LCDM_%d%d_ss_Ncl%d_Ntomo%d"
-
+DE_FLAG = False
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files[args.iSelection])
 file_lens_z = os.path.join(dirname, nz_lens_file)
@@ -67,8 +67,7 @@ initdatainvbary(cov_file ,data_file, bary_file)
 
 #sample_params=sample_LCDM_only()
 #sample_params= sample_cosmology_only()
-#sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear())
-sample_params = sample_LCDM_shear_nuisance(get_N_tomo_shear())
+sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
 # Fix Q3, not constraining that
 sample_params += ['bary_%d'%i for i in xrange(2)]
 #print "Dim of param space: ", len(sample_params)
