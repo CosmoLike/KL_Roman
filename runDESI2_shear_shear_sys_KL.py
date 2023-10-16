@@ -20,6 +20,7 @@ Ncl = 15
 ell_min, ell_max, ell_max_shear = 20.0, 3000.0, 3000.0
 Rmin_bias = 21.0
 strat = "DESI2_KL_%d%d"%(args.iSelection, args.iSN)
+external_prior = "Planck15_BAO_H070p6_JLA_w0wa" # default: "none"
 
 #sigmae_list = np.array([0.02, 0.04, 0.06, 0.10, 0.20, 0.30])*np.sqrt(2)
 #Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])
@@ -35,7 +36,7 @@ nz_lens_file = "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm"
 data_vector_file = "datav/DESI2_KL_%d0_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
 baryon_PCS_file = "datav/DESI2_KL_%d%d_shear_shear_Ntomo%d_Ncl%d.pca"
-chain_output_file = "chains/DESI2_KL_v2_%d%d_ss_Ncl%d_Ntomo%d"
+chain_output_file = "chains/DESI2_KL_v2_PlanckBAOJLA_%d%d_ss_Ncl%d_Ntomo%d"
 
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files[args.iSelection])
@@ -52,7 +53,7 @@ chain_file = os.path.join(outdirname,
 initcosmo("halofit")
 initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
 #initpriors_KL("photo_opti","shear_opti","none","none")
-initpriors_IA_bary("spec_DESI2", "shear_KL_DESI2", "none", "none", 
+initpriors_IA_bary("spec_DESI2", "shear_KL_DESI2", "none", external_prior,
     False, 3.0, 1.2, 3.8, 2.0, 
     True, 20.0, 6.0, 2.0)
 initsurvey(strat)
@@ -72,5 +73,5 @@ sample_params += ['bary_%d'%i for i in xrange(2)]
 #sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
 
-sample_main(sample_params,8000,400,1,chain_file+"_8000", blind=False, pool=MPIPool(), KL=True)
+sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
 

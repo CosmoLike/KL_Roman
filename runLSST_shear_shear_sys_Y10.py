@@ -16,9 +16,9 @@ nz_src_file = "zdistris/src_LSSTY10"
 nz_lens_file = "zdistris/lens_LSSTY10"
 data_vector_file = "datav/LSST_Y10_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/LSST_Y10_ssss_invcov_Ncl%d_Ntomo%d"
-baryon_PCS_file = "datav/LSST_Y10_shear_shear_Ntomo%d_Ncl%d.pca"
+baryon_PCS_file = "datav/LSST_Y10_shear_shear_Ntomo%d_Ncl%d_9sim.pca"
 chain_output_file = "chains/LSST_Y10_ss_Ncl%d_Ntomo%d"
-
+external_probe = "none"
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_file)
 file_lens_z = os.path.join(dirname, nz_lens_file)
@@ -29,9 +29,9 @@ chain_file = os.path.join(outdirname, chain_output_file%(Ncl, Ntomo_src))
 
 initcosmo("halofit")
 initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
-initpriors_IA_bary("photo_LSST_Y10","shear_LSST_Y10","none","none",
+initpriors_IA_bary("photo_LSST_Y10","shear_LSST_Y10","none",external_probe,
     True, 3.0,1.2,3.8,2.0,
-    True, 16.0,5.0,0.8)
+    True, 40.0,10.0,0.8)
 initsurvey(strat)
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
 initclusters()
@@ -46,4 +46,4 @@ sample_params = sample_cosmology_shear_nuisance_IA_bary(get_N_tomo_shear(), NPCs
 #sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
 
-sample_main(sample_params,10000,400,1,chain_file+"_10000", blind=False, pool=MPIPool())
+sample_main(sample_params,6000,400,1,chain_file+"_6000", blind=False, pool=MPIPool())
