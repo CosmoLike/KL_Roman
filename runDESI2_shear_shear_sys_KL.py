@@ -20,7 +20,8 @@ Ncl = 15
 ell_min, ell_max, ell_max_shear = 20.0, 3000.0, 3000.0
 Rmin_bias = 21.0
 strat = "DESI2_KL_%d%d"%(args.iSelection, args.iSN)
-external_prior = "Planck15_BAO_H070p6_JLA_w0wa" # default: "none"
+#external_prior = "Planck15_BAO_H070p6_JLA_w0wa" # default: "none"
+external_prior = "none"
 
 #sigmae_list = np.array([0.02, 0.04, 0.06, 0.10, 0.20, 0.30])*np.sqrt(2)
 #Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])
@@ -36,7 +37,8 @@ nz_lens_file = "zdistris/zdistri_WFIRST_LSST_clustering_fine_bin_norm"
 data_vector_file = "datav/DESI2_KL_%d0_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
 baryon_PCS_file = "datav/DESI2_KL_%d%d_shear_shear_Ntomo%d_Ncl%d.pca"
-chain_output_file = "chains/DESI2_KL_v2_PlanckBAOJLA_%d%d_ss_Ncl%d_Ntomo%d"
+#chain_output_file = "chains/DESI2_KL_v2_PlanckBAOJLA_%d%d_ss_Ncl%d_Ntomo%d"
+chain_output_file = "chains/DESI2_KL_LCDM_%d%d_ss_Ncl%d_Ntomo%d"
 
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files[args.iSelection])
@@ -65,7 +67,8 @@ initdatainvbary(cov_file ,data_file, bary_file)
 
 #sample_params=sample_LCDM_only()
 #sample_params= sample_cosmology_only()
-sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear())
+#sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear())
+sample_params = sample_LCDM_shear_nuisance(get_N_tomo_shear())
 # Fix Q3, not constraining that
 sample_params += ['bary_%d'%i for i in xrange(2)]
 #print "Dim of param space: ", len(sample_params)
