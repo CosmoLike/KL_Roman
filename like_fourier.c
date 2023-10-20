@@ -613,7 +613,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_test",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
+  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_test2",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
@@ -762,7 +762,7 @@ int main(int argc, char** argv)
   sprintf(_photoz_prior, "photo_%s", strat);
   sprintf(_shearm_prior, "shear_%s", strat);
   init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-    true, 3.0, 1.2, 3.8, 2.0, true, 40.0, 10.0, 0.8);
+    false, 3.0, 1.2, 3.8, 2.0, true, 40.0, 10.0, 0.8);
   init_survey(strat);
   // customize shape noise here
   //survey.sigma_e = shape_noise_rms[i_SN];
