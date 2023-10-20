@@ -475,7 +475,7 @@ double log_multi_like(
   }
        
   printf("like %le %le %le %le %le %le %le %le %le %le\n",cosmology.Omega_m, cosmology.Omega_v,cosmology.sigma_8,cosmology.n_spec,cosmology.w0,cosmology.wa,cosmology.omb,cosmology.h0,cosmology.coverH0,cosmology.rho_crit); 
-  printf("like %le %le %le %le\n",gbias.b[0][0], gbias.b[1][0], gbias.b[2][0], gbias.b[3][0]);    
+  printf("like %le %le %le %le\n",gbias.b[0], gbias.b[1], gbias.b[2], gbias.b[3]);    
   for (i=0; i<10; i++){
     printf("nuisance %le %le %le\n",nuisance.shear_calibration_m[i],nuisance.bias_zphot_shear[i],nuisance.sigma_zphot_shear[i]);
   }
