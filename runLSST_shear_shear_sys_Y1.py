@@ -45,9 +45,8 @@ initdatainvbary(cov_file ,data_file, bary_file)
 #sample_params=sample_LCDM_only()
 #sample_params= sample_cosmology_only()
 #sample_params = sample_cosmology_shear_nuisance_IA(get_N_tomo_shear())
-#sample_params = sample_cosmology_shear_nuisance_IA_bary(get_N_tomo_shear(), NPCs=2)
-sample_params = sample_LCDM_shear_nuisance_IA_bary(get_N_tomo_shear(), 
-    NPCs=NPCs_used, DE=DE_FLAG)
+sample_params = sample_cosmology_shear_nuisance_IA_bary(get_N_tomo_shear(), 
+	NPCs=NPCs_used, DE=DE_FLAG)
 #sample_params = sample_cosmology_2pt_nuisance(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
