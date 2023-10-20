@@ -474,11 +474,11 @@ double log_multi_like(
     return -1.0e15;
   }
        
-  //printf("like %le %le %le %le %le %le %le %le %le %le\n",cosmology.Omega_m, cosmology.Omega_v,cosmology.sigma_8,cosmology.n_spec,cosmology.w0,cosmology.wa,cosmology.omb,cosmology.h0,cosmology.coverH0,cosmology.rho_crit); 
-  // printf("like %le %le %le %le\n",gbias.b[0][0], gbias.b[1][0], gbias.b[2][0], gbias.b[3][0]);    
-  // for (i=0; i<10; i++){
-  //   printf("nuisance %le %le %le\n",nuisance.shear_calibration_m[i],nuisance.bias_zphot_shear[i],nuisance.sigma_zphot_shear[i]);
-  // }
+  printf("like %le %le %le %le %le %le %le %le %le %le\n",cosmology.Omega_m, cosmology.Omega_v,cosmology.sigma_8,cosmology.n_spec,cosmology.w0,cosmology.wa,cosmology.omb,cosmology.h0,cosmology.coverH0,cosmology.rho_crit); 
+  printf("like %le %le %le %le\n",gbias.b[0][0], gbias.b[1][0], gbias.b[2][0], gbias.b[3][0]);    
+  for (i=0; i<10; i++){
+    printf("nuisance %le %le %le\n",nuisance.shear_calibration_m[i],nuisance.bias_zphot_shear[i],nuisance.sigma_zphot_shear[i]);
+  }
 
   // prior information
   if(like.wlphotoz!=0) log_L_prior+=log_L_wlphotoz();
@@ -792,6 +792,8 @@ int main(int argc, char** argv)
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21
   // NOTE: different target selections have different data vectors
   #if _COMPUTE_DATAVECTOR_ == 1
+  printf("like.IA = %d\n", like.IA);
+  printf("like.baryons = %d\n", like.baryons);
   compute_data_vector(argv[1],
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
