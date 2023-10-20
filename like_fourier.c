@@ -481,9 +481,9 @@ double log_multi_like(
   }
 
   // prior information
-  if(like.wlphotoz!=0) log_L_prior+=log_L_wlphotoz();
-  if(like.clphotoz!=0) log_L_prior+=log_L_clphotoz();
-  if(like.shearcalib==1) log_L_prior+=log_L_shear_calib();
+  if(like.wlphotoz!=0) {log_L_prior+=log_L_wlphotoz();printf("wlphotoz %e\n",log_L_prior);}
+  if(like.clphotoz!=0) {log_L_prior+=log_L_clphotoz();printf("clphotoz %e\n", log_L_prior);}
+  if(like.shearcalib==1) {log_L_prior+=log_L_shear_calib();printf("shearcalib %e\n", log_L_prior);}
   if(like.IA!=0) {
     log_L = 0.0;
     log_L -= pow((nuisance.A_ia - prior.A_ia[0])/prior.A_ia[1],2.0);
@@ -491,6 +491,7 @@ double log_multi_like(
     log_L -= pow((nuisance.eta_ia - prior.eta_ia[0])/prior.eta_ia[1],2.0);
     log_L -= pow((nuisance.eta_ia_highz - prior.eta_ia_highz[0])/prior.eta_ia_highz[1],2.0);
     log_L_prior+=0.5*log_L;
+    printf("IA %e\n", log_L);
   }
   if(like.baryons==1){
     log_L = 0.0;
@@ -498,12 +499,13 @@ double log_multi_like(
     log_L -= pow((Q2 - prior.bary_Q2[0])/prior.bary_Q2[1],2.0);
     log_L -= pow((Q3 - prior.bary_Q3[0])/prior.bary_Q3[1],2.0);
     log_L_prior+=0.5*log_L;
+    printf("baryon %e\n", log_L);
   }
   if(like.Planck15_BAO_H070p6_JLA_w0wa==1){
     log_L_prior += log_L_PlanckBAOJLA_w0wa();
   }
-  //printf("%d %d %d %d\n",like.BAO,like.wlphotoz,like.clphotoz,like.shearcalib);
-  // printf("logl %le %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz(),log_L_clusterMobs());
+  printf("%d %d %d %d\n",like.BAO,like.wlphotoz,like.clphotoz,like.shearcalib);
+  printf("logl %le %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz(),log_L_clusterMobs());
   int start=0;  
   
   if(like.shear_shear==1) {
