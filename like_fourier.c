@@ -46,7 +46,7 @@
 #include "../cosmolike_core/theory/init_baryon.c"
 
 #define _WRITE_NZ_TOMO_ 0
-#define _WRITE_DATA_VECTOR_ 0
+#define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
 #define _COMPUTE_LIKELIHOOD_ 1
 #define _VERBOSE_ 0 
@@ -613,7 +613,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
+  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_test",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
@@ -819,7 +819,7 @@ int main(int argc, char** argv)
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
   init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
-    "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo",
+    "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo_test",
     "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_9sim.pca");
   begin = clock();
   loglike=log_multi_like(
