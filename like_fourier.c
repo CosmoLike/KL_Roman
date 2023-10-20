@@ -760,7 +760,7 @@ int main(int argc, char** argv)
   sprintf(_photoz_prior, "photo_%s", strat);
   sprintf(_shearm_prior, "shear_%s", strat);
   init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-    false, 3.0, 1.2, 3.8, 2.0, true, 16, 1.9, 0.7);
+    false, 3.0, 1.2, 3.8, 2.0, true, 40.0, 10.0, 0.8);
   init_survey(strat);
   // customize shape noise here
   //survey.sigma_e = shape_noise_rms[i_SN];
@@ -814,8 +814,9 @@ int main(int argc, char** argv)
   #endif
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
-  init_data_inv("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
-    "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo");
+  init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
+    "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo",
+    "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_9sim.pca");
   begin = clock();
   loglike=log_multi_like(
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
