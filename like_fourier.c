@@ -46,9 +46,9 @@
 #include "../cosmolike_core/theory/init_baryon.c"
 
 #define _WRITE_NZ_TOMO_ 0
-#define _WRITE_DATA_VECTOR_ 1
+#define _WRITE_DATA_VECTOR_ 0
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 0
+#define _COMPUTE_LIKELIHOOD_ 1
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -820,11 +820,11 @@ int main(int argc, char** argv)
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,
     // galaxy bias: b[0-9]
-    1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,
+    1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,
     // lens galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.0005,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,
     // additive shear calibration bias[0-9]
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
     // IA: A_ia, beta_ia, eta_ia, eta_ia_highz
@@ -833,8 +833,18 @@ int main(int argc, char** argv)
     0.0,0.0,0.0,0.0,0.0,0.0,
     // clus: mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm
     3.207,0.993,0.0,0.456,
-    // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope, baryon scenario
-    0.0,0.0);
+    // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope,
+    0.0,0.0,
+    // GRS B1, B2, B3, B4, B5, B6, B7
+    1.538026692020565,1.862707210288686,2.213131761595241,2.617023657038295,
+    2.975011712138650,3.376705680190931,3.725882076395691,
+    // SIGMA P1, P2, P3, P4, P5, P6, P7, Z
+    290, 290, 290, 290, 290, 290, 290, 0.001,
+    // Pshot, Kstar
+    0.0, 0.24
+    // Q1, Q2, Q3
+    0.0, 0.0, 0.0,
+    );
   printf("%le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
