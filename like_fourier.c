@@ -843,8 +843,7 @@ int main(int argc, char** argv)
     // Pshot, Kstar
     0.0, 0.24,
     // Q1, Q2, Q3
-    0.0, 0.0, 0.0,
-    );
+    0.0, 0.0, 0.0);
   printf("%le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
