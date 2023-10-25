@@ -227,6 +227,16 @@ int set_cosmology_params(double OMM, double S8, double NS, double W0,double WA, 
   return 1;
 }
 
+int set_cosmology_params_lowz(double sigma_8_low, double z_low)
+{
+  cosmology_lowz.sigma_8 = sigma_8_low;
+  cosmology_lowz.z_low = z_low;
+  // Jiachuan Xu: increase the lower bound of Omega_m to avoid f_baryon > 1.0
+  // which would make Tsqr_EH_wiggle return 0, and cause a bunch of errors
+  if (cosmology_lowz.sigma_8 < 0.5 || cosmology_lowz.sigma_8 > 1.1) return 0;
+  return 1;
+}
+
 void set_nuisance_shear_calib(double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10)
 {
   nuisance.shear_calibration_m[0] = M1;
@@ -425,7 +435,7 @@ double log_multi_like(
   double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, 
   double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, 
   double PSHOT, double KSTAR,
-  double Q1, double Q2, double Q3)
+  double Q1, double Q2, double Q3, double sigma_8_low, double z_low)
 {
   //printf("%le %le\n",SPS1,CPS1);
   int i,j,k,m=0,l;
@@ -450,6 +460,10 @@ double log_multi_like(
   }
   if (set_cosmology_params(OMM,S8,NS,W0,WA,OMB,H0,MGSigma,MGmu)==0){
     if(_VERBOSE_==1){printf("Cosmology out of bounds\n");}
+    return -1.0e15;
+  }
+  if (set_cosmology_params_lowz(sigma_8_lowz, z_low)==0){
+    if(_VERBOSE_==1){printf("Low-z cosmology out of bounds\n");}
     return -1.0e15;
   }
   set_nuisance_shear_calib(M1,M2,M3,M4,M5,M6,M7,M8,M9,M10);
@@ -479,6 +493,7 @@ double log_multi_like(
   for (i=0; i<10; i++){
     printf("nuisance %le %le %le\n",nuisance.shear_calibration_m[i],nuisance.bias_zphot_shear[i],nuisance.sigma_zphot_shear[i]);
   }
+  printf("like sigma_8_lowz = %le; z_low = %.2f\n", cosmology_lowz.sigma_8, cosmology_lowz.z_low);
 
   // prior information
   if(like.wlphotoz!=0) {log_L_prior+=log_L_wlphotoz();printf("wlphotoz %e\n",log_L_prior);}
@@ -551,7 +566,7 @@ double log_multi_like(
   return -0.5*chisqr+log_L_prior;
 }
 
-void compute_data_vector(char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5,double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q, double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, char *bary_sce)
+void compute_data_vector(char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5,double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q, double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, char *bary_sce, double sigma_8_lowz, double z_low)
 {
 
   int i,j,k,m=0,l;
@@ -578,6 +593,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
 //   printf("%d %le\n",i,ell[l]);
 // }
   set_cosmology_params(OMM,S8,NS,W0,WA,OMB,H0,MGSigma,MGmu);
+  set_cosmology_params_lowz(sigma_8_lowz, z_low);
   set_nuisance_shear_calib(M1,M2,M3,M4,M5,M6,M7,M8,M9,M10);
   set_nuisance_shear_photoz(SP1,SP2,SP3,SP4,SP5,SP6,SP7,SP8,SP9,SP10,SPS1);
   set_nuisance_clustering_photoz(CP1,CP2,CP3,CP4,CP5,CP6,CP7,CP8,CP9,CP10,CPS1);
@@ -626,7 +642,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   #endif
 }
 
-void write_vector_wrapper(char *details, char *bary_sce, input_cosmo_params ic, input_nuisance_params in)
+void write_vector_wrapper(char *details, char *bary_sce, input_cosmo_params ic, input_nuisance_params in, input_cosmo_params_lowz icplow)
 {
   compute_data_vector(details, ic.omega_m, ic.sigma_8, ic.n_s, ic.w0, ic.wa, ic.omega_b, ic.h0, ic.MGSigma, ic.MGmu,
     in.bias[0], in.bias[1], in.bias[2], in.bias[3],in.bias[4], in.bias[5], in.bias[6], in.bias[7],in.bias[8], in.bias[9], 
@@ -641,10 +657,11 @@ void write_vector_wrapper(char *details, char *bary_sce, input_cosmo_params ic, 
     in.A_ia, in.beta_ia, in.eta_ia, in.eta_ia_highz,
     in.lf[0], in.lf[1], in.lf[2], in.lf[3], in.lf[4], in.lf[5],
     in.m_lambda[0], in.m_lambda[1], in.m_lambda[2], in.m_lambda[3],
-    in.m_lambda[4], in.m_lambda[5], bary_sce);
+    in.m_lambda[4], in.m_lambda[5], bary_sce, 
+    icplow.sigma_8_lowz, icplow.z_low);
 }
 
-double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in,input_nuisance_params_grs ingr)
+double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in,input_nuisance_params_grs ingr, input_cosmo_params_lowz icplow)
 {
   double like = log_multi_like(ic.omega_m, ic.sigma_8, ic.n_s, ic.w0, ic.wa, ic.omega_b, ic.h0, ic.MGSigma, ic.MGmu,
     in.bias[0], in.bias[1], in.bias[2], in.bias[3],in.bias[4], in.bias[5], in.bias[6], in.bias[7],in.bias[8], in.bias[9], 
@@ -660,7 +677,7 @@ double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in,input_nu
     in.lf[0], in.lf[1], in.lf[2], in.lf[3], in.lf[4], in.lf[5], 
     in.m_lambda[0], in.m_lambda[1], in.m_lambda[2], in.m_lambda[3], in.m_lambda[4], in.m_lambda[5],
     ingr.grsbias[0],ingr.grsbias[1],ingr.grsbias[2],ingr.grsbias[3],ingr.grsbias[4],ingr.grsbias[5],ingr.grsbias[6],ingr.grssigmap[0],ingr.grssigmap[1],ingr.grssigmap[2],ingr.grssigmap[3],ingr.grssigmap[4],ingr.grssigmap[5],ingr.grssigmap[6],ingr.grssigmaz,ingr.grspshot,ingr.grskstar,
-    in.bary[0], in.bary[1], in.bary[2]);
+    in.bary[0], in.bary[1], in.bary[2], icplow.sigma_8_lowz, icplow.z_low);
   return like;
 }
 
@@ -797,7 +814,7 @@ int main(int argc, char** argv)
   printf("like.IA = %d\n", like.IA);
   printf("like.baryons = %d\n", like.baryons);
   compute_data_vector(argv[1],
-    // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
+    // cosmology+MG: Om, sigma_8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
@@ -813,8 +830,12 @@ int main(int argc, char** argv)
     0.0,0.0,0.0,0.0,0.0,0.0,
     // clus: mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm
     3.207,0.993,0.0,0.456,
-    // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope, baryon scenario
-    0.0, 0.0, argv[4]);
+    // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope
+    0.0, 0.0,
+    // baryon scenario,
+    argv[4],
+    // sigma8 split at low-z
+    0.831, 0.4);
   #endif
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
@@ -849,7 +870,9 @@ int main(int argc, char** argv)
     // Pshot, Kstar
     0.0, 0.24,
     // Q1, Q2, Q3
-    0.0, 0.0, 0.0);
+    0.0, 0.0, 0.0,
+    // sigma8 split at low-z
+    0.831, 0.4);
   printf("%le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
