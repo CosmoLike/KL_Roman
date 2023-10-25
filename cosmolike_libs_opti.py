@@ -282,6 +282,27 @@ class InputCosmologyParams(IterableStruct):
         c.MGSigma = 0.1
         c.MGmu = 0.2     
         return c
+
+class InputCosmologyLowzParams(IterableStruct):
+    section_name = "cosmological_parameters_lowz"
+    _fields_ = [
+        ("sigma_8_lowz", double),
+        ("z_low", double),
+    ]
+
+    @classmethod
+    def fiducial(cls):
+        c = cls()
+        c.sigma_8_lowz = 0.831
+        c.z_low = 0.4
+        return c
+
+    @classmethod
+    def fiducial_sigma(cls):
+        c = cls()
+        c.sigma_8_lowz = 0.1
+        c.z_low = 0.05
+        return c
 """
 class InputNuisanceParams(IterableStruct):
     section_name = "nuisance_parameters"
@@ -540,11 +561,11 @@ class LikelihoodFunctionWrapper(object):
             self.KL_flag = False
 
 
-    def fill_varied(self, icp, inp, inpgrs, x):
+    def fill_varied(self, icp, inp, inpgrs, icplow, x):
         assert len(x) == len(self.varied_parameters), "Wrong number of parameters"
         i = 0
         #print "filling %d params"%(len(x))
-        for s in [icp, inp, inpgrs]:
+        for s in [icp, inp, inpgrs, icplow]:
             for name, obj, length in s.iter_parameters():
                 if length==0:
                     if name in self.varied_parameters:
@@ -570,20 +591,21 @@ class LikelihoodFunctionWrapper(object):
         else:
             inp = InputNuisanceParams.fiducial()
         inpgrs = InputNuisanceParamsGRS.fiducial()
+        icplow = InputCosmologyLowzParams.fiducial()
         # fill the param-struct with input values and default values
-        self.fill_varied(icp, inp, inpgrs, x)
+        self.fill_varied(icp, inp, inpgrs, icplow, x)
         #icp.print_struct()
         #inp.print_struct()
         #inpgrs.print_struct()
         #print
-        like = lib.log_like_wrapper(icp, inp, inpgrs)
+        like = lib.log_like_wrapper(icp, inp, inpgrs, icplow)
         #print "like before" , like
         if like < -1.0e+14:
             return -np.inf
         return like
 
 
-lib.log_like_wrapper.argtypes = [InputCosmologyParams, InputNuisanceParams, InputNuisanceParamsGRS]
+lib.log_like_wrapper.argtypes = [InputCosmologyParams, InputNuisanceParams, InputNuisanceParamsGRS, InputCosmologyLowzParams]
 lib.log_like_wrapper.restype = double
 log_like_wrapper = lib.log_like_wrapper
 
@@ -611,6 +633,17 @@ def sample_LCDM_only(MG = False):
 
     return varied_parameters
 
+def sample_LCDM_sigma8_split(MG = False):
+    if MG:
+        varied_parameters = InputCosmologyParams().names()
+    else:
+        varied_parameters = ['omega_m']
+        varied_parameters.append('sigma_8')
+        varied_parameters.append('n_s')
+        varied_parameters.append('omega_b')
+        varied_parameters.append('h0')
+        varied_parameters.append('sigma_8_lowz')
+    return varied_parameters
 
 def sample_cosmology_only(MG = False):
     if MG:
@@ -623,16 +656,6 @@ def sample_cosmology_only(MG = False):
         varied_parameters.append('wa')
         varied_parameters.append('omega_b')
         varied_parameters.append('h0')
-    return varied_parameters
-
-def sample_cosmology_shear_nuisance(tomo_N_shear,MG = False, DE=True):
-    if DE:
-        varied_parameters = sample_cosmology_only(MG)
-    else:
-        varied_parameters = sample_LCDM_only(MG)
-    varied_parameters += ['source_z_bias_%d'%i for i in xrange(tomo_N_shear)]
-    varied_parameters.append('source_z_s')
-    varied_parameters += ['shear_m_%d'%i for i in xrange(tomo_N_shear)]
     return varied_parameters
 
 def sample_cosmology_shear_nuisance_IA(tomo_N_shear,MG = False, DE=True):
@@ -664,7 +687,39 @@ def sample_cosmology_shear_nuisance_IA_bary(tomo_N_shear,MG = False, NPCs=3, DE=
     varied_parameters += ['bary_%d'%i for i in xrange(NPCs)]
     return varied_parameters
 
-
+def sample_cosmology_shear_nuisance(tomo_N_shear, MG=False, NPCs=0, cosmology='LCDM', source_photo_z=True, shear_calibration=True, IA=True):
+    if(cosmology=='LCDM'):
+        varied_parameters = sample_LCDM_only(MG)
+    elif(cosmology=='wCDM'):
+        varied_parameters = sample_LCDM_only(MG)
+        varied_parameters.append("w0")
+    elif(cosmology=='w0waCDM'):
+        varied_parameters = sample_cosmology_only(MG)
+    elif(cosmology=='LCDM_split'):
+        varied_parameters = sample_LCDM_sigma8_split(MG)
+    elif(cosmology=='wCDM_split'):
+        varied_parameters = sample_LCDM_sigma8_split(MG)
+        varied_parameters.append("w0")
+    elif(cosmology=='w0waCDM_split'):
+        varied_parameters = sample_LCDM_sigma8_split(MG)
+        varied_parameters.append('w0')
+        varied_parameters.append('wa')
+    else:
+        print(f'cosmology = {cosmology} is not supported!')
+        exit(-1)
+    if source_photo_z:
+        varied_parameters+=['source_z_bias_%d'%i for i in xrange(tomo_N_shear)]
+        varied_parameters.append('source_z_s')
+    if shear_calibration:
+        varied_parameters+=['shear_m_%d'%i for i in xrange(tomo_N_shear)]
+    if IA:
+        varied_parameters.append('A_ia')
+        varied_parameters.append('beta_ia')
+        varied_parameters.append('eta_ia')
+        varied_parameters.append('eta_ia_highz')
+    if NPCs>0:
+        varied_parameters += ['bary_%d'%i for i in xrange(NPCs)]
+    return varied_parameters
 
 def sample_cosmology_clustering_nuisance(tomo_N_lens,MG = False):
     varied_parameters = sample_cosmology_only(MG)
@@ -785,14 +840,18 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
     if KL:
         starting_point += InputNuisanceParams().fiducial_KL().convert_to_vector_filter(varied_parameters)
         starting_point += InputNuisanceParamsGRS().fiducial().convert_to_vector_filter(varied_parameters)
+        starting_point += InputCosmologyLowzParams().fiducial().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma_KL().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
+        std += InputCosmologyLowzParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         likelihood = LikelihoodFunctionWrapper(varied_parameters,KL=True)
     else:
         starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
         starting_point += InputNuisanceParamsGRS().fiducial().convert_to_vector_filter(varied_parameters)
+        starting_point += InputCosmologyLowzParams().fiducial().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
+        std += InputCosmologyLowzParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         likelihood = LikelihoodFunctionWrapper(varied_parameters)
 
     p0 = emcee.utils.sample_ball(starting_point, std, size=nwalker)
