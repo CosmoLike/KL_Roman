@@ -89,11 +89,20 @@ double C_shear_tomo_sys(double ell, int z1, int z2)
   double C;
   // C= C_shear_tomo_nointerp(ell,z1,z2);
   // if(like.IA==1) C+=C_II_nointerp(ell,z1,z2)+C_GI_nointerp(ell,z1,z2);
-  
+  switch(like.IA){
+    case 0: // No IA
+      C = C_shear_tomo_nointerp(ell,z1,z2); break;
+    case 2: // linear IA
+      C = C_shear_tomo_nointerp(ell,z1,z2) + C_II_lin_nointerp(ell,z1,z2)+C_GI_lin_nointerp(ell,z1,z2); break;
+    default: // Other cases, like.IA = 1,3,4: NLA
+      C = C_shear_shear_IA(ell,z1,z2);
+  }
+  /*
   if(like.IA!=1) C= C_shear_tomo_nointerp(ell,z1,z2);
   //if(like.IA==1) C= C_shear_shear_IA(ell,z1,z2);
   if(like.IA==1) C = C_shear_tomo_nointerp(ell,z1,z2)+C_II_nointerp(ell,z1,z2)+C_GI_nointerp(ell,z1,z2);
-  if(like.IA==2) C += C_II_lin_nointerp(ell,z1,z2)+C_GI_lin_nointerp(ell,z1,z2);  
+  if(like.IA==2) C += C_II_lin_nointerp(ell,z1,z2)+C_GI_lin_nointerp(ell,z1,z2);
+  */  
   if(like.shearcalib==1) C *=(1.0+nuisance.shear_calibration_m[z1])*(1.0+nuisance.shear_calibration_m[z2]);
   //printf("%le %d %d %le\n",ell,z1,z2,C_shear_tomo_nointerp(ell,z1,z2)+C_II_JB_nointerp(ell,z1,z2)+C_GI_JB_nointerp(ell,z1,z2));
 return C;
