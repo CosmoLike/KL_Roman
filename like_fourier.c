@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 1
+#define _COMPUTE_LIKELIHOOD_ 0
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -629,7 +629,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_test2",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
+  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_split_test1",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
@@ -734,6 +734,8 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
   char survey_names[2][100] = {"LSST_Y1", "LSST_Y10"};
+  double delta_z_src[2] = {0.05, 0.05};
+  double delta_z_lens[2] = {0.03, 0.03};
   char dndz[2][100] = {"zdistris/src_LSSTY1", "zdistris/src_LSSTY10"};
   int Ntomo_source = 10;
   printf("%d target selection scenarios\n", N_scenarios_selection);
@@ -761,7 +763,7 @@ int main(int argc, char** argv)
   sprintf(strat, survey_names[i_Selection]);
   /* here, do your time-consuming job */
 
-  init_cosmo_runmode("halofit");
+  init_cosmo_runmode("halofit_split");
   // baryon effects initialization
   // This one is used for applying baryon effects from specific simulation
   // Available choices:
@@ -819,9 +821,9 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,delta_z_src[i_Selection],
     // lens galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,delta_z_lens[i_Selection],
     // additive shear calibration bias[0-9]
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
     // IA: A_ia, beta_ia, eta_ia, eta_ia_highz
@@ -849,9 +851,9 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,delta_z_src[i_Selection],
     // lens galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,delta_z_lens[i_Selection],
     // additive shear calibration bias[0-9]
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
     // IA: A_ia, beta_ia, eta_ia, eta_ia_highz
