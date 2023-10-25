@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 0
+#define _COMPUTE_LIKELIHOOD_ 1
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -487,18 +487,18 @@ double log_multi_like(
     if(_VERBOSE_==1){printf("Mobs out of bounds\n");}
     return -1.0e15;
   }
-       
-  printf("like %le %le %le %le %le %le %le %le %le %le\n",cosmology.Omega_m, cosmology.Omega_v,cosmology.sigma_8,cosmology.n_spec,cosmology.w0,cosmology.wa,cosmology.omb,cosmology.h0,cosmology.coverH0,cosmology.rho_crit); 
-  printf("like %le %le %le %le\n",gbias.b[0], gbias.b[1], gbias.b[2], gbias.b[3]);    
-  for (i=0; i<10; i++){
-    printf("nuisance %le %le %le\n",nuisance.shear_calibration_m[i],nuisance.bias_zphot_shear[i],nuisance.sigma_zphot_shear[i]);
-  }
-  printf("like sigma_8_lowz = %le; z_low = %.2f\n", cosmology_lowz.sigma_8, cosmology_lowz.z_low);
-
+  if(_VERBOSE_==1){
+    printf("like %le %le %le %le %le %le %le %le %le %le\n",cosmology.Omega_m, cosmology.Omega_v,cosmology.sigma_8,cosmology.n_spec,cosmology.w0,cosmology.wa,cosmology.omb,cosmology.h0,cosmology.coverH0,cosmology.rho_crit); 
+    printf("like %le %le %le %le\n",gbias.b[0], gbias.b[1], gbias.b[2], gbias.b[3]);    
+    for (i=0; i<10; i++){
+      printf("nuisance %le %le %le\n",nuisance.shear_calibration_m[i],nuisance.bias_zphot_shear[i],nuisance.sigma_zphot_shear[i]);
+    }
+    printf("like sigma_8_lowz = %le; z_low = %.2f\n", cosmology_lowz.sigma_8, cosmology_lowz.z_low);
+  }     
   // prior information
-  if(like.wlphotoz!=0) {log_L_prior+=log_L_wlphotoz();printf("wlphotoz %e\n",log_L_prior);}
-  if(like.clphotoz!=0) {log_L_prior+=log_L_clphotoz();printf("clphotoz %e\n", log_L_prior);}
-  if(like.shearcalib==1) {log_L_prior+=log_L_shear_calib();printf("shearcalib %e\n", log_L_prior);}
+  if(like.wlphotoz!=0) log_L_prior+=log_L_wlphotoz();
+  if(like.clphotoz!=0) log_L_prior+=log_L_clphotoz();
+  if(like.shearcalib==1) log_L_prior+=log_L_shear_calib();
   if(like.IA!=0) {
     log_L = 0.0;
     log_L -= pow((nuisance.A_ia - prior.A_ia[0])/prior.A_ia[1],2.0);
@@ -506,7 +506,6 @@ double log_multi_like(
     log_L -= pow((nuisance.eta_ia - prior.eta_ia[0])/prior.eta_ia[1],2.0);
     log_L -= pow((nuisance.eta_ia_highz - prior.eta_ia_highz[0])/prior.eta_ia_highz[1],2.0);
     log_L_prior+=0.5*log_L;
-    printf("IA %e\n", log_L);
   }
   if(like.baryons==1){
     log_L = 0.0;
@@ -514,13 +513,14 @@ double log_multi_like(
     log_L -= pow((Q2 - prior.bary_Q2[0])/prior.bary_Q2[1],2.0);
     log_L -= pow((Q3 - prior.bary_Q3[0])/prior.bary_Q3[1],2.0);
     log_L_prior+=0.5*log_L;
-    printf("baryon %e\n", log_L);
   }
   if(like.Planck15_BAO_H070p6_JLA_w0wa==1){
     log_L_prior += log_L_PlanckBAOJLA_w0wa();
   }
-  printf("%d %d %d %d\n",like.BAO,like.wlphotoz,like.clphotoz,like.shearcalib);
-  printf("logl %le %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz(),log_L_clusterMobs());
+  if(_VERBOSE_==1){
+    printf("%d %d %d %d\n",like.BAO,like.wlphotoz,like.clphotoz,like.shearcalib);
+    printf("logl %le %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz(),log_L_clusterMobs());
+  }
   int start=0;  
   
   if(like.shear_shear==1) {
@@ -562,7 +562,7 @@ double log_multi_like(
     printf("error: chisqr = %le\n",chisqr);
     //exit(EXIT_FAILURE);
   }
-  printf("************\nchisq - %le\nlog_L_prior - %le\n Q1 Q2 Q3 = %e %e %e\n IA params = %e %e %e %e\n************\n", -0.5*chisqr, log_L_prior, Q1, Q2, Q3, nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
+  if(_VERBOSE_==1) printf("************\nchisq - %le\nlog_L_prior - %le\n Q1 Q2 Q3 = %e %e %e\n IA params = %e %e %e %e\n************\n", -0.5*chisqr, log_L_prior, Q1, Q2, Q3, nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
   return -0.5*chisqr+log_L_prior;
 }
 
@@ -629,7 +629,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_split_test1",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
+  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_split_test2",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
@@ -806,7 +806,7 @@ int main(int argc, char** argv)
   #endif
 
   init_clusters();
-  init_IA("NLA_HF", "GAMA");
+  init_IA("none", "GAMA");
   init_probes(argv[3]);
   
   /* compute fiducial data vector */
