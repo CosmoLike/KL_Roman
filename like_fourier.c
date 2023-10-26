@@ -815,7 +815,7 @@ int main(int argc, char** argv)
   #endif
 
   //init_clusters();
-  init_IA("NLA_Az", "GAMA");
+  init_IA("NLA_HF", "GAMA");
   init_probes(argv[3]);
   
   /* compute fiducial data vector */
@@ -854,6 +854,7 @@ int main(int argc, char** argv)
     "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo_test",
     "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_9sim.pca");
   begin = clock();
+  for(int ii=0; ii<10; ii++)
   loglike=log_multi_like(
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,
@@ -888,7 +889,7 @@ int main(int argc, char** argv)
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
   end = clock();
-  time_spent = (double)(end - begin) / CLOCKS_PER_SEC;      
+  time_spent = (double)(end - begin) / CLOCKS_PER_SEC/10;
   printf("timespent %.3f\n",time_spent);
   #endif
   return 0;
