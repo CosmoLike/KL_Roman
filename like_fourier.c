@@ -638,7 +638,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_split_test2",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
+  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_split_test4",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
@@ -790,7 +790,7 @@ int main(int argc, char** argv)
   sprintf(_photoz_prior, "photo_%s", strat);
   sprintf(_shearm_prior, "shear_%s", strat);
   init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-    false, 3.0, 1.2, 3.8, 2.0, true, 40.0, 10.0, 0.8);
+    true, 3.0, 1.2, 3.8, 2.0, true, 40.0, 10.0, 0.8);
   init_survey(strat);
   // customize shape noise here
   //survey.sigma_e = shape_noise_rms[i_SN];
@@ -814,8 +814,8 @@ int main(int argc, char** argv)
     fclose(tomo_zdist);
   #endif
 
-  init_clusters();
-  init_IA("none", "GAMA");
+  //init_clusters();
+  init_IA("NLA_Az", "GAMA");
   init_probes(argv[3]);
   
   /* compute fiducial data vector */
@@ -889,7 +889,7 @@ int main(int argc, char** argv)
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
   end = clock();
   time_spent = (double)(end - begin) / CLOCKS_PER_SEC;      
-  printf("timespent %le\n",time_spent);
+  printf("timespent %.3f\n",time_spent);
   #endif
   return 0;
 }
