@@ -1096,7 +1096,10 @@ void init_IA(char *model,char *lumfct)
   if(strcmp(model,"none")==0)  like.IA=0;
   else if(strcmp(model,"NLA_HF")==0)  like.IA=1;
   else if(strcmp(model,"lin")==0)  like.IA=2;
-  else if(strcmp(model,"NLA_Az")==0) like.IA=3;
+  else if(strcmp(model,"NLA_Az")==0){
+    like.IA=3;
+    for(int ii=0; ii<tomo.shear_Nbin; ii++) nuisance.A_z[ii]=0.5;
+  }
   else if(strcmp(model,"NLA_mpp")==0) like.IA=4;
   else{
     printf("init.c:init_IA: %s IA model not defined\n",model);
