@@ -892,6 +892,35 @@ int main(int argc, char** argv)
   time_spent = (double)(end - begin) / CLOCKS_PER_SEC/10;
   printf("timespent %.3f\n",time_spent);
   #endif
+
+  // print lensing kernel
+  // ====================
+  double da = (1. - limits.a_min)/(Ntable.N_a-1.);
+  double a_list[Ntable.N_a], kernel_list[tomo.shear_Nbin][Ntable.N_a];
+  for (int i=0;i<Ntable.N_a;i++) a_list[i] = limits.a_min + i*da
+  for (int i=0; i<tomo.shear_Nbin; i++){
+    for (int j=0; j<Ntable.N_a; j++){
+      double fK = f_K(chi(a_list[j]));
+      kernel_list[i][j] = W_kappa(a_list[j],fK,i);
+    }
+  }
+  // write redshift boundary of each tomo bin
+  FILE *tomo_kernel;
+  char tomo_kernel_fname[500];
+  sprintf(tomo_kernel_fname, "zdistris/tomo_kernel_src_%s_%d", strat, i_Selection);
+  tomo_kernel = fopen(tomo_kernel_fname, "w");
+  if(tomo_kernel!=NULL){
+    for (int j=0; j<Ntable.N_a; j++){
+      fprintf(tomo_kernel, "%le", a_list[j]);
+      for(int i=0; i<tomo.shear_Nbin; i++){
+        fprintf(tomo_kernel,"\t%.le",kernel_list[i][j]);
+      }
+      fprintf(tomo_kernel, "\n");
+    }
+    fclose(tomo_kernel);
+  }
+  else{printf("Can not open file %s!\n", tomo_kernel_fname);}
+
   return 0;
 }
 
