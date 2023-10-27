@@ -190,7 +190,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
   return 0;
 }
 
-int test_LSST_WL(int iYear, char* probe, char*bary_sce)
+int test_LSST_WL(int iYear, char* probe, char* bary_sce)
 {
   clock_t begin, end;
   double time_spent, loglike=0.0, init=0.0;
@@ -260,8 +260,9 @@ int test_LSST_WL(int iYear, char* probe, char*bary_sce)
     }
     fclose(tomo_zdist);
   #endif
-
+  printf("Setting IA...\n");
   init_IA("NLA_HF", "GAMA");
+  printf("Probes: %s\n", probe);
   init_probes(probe);
   printf("\n Printing data vector \n");
   /* compute fiducial data vector */
