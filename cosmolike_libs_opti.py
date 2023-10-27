@@ -586,7 +586,7 @@ def sample_cosmology_shear_nuisance(tomo_N_shear, MG=False, NPCs=0, cosmology='L
         varied_parameters.append('w0')
         varied_parameters.append('wa')
     else:
-        print(f'cosmology = {cosmology} is not supported!')
+        print "cosmology = %s is not supported!"%cosmology
         exit(-1)
     if source_photo_z:
         varied_parameters+=['source_z_bias_%d'%i for i in xrange(tomo_N_shear)]
