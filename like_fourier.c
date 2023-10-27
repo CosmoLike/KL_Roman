@@ -638,10 +638,11 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_split_test4",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
+  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_split",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
+  
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
-  for (i=0;i<like.Ndata; i++){  
+  for (i=0;i<like.Ndata; i++){
     //a = pred[i]+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i);
     a = pred[i];
     fprintf(F,"%d %le\n",i,a);
