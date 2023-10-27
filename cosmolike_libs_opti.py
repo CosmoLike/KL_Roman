@@ -294,134 +294,15 @@ class InputCosmologyLowzParams(IterableStruct):
     def fiducial(cls):
         c = cls()
         c.sigma_8_lowz = 0.831
-        c.z_low = 0.4
+        c.z_low = 0.25
         return c
 
     @classmethod
     def fiducial_sigma(cls):
         c = cls()
         c.sigma_8_lowz = 0.1
-        c.z_low = 0.05
+        c.z_low = 0.02
         return c
-"""
-class InputNuisanceParams(IterableStruct):
-    section_name = "nuisance_parameters"
-    _fields_ = [
-        ("bias", double*10),
-        ("source_z_bias", double*10),
-        ("source_z_s", double),
-        ("lens_z_bias", double*10),
-        ("lens_z_s", double),
-        ("shear_m", double*10),
-        ("A_ia", double),
-        ("beta_ia", double),
-        ("eta_ia", double),
-        ("eta_ia_highz", double),
-        ("lf", double*6),
-        ("m_lambda", double*6),
-        ("bary", double*3),
-        ("grsbias", double*7),
-        ("grssigmap", double*7),
-        ("grssigmaz", double),
-        ("grspshot", double),
-        ("grskstar", double),
-    ]
-    @classmethod
-    def fiducial(cls):
-        c = cls()
-        c.bias[:] = [1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2]
-        c.source_z_bias[:] = np.repeat(0.0, 10)
-        c.source_z_s = 0.01
-        c.lens_z_bias[:] = np.repeat(0.0, 10)
-        c.lens_z_s = 0.01
-        c.shear_m[:] = np.repeat(0.0, 10)
-        c.A_ia = 5.92# 5.95 from Eifler et. al. 2020
-        c.beta_ia = 1.1# 1.1
-        c.eta_ia = -0.47# 0.49
-        c.eta_ia_highz = 0.0# 0.0
-        c.lf[:] = np.repeat(0.0, 6)
-        c.m_lambda[:] = [3.207, 0.993, 0.0, 0.456, 0.0, 0.0]
-        c.bary[:] = [0., 0., 0.]
-        c.grsbias[:] = [1.538026692020565,1.862707210288686,2.213131761595241,2.617023657038295,2.975011712138650,3.376705680190931,3.725882076395691]
-        c.grssigmap[:] = np.repeat(290.,7)
-        c.grssigmaz = 0.001
-        c.grspshot = 0.0
-        c.grskstar = 0.24
-        return c
-
-    @classmethod
-    def fiducial_KL(cls):
-        c = cls()
-        c.bias[:] = [1.3,1.35,1.4,1.45,1.5,1.55,1.6,1.65,1.7,1.75]
-        c.source_z_bias[:] = np.repeat(0.0, 10)
-        c.source_z_s = 0.002
-        c.lens_z_bias[:] = np.repeat(0.0, 10)
-        c.lens_z_s = 0.002
-        c.shear_m[:] = np.repeat(0.0, 10)
-        c.A_ia = 5.92
-        c.beta_ia = 1.1
-        c.eta_ia = -0.47
-        c.eta_ia_highz = 0.0
-        c.lf[:] = np.repeat(0.0, 6)
-        c.m_lambda[:] = [3.207, 0.993, 0.0, 0.456, 0.0, 0.0]
-        c.bary[:] = [0., 0., 0.]
-        c.grsbias[:] = [1.538026692020565,1.862707210288686,2.213131761595241,2.617023657038295,2.975011712138650,3.376705680190931,3.725882076395691]
-        c.grssigmap[:] = np.repeat(290.,7)
-        c.grssigmaz = 0.001
-        c.grspshot = 0.0
-        c.grskstar = 0.24
-        return c
-
-    
-    @classmethod
-    def fiducial_sigma(cls):
-        c = cls()
-        c.bias[:] = np.repeat(0.15, 10)
-        c.source_z_bias[:] = np.repeat(0.005, 10)
-        c.source_z_s = 0.002
-        c.lens_z_bias[:] = np.repeat(0.005, 10)
-        c.lens_z_s = 0.002
-        c.shear_m[:] = np.repeat(0.005, 10)
-        c.A_ia = 0.05
-        c.beta_ia = 0.01
-        c.eta_ia = 0.01
-        c.eta_ia_highz = 0.01
-        c.lf[:] = np.repeat(0.005, 6)
-        c.m_lambda[:] = [0.045, 0.045, 0.3, 0.045, 0.03, 0.1]
-        c.bary[:] = [3., 1., .15]
-        c.grsbias[:] = np.repeat(0.15, 7)
-        c.grssigmap[:] = np.repeat(20.0, 7)
-        c.grssigmaz = 0.0002 # fid is 0.001 and can't be neg
-        c.grspshot = 0.001 #fid is zero
-        c.grskstar = 0.05 # fid is 0.24
-        return c        
-
-    @classmethod
-    def fiducial_sigma_KL(cls):
-        c = cls()
-        c.bias[:] = np.repeat(0.15, 10)
-        c.source_z_bias[:] = np.repeat(0.001, 10)
-        c.source_z_s = 0.0004
-        c.lens_z_bias[:] = np.repeat(0.001, 10)
-        c.lens_z_s = 0.0004
-        c.shear_m[:] = np.repeat(0.005, 10)
-        c.A_ia = 0.05
-        c.beta_ia = 0.01
-        c.eta_ia = 0.01
-        c.eta_ia_highz = 0.01
-        c.lf[:] = np.repeat(0.005, 6)
-        c.m_lambda[:] = [0.045, 0.045, 0.3, 0.045, 0.03, 0.1]
-        c.bary[:] = [3., 1., .15]
-        c.grsbias[:] = np.repeat(0.15, 7)
-        c.grssigmap[:] = np.repeat(20.0, 7)
-        c.grssigmaz = 0.0002 # fid is 0.001 and can't be neg
-        c.grspshot = 0.001 #fid is zero
-        c.grskstar = 0.05 # fid is 0.24
-        return c        
-
-
-
-"""
 
 class InputNuisanceParams(IterableStruct):
     section_name = "nuisance_parameters"
