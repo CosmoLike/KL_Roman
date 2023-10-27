@@ -114,7 +114,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
     // baryon scenario,
     bary_sce,
     // sigma8 split at low-z
-    0.831, 0.4);
+    0.831, -0.4);
   #endif
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
@@ -161,6 +161,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
 
   // print lensing kernel
   // ====================
+  /*
   double da = (1. - limits.a_min)/(Ntable.N_a-1.);
   double a_list[Ntable.N_a], kernel_list[tomo.shear_Nbin][Ntable.N_a];
   for (int i=0;i<Ntable.N_a;i++) a_list[i] = limits.a_min + i*da;
@@ -173,7 +174,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
   // write redshift boundary of each tomo bin
   FILE *tomo_kernel;
   char tomo_kernel_fname[500];
-  sprintf(tomo_kernel_fname, "zdistris/tomo_kernel_src_%s_%d", strat, i_Selection);
+  sprintf(tomo_kernel_fname, "zdistris/tomo_kernel_src_%s", strat);
   tomo_kernel = fopen(tomo_kernel_fname, "w");
   if(tomo_kernel!=NULL){
     for (int j=0; j<Ntable.N_a; j++){
@@ -186,7 +187,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
     fclose(tomo_kernel);
   }
   else{printf("Can not open file %s!\n", tomo_kernel_fname);}
-
+  */
   return 0;
 }
 
@@ -328,7 +329,7 @@ int test_LSST_WL(int iYear, char* probe, char* bary_sce)
     // Q1, Q2, Q3
     0.0, 0.0, 0.0,
     // sigma8 split at low-z
-    0.831, -0.4);
+    0.831, 0.4);
   printf("%le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
@@ -339,6 +340,7 @@ int test_LSST_WL(int iYear, char* probe, char* bary_sce)
 
   // print lensing kernel
   // ====================
+  /*
   double da = (1. - limits.a_min)/(Ntable.N_a-1.);
   double a_list[Ntable.N_a], kernel_list[tomo.shear_Nbin][Ntable.N_a];
   for (int i=0;i<Ntable.N_a;i++) a_list[i] = limits.a_min + i*da;
@@ -364,7 +366,7 @@ int test_LSST_WL(int iYear, char* probe, char* bary_sce)
     fclose(tomo_kernel);
   }
   else{printf("Can not open file %s!\n", tomo_kernel_fname);}
-
+  */
   return 0;
 }
 

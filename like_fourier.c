@@ -46,7 +46,7 @@
 #include "../cosmolike_core/theory/init_baryon.c"
 
 #define _WRITE_NZ_TOMO_ 0
-#define _WRITE_DATA_VECTOR_ 1
+#define _WRITE_DATA_VECTOR_ 0
 #define _COMPUTE_DATAVECTOR_ 1
 #define _COMPUTE_LIKELIHOOD_ 1
 #define _VERBOSE_ 0 
@@ -638,7 +638,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_split",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
+  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
   
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
