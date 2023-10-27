@@ -897,7 +897,7 @@ int main(int argc, char** argv)
   // ====================
   double da = (1. - limits.a_min)/(Ntable.N_a-1.);
   double a_list[Ntable.N_a], kernel_list[tomo.shear_Nbin][Ntable.N_a];
-  for (int i=0;i<Ntable.N_a;i++) a_list[i] = limits.a_min + i*da
+  for (int i=0;i<Ntable.N_a;i++) a_list[i] = limits.a_min + i*da;
   for (int i=0; i<tomo.shear_Nbin; i++){
     for (int j=0; j<Ntable.N_a; j++){
       double fK = f_K(chi(a_list[j]));
