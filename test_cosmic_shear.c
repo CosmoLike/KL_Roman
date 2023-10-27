@@ -263,7 +263,7 @@ int test_LSST_WL(int iYear, char* probe, char*bary_sce)
 
   init_IA("NLA_HF", "GAMA");
   init_probes(probe);
-  
+  printf("\n Printing data vector \n");
   /* compute fiducial data vector */
   // NOTE: different target selections have different data vectors
   #if _COMPUTE_DATAVECTOR_ == 1
