@@ -20,11 +20,6 @@ Ncl = 15
 ell_min, ell_max, ell_max_shear = 20.0, 3000.0, 3000.0
 Rmin_bias = 21.0
 strat = "DESI2_KL_%d%d"%(args.iSelection, args.iSN)
-#external_prior = "Planck15_BAO_H070p6_JLA_w0wa" # default: "none"
-external_prior = "none"
-
-#sigmae_list = np.array([0.02, 0.04, 0.06, 0.10, 0.20, 0.30])*np.sqrt(2)
-#Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])
 nz_src_files = [
 	"zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
     "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
@@ -38,8 +33,12 @@ data_vector_file = "datav/DESI2_KL_%d0_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
 baryon_PCS_file = "datav/DESI2_KL_%d%d_shear_shear_Ntomo%d_Ncl%d.pca"
 #chain_output_file = "chains/DESI2_KL_v2_PlanckBAOJLA_%d%d_ss_Ncl%d_Ntomo%d"
-chain_output_file = "chains/DESI2_KL_LCDM_%d%d_ss_Ncl%d_Ntomo%d"
-DE_FLAG = False
+chain_output_file = "chains/DESI2_KL_LCDM_s8split_%d%d_ss_Ncl%d_Ntomo%d"
+#external_prior = "Planck15_BAO_H070p6_JLA_w0wa" # default: "none"
+external_prior = "none"
+NPCs_used = 2
+cosmo_model = "LCDM_split"
+runmode = "halofit_split"
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files[args.iSelection])
 file_lens_z = os.path.join(dirname, nz_lens_file)
@@ -52,28 +51,21 @@ bary_file = os.path.join(dirname,
 chain_file = os.path.join(outdirname, 
     chain_output_file%(args.iSelection, args.iSN, Ncl, Ntomo_src))
 
-initcosmo("halofit")
+initcosmo(runmode)
 initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
-#initpriors_KL("photo_opti","shear_opti","none","none")
 initpriors_IA_bary("spec_DESI2", "shear_KL_DESI2", "none", external_prior,
     False, 3.0, 1.2, 3.8, 2.0, 
     True, 20.0, 6.0, 2.0)
 initsurvey(strat)
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
-initclusters()
+#initclusters()
 initia("none","none")
 initprobes("shear_shear")
 initdatainvbary(cov_file ,data_file, bary_file)
 
-#sample_params=sample_LCDM_only()
-#sample_params= sample_cosmology_only()
-sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
-# Fix Q3, not constraining that
-sample_params += ['bary_%d'%i for i in xrange(2)]
-#print "Dim of param space: ", len(sample_params)
-#sample_params = sample_cosmology_2pt_nuisance(get_N_tomo_shear(),get_N_tomo_clustering())
-#sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
-#sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
+sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), 
+    MG=False, NPCs=NPCs_used, cosmology=cosmo_model, source_photo_z=True, 
+    shear_calibration=True, IA=False)
 
 sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
 
