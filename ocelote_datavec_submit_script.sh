@@ -16,10 +16,20 @@ module load gsl
 module load openmpi3
 WORKDIR=/home/u17/jiachuanxu/CosmoLike/KL_WFIRST
 cd ${WORKDIR}
+### LSST
 for (( c=0; c<2; c++ ))
 do
-	for bary in dmo mb2 illustris eagle HzAGN TNG100 cowls_AGN cowls_AGN_T8p5 cowls_AGN_T8p7 BAHAMAS BAHAMAS_T7p6 BAHAMAS_T8p0
+	for (( k=0; k<12; k++ ))
 	do
-		./like_fourier ${c} 0 shear_shear ${bary}
+		./test_cosmic_shear LSST ${c} ${k}
+	done
+done
+
+### DESI2
+for (( c=0; c<6; c++ ))
+do 
+	for (( k=0; k<12; k++ ))
+	do
+		./test_cosmic_shear DESI2 ${c} ${k}
 	done
 done

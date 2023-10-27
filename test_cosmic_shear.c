@@ -220,9 +220,9 @@ int test_LSST_WL(int iYear, char* probe, char* bary_sce)
   char strat[20];
   sprintf(strat, survey_names[iYear]);
   char invcov_fn[500], dv_fn[500], PCs_fn[500];
-  sprintf(invcov_fn, "/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_%s_ssss_invcov_Ncl15_Ntomo10", strat);
-  sprintf(dv_fn, "datav/LSST_%s_shear_shear_Ntomo10_Ncl15_dmo", strat);
-  sprintf(PCs_fn, "datav/LSST_%s_shear_shear_Ntomo10_Ncl15_9sim.pca", strat);
+  sprintf(invcov_fn, "/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/%s_ssss_invcov_Ncl15_Ntomo10", strat);
+  sprintf(dv_fn, "datav/%s_shear_shear_Ntomo10_Ncl15_dmo", strat);
+  sprintf(PCs_fn, "datav/%s_shear_shear_Ntomo10_Ncl15_9sim.pca", strat);
   /* here, do your time-consuming job */
 
   init_cosmo_runmode("halofit_split");
@@ -292,7 +292,7 @@ int test_LSST_WL(int iYear, char* probe, char* bary_sce)
     // baryon scenario,
     bary_sce,
     // sigma8 split at low-z
-    0.831, 0.4);
+    0.831, -0.4);
   #endif
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
@@ -328,7 +328,7 @@ int test_LSST_WL(int iYear, char* probe, char* bary_sce)
     // Q1, Q2, Q3
     0.0, 0.0, 0.0,
     // sigma8 split at low-z
-    0.831, 0.4);
+    0.831, -0.4);
   printf("%le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
@@ -369,26 +369,22 @@ int test_LSST_WL(int iYear, char* probe, char* bary_sce)
 }
 
 int main(int argc, char** argv)
-{
-	int i,j,k;
+{	// ./test_cosmic_shear DESI2/LSST id_sample id_baryon 
 	char probe[500]="shear_shear";
 	char bary_scenarios[12][500]={"dmo", "mb2", "illustris", "eagle", "HzAGN", 
 		"TNG100", "cowls_AGN", "cowls_AGN_T8p5", "cowls_AGN_T8p7", 
 		"BAHAMAS", "BAHAMAS_T7p6", "BAHAMAS_T8p0"};
-	
-	// test DESI2-KL
-	for (i=0; i<6; i++){
-		for (k=0;k<12;k++){
-			test_DESI2_KL(i, 0, probe, bary_scenarios[k]);
-		}
+	int i = atoi(argv[2]);
+	int k = atoi(argv[3]);
+	if(strcmp(argv[1], "DESI2")==0){
+		assert(i<6);assert(k<12);
+		// test DESI2-KL
+		test_DESI2_KL(i, 0, probe, bary_scenarios[k]);
 	}
-
-	// test LSST cosmic shear
-	for (i=0; i<2; i++){
-		for (k=0;k<12;k++){
-			test_LSST_WL(i, probe, bary_scenarios[k]);
-		}
+	else{
+		assert(i<2);assert(k<12);
+		// test LSST cosmic shear
+		test_LSST_WL(i, probe, bary_scenarios[k]);
 	}
-
 	return 0;
 }
