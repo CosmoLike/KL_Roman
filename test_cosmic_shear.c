@@ -379,7 +379,7 @@ int main(int argc, char** argv)
 	for (i=0; i<6; i++){
 		for (j=0;j<6;j++){
 			for (k=0;k<12;k++){
-				test_DESI2_KL(i, j, probe, bary_scenarios[k])
+				test_DESI2_KL(i, j, probe, bary_scenarios[k]);
 			}
 		}
 	}
@@ -387,7 +387,7 @@ int main(int argc, char** argv)
 	// test LSST cosmic shear
 	for (i=0; i<2; i++){
 		for (k=0;k<12;k++){
-			test_LSST_WL(i, probe, bary_scenarios[k])
+			test_LSST_WL(i, probe, bary_scenarios[k]);
 		}
 	}
 
