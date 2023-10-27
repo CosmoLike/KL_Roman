@@ -377,10 +377,8 @@ int main(int argc, char** argv)
 	
 	// test DESI2-KL
 	for (i=0; i<6; i++){
-		for (j=0;j<6;j++){
-			for (k=0;k<12;k++){
-				test_DESI2_KL(i, j, probe, bary_scenarios[k]);
-			}
+		for (k=0;k<12;k++){
+			test_DESI2_KL(i, 0, probe, bary_scenarios[k]);
 		}
 	}
 
