@@ -230,7 +230,7 @@ int test_LSST_WL(int iYear, char* probe, char*bary_sce)
   // This one is used for applying baryon effects from specific simulation
   // Available choices:
   // "dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",...
-  init_bary(argv[4]);
+  init_bary(bary_sce);
 
   init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, 
     Rmin_bias, Ntomo_source, Ntomo_lens);
@@ -262,7 +262,7 @@ int test_LSST_WL(int iYear, char* probe, char*bary_sce)
   #endif
 
   init_IA("NLA_HF", "GAMA");
-  init_probes(argv[3]);
+  init_probes(probe);
   
   /* compute fiducial data vector */
   // NOTE: different target selections have different data vectors
