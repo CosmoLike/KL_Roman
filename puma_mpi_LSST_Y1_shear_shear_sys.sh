@@ -1,17 +1,30 @@
 #!/bin/bash
 #SBATCH --job-name=LSST1cn
 #SBATCH --output=LSST_Y1-%A_%a.out
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=80
-#SBATCH --ntasks-per-socket=40
+
+### 1. puma
+###SBATCH --nodes=1
+###SBATCH --ntasks-per-node=80
+###SBATCH --ntasks-per-socket=40
+###SBATCH --cpus-per-task=1
+###SBATCH --partition=high_priority
+###SBATCH --qos=user_qos_timeifler
+###SBATCH --account=timeifler
+###SBATCH --time=96:00:00
+
+### 2. ocelote
+#SBATCH --nodes=10
+#SBATCH --ntasks-per-node=28
 #SBATCH --cpus-per-task=1
-#SBATCH --partition=high_priority
-#SBATCH --qos=user_qos_timeifler
+#SBATCH --partition=standard
+#SBATCH --qos=qual_qos_timeifler
 #SBATCH --account=timeifler
-#SBATCH --time=72:00:00
+#SBATCH --time=96:00:00
+
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jiachuanxu@arizona.edu
 
+MPI_NPROCESS=400
 echo "SLURM_ARRAY_TASK_ID = ${SLURM_ARRAY_TASK_ID}"
 
 module load gsl
@@ -30,6 +43,5 @@ conda activate python2
 
 export MPI_DSM_DISTRIBUTE
 date
-#/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_opti.py
-/usr/bin/time mpiexec -n 400 python runLSST_shear_shear_sys_Y1.py
+/usr/bin/time mpiexec -n ${MPI_NPROCESS} python runLSST_shear_shear_sys_Y1.py
 date
