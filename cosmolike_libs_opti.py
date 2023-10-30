@@ -526,6 +526,10 @@ def sample_LCDM_sigma8_split(MG = False):
         varied_parameters.append('sigma_8_lowz')
     return varied_parameters
 
+def sample_sigma8_split():
+    varied_parameters = ['sigma_8', 'sigma_8_lowz']
+    return varied_parameters
+
 def sample_cosmology_only(MG = False):
     if MG:
         varied_parameters = InputCosmologyParams().names()
@@ -585,6 +589,8 @@ def sample_cosmology_shear_nuisance(tomo_N_shear, MG=False, NPCs=0, cosmology='L
         varied_parameters = sample_LCDM_sigma8_split(MG)
         varied_parameters.append('w0')
         varied_parameters.append('wa')
+    elif(cosmology=='s8split_only'):
+        varied_parameters = sample_sigma8_split()
     else:
         print "cosmology = %s is not supported!"%cosmology
         exit(-1)
