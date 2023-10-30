@@ -150,7 +150,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
     // Q1, Q2, Q3
     0.0, 0.0, 0.0,
     // sigma8 split at low-z
-    0.831, 0.4);
+    -0.831, 0.4);
   printf("%le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
