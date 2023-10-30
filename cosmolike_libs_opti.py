@@ -719,20 +719,20 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
 
     ### Choose your nuisance: weak lensing or kinematic lensing?
     if KL:
+        starting_point += InputCosmologyLowzParams().fiducial().convert_to_vector_filter(varied_parameters)
         starting_point += InputNuisanceParams().fiducial_KL().convert_to_vector_filter(varied_parameters)
         starting_point += InputNuisanceParamsGRS().fiducial().convert_to_vector_filter(varied_parameters)
-        starting_point += InputCosmologyLowzParams().fiducial().convert_to_vector_filter(varied_parameters)
+        std += InputCosmologyLowzParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma_KL().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
-        std += InputCosmologyLowzParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         likelihood = LikelihoodFunctionWrapper(varied_parameters,KL=True)
     else:
+        starting_point += InputCosmologyLowzParams().fiducial().convert_to_vector_filter(varied_parameters)
         starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
         starting_point += InputNuisanceParamsGRS().fiducial().convert_to_vector_filter(varied_parameters)
-        starting_point += InputCosmologyLowzParams().fiducial().convert_to_vector_filter(varied_parameters)
+        std += InputCosmologyLowzParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
-        std += InputCosmologyLowzParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         likelihood = LikelihoodFunctionWrapper(varied_parameters)
 
     p0 = emcee.utils.sample_ball(starting_point, std, size=nwalker)
