@@ -446,7 +446,9 @@ class LikelihoodFunctionWrapper(object):
         assert len(x) == len(self.varied_parameters), "Wrong number of parameters"
         i = 0
         #print "filling %d params"%(len(x))
-        for s in [icp, inp, inpgrs, icplow]:
+        # THE SEQUENCE IS IMPORTANT! MATCH IT WITH YOUR STARING POINT SEQUENCE AND VARIAED
+        # PARAMETERS!
+        for s in [icp, icplow, inp, inpgrs]:
             for name, obj, length in s.iter_parameters():
                 if length==0:
                     if name in self.varied_parameters:
@@ -478,6 +480,7 @@ class LikelihoodFunctionWrapper(object):
         #icp.print_struct()
         #inp.print_struct()
         #inpgrs.print_struct()
+        #icplow.print_struct()
         #print
         like = lib.log_like_wrapper(icp, inp, inpgrs, icplow)
         #print "like before" , like
@@ -747,8 +750,10 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
     print "ndim = ", ndim
     print "start = ", starting_point
     print "std = ", std
-
-
+    print "p0 = ", p0
+    #exit(0)
+    #print likelihood(starting_point)
+    #exit(0)
     # if pool is not None:
     #     if not pool.is_master():
     #         pool.wait()
@@ -775,6 +780,7 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
             if blind:
                 row = blind_parameters(varied_parameters, row)
             p_text = '  '.join(str(r) for r in row)
+            #print p_text, row
             f.write('%s %e\n' % (p_text,logl))
         f.flush()
     f.close()

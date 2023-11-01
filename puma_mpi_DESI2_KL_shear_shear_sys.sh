@@ -15,7 +15,7 @@
 
 ### 2. ocelote
 #SBATCH --nodes=10
-#SBATCH --array=5-18
+#SBATCH --array=1-18
 #SBATCH --ntasks-per-node=28
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=standard
