@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 1
+#define _COMPUTE_LIKELIHOOD_ 1  
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -762,7 +762,7 @@ int main(int argc, char** argv)
   sprintf(_photoz_prior, "photo_%s", strat);
   sprintf(_shearm_prior, "shear_%s", strat);
   init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-    false, 3.0, 1.2, 3.8, 2.0, true, 40.0, 10.0, 0.8);
+    false, 3.0, 1.2, 3.8, 2.0, false, 40.0, 10.0, 0.8);
   init_survey(strat);
   // customize shape noise here
   //survey.sigma_e = shape_noise_rms[i_SN];
