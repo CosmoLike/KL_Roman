@@ -15,4 +15,4 @@ chains/
 
 .nfs*
 
-compute_covariance_fourier
+compute_covariances_fourier
