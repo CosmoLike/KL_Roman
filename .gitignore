@@ -16,3 +16,5 @@ chains/
 .nfs*
 
 compute_covariances_fourier
+
+.vscode
