@@ -1415,6 +1415,17 @@ void set_survey_parameters_to_LSST_Y10()
   sprintf(survey.name,"LSST_Y10");
 }
 
+void set_survey_parameters_to_DSA_allsky_KL()
+{
+  survey.area   = 30000.0;    // DSA all-sky
+  survey.n_gal  = 0.0459;     // DSA all-sky
+  survey.sigma_e  = 0.05;
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor = 1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim = 24.5;
+  sprintf(survey.name,"DSA_allsky");
+}
+
 void set_wlphotoz_LSST_Y1()
 {
   int i;
