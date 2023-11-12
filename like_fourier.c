@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 1  
+#define _COMPUTE_LIKELIHOOD_ 0  
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -613,7 +613,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_test2",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
+  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
@@ -707,7 +707,7 @@ int main(int argc, char** argv)
   // 6 sets of target selections results in different src density [/arcmin2]
   //double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
   //int N_scenarios_selection = sizeof(source_density)/sizeof(double);
-  int N_scenarios_selection = 2;
+  int N_scenarios_selection = 1;
   // char dndz[6][100] = {
   //   "zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
   //   "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
@@ -716,9 +716,9 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
-  char survey_names[2][100] = {"LSST_Y1", "LSST_Y10"};
-  char dndz[2][100] = {"zdistris/src_LSSTY1", "zdistris/src_LSSTY10"};
-  int Ntomo_source = 10;
+  char survey_names[1][100] = {"DSA_allsky"};
+  char dndz[1][100] = {"zdistris/zdistri_DSA_allsky"};
+  int Ntomo_source = 4;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
   // detailed settings are stored in `set_survey_parameters_to_DESI2_KL()`
@@ -738,7 +738,7 @@ int main(int argc, char** argv)
   int N_scenarios = N_scenarios_selection * N_scenarios_shape_noise;
 
   int i_Selection = atoi(argv[1]);
-  int i_SN = atoi(argv[2]);
+  // int i_SN = atoi(argv[2]);
   char strat[20];
   //sprintf(strat, "DESI2_KL_%d%d", i_Selection, i_SN);
   sprintf(strat, survey_names[i_Selection]);
@@ -759,10 +759,10 @@ int main(int argc, char** argv)
   //init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
   char _photoz_prior[100];
   char _shearm_prior[100];
-  sprintf(_photoz_prior, "photo_%s", strat);
+  sprintf(_photoz_prior, "spec_%s", strat);
   sprintf(_shearm_prior, "shear_%s", strat);
   init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-    false, 3.0, 1.2, 3.8, 2.0, false, 40.0, 10.0, 0.8);
+    false, 3.0, 1.2, 3.8, 2.0, true, 40.0, 10.0, 0.8);
   init_survey(strat);
   // customize shape noise here
   //survey.sigma_e = shape_noise_rms[i_SN];

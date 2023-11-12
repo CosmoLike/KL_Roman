@@ -549,8 +549,8 @@ int main(int argc, char** argv)
   // The DESI BGS is 14000 deg2, can be smaller than that
   //double survey_area = 14000.0;
   int N_scenarios_area = 2;
-  double survey_area[2] = {12300.0, 14300.0};
-  char survey_names[2][100] = {"LSST_Y1", "LSST_Y10"};
+  double survey_area[1] = {30000.0};
+  char survey_names[1][100] = {"DSA_allsky"};
   // We do not sample survey area any more, just scale that!
   //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
   //printf("%d survey area scenarios\n", N_scenarios_area);
@@ -558,7 +558,7 @@ int main(int argc, char** argv)
   int N_scenarios_selection = 2;
   // Start with 4 source tomo bins 
   //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
-  int Ntomo_source[2] = {10, 10};
+  int Ntomo_source[1] = {4};
   // example, zdistris/zdistri_WFIRST_grism_norm
   // char dndz[6][100] = {
   //   //"zdistris/zdistri_DESI2_KL_sample1",
@@ -572,9 +572,7 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
-  char dndz[2][100] = {
-    "zdistris/src_LSSTY1", "zdistris/src_LSSTY10"
-  };
+  char dndz[1][100] = {"zdistris/zdistri_DSA_allsky"};
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // Six shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
@@ -593,7 +591,7 @@ int main(int argc, char** argv)
   double ell_max_shear = 3000.0;
   // Now count how many scenarios
   //int N_scenarios = N_scenarios_selection * N_scenarios_shape_noise;
-  int N_scenarios = 2;
+  int N_scenarios = 1;
   //double scenario_table[1][3]={ {2000.0, 8.0, 66.0} };
 
   int hit=atoi(argv[1]);
@@ -641,7 +639,7 @@ int main(int argc, char** argv)
     sprintf(_surveyname, survey_names[i_selection]);
     char _photoz_prior[100];
     char _shearm_prior[100];
-    sprintf(_photoz_prior, "photo_%s", survey_names[i_selection]);
+    sprintf(_photoz_prior, "spec_%s", survey_names[i_selection]);
     sprintf(_shearm_prior, "shear_%s", survey_names[i_selection]);
     init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
       false, 3.0, 1.2, 3.8, 2.0, true, 16, 1.9, 0.7);
@@ -658,8 +656,10 @@ int main(int argc, char** argv)
     init_clusters(); // not used if we don't have clusters
     init_IA("NLA_HF", "GAMA");// KL assumes no IA; WL assumes NLA_HF
     init_probes("shear_shear");
-    sprintf(covparams.outdir, 
-      "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");
+    // sprintf(covparams.outdir, 
+    //   "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");
+    sprintf(covparams.outdir,
+        "/home/yu-hsiuhuang/code/cosmology/dsa/covpara");
 
     printf("----------------------------------\n");  
     printf("area: %.2f n_source: %.2f n_lens: %.2f\n",
