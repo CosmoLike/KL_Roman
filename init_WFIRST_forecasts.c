@@ -40,6 +40,7 @@ void set_wlphotoz_LSST_Y1();
 void set_clphotoz_LSST_Y1();
 void set_wlphotoz_LSST_Y10();
 void set_clphotoz_LSST_Y10();
+void set_wlphotoz_DSA_allsky();
 
 void set_shear_priors_WFIRST_KL();
 void set_shear_priors_DESI2_KL();
@@ -47,12 +48,14 @@ void set_shear_priors_WFIRST_opti();
 void set_shear_priors_WFIRST_pessi();
 void set_shear_priors_LSST_Y1();
 void set_shear_priors_LSST_Y10();
+void set_shear_priors_DSA_allsky();
 
 void set_survey_parameters_to_WFIRST_WL();
 void set_survey_parameters_to_WFIRST_KL();
 void set_survey_parameters_to_DESI2_KL(char *surveyname);
 void set_survey_parameters_to_LSST_Y1();
 void set_survey_parameters_to_LSST_Y10();
+void set_survey_parameters_to_DSA_allsky();
 
 void init_clusterMobs();
 void set_equal_tomo_bins();
@@ -1415,17 +1418,6 @@ void set_survey_parameters_to_LSST_Y10()
   sprintf(survey.name,"LSST_Y10");
 }
 
-void set_survey_parameters_to_DSA_allsky_KL()
-{
-  survey.area   = 30000.0;    // DSA all-sky
-  survey.n_gal  = 0.0459;     // DSA all-sky
-  survey.sigma_e  = 0.05;
-  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
-  survey.n_gal_conversion_factor = 1.0/constants.arcmin/constants.arcmin;
-  survey.m_lim = 24.5;
-  sprintf(survey.name,"DSA_allsky");
-}
-
 void set_wlphotoz_LSST_Y1()
 {
   int i;
@@ -1560,4 +1552,49 @@ double log_L_PlanckBAOJLA_w0wa()
   log_L = -0.5*do_matrix_mult_invcov(n_param,table, param_diff);
 
   return log_L;
+}
+
+// DSA configuration
+void set_survey_parameters_to_DSA_allsky()
+{
+  survey.area   = 30000.0;    // DSA all-sky
+  survey.n_gal  = 0.0459;     // DSA all-sky
+  survey.sigma_e  = 0.05;
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor = 1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim = 24.5;
+  sprintf(survey.name,"DSA_allsky");
+}
+void set_wlphotoz_DSA_allsky()
+{
+  int i;
+  printf("\n");
+  printf("Source sample: DSA All-sky spec-z uncertainty initialized\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    nuisance.bias_zphot_shear[i]=0.0;
+    nuisance.sigma_zphot_shear[i]=0.0002; 
+    printf("nuisance.bias_zphot_shear[%d]=%le\n",i,nuisance.bias_zphot_shear[i]);
+    printf("nuisance.sigma_zphot_shear[%d]=%le\n",i,nuisance.sigma_zphot_shear[i]);
+    // center of Gaussian priors: estimated from DSA spectral resolution at z=1
+    prior.bias_zphot_shear[i][0]=nuisance.bias_zphot_shear[i];
+    prior.sigma_zphot_shear[i][0]=nuisance.sigma_zphot_shear[i];
+    // rms width of Gaussian priors: randomly pick a number
+    prior.bias_zphot_shear[i][1] = 0.00004;
+    prior.sigma_zphot_shear[i][1]= 0.00004;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_shear[i][0],prior.bias_zphot_shear[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_shear[i][0],prior.sigma_zphot_shear[i][1]); 
+  }
+  like.wlphotoz=1;
+}
+void set_shear_priors_DSA_allsky() 
+{
+  // copy from LSST Y1
+  int i;
+  printf("\nSetting Gaussian shear calibration Priors DSA All-sky\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    prior.shear_calibration_m[i][0] = 0.0;
+    prior.shear_calibration_m[i][1] = 0.013;
+    printf("Mean=%le, Sigma=%le\n",prior.shear_calibration_m[i][0],prior.shear_calibration_m[i][1]);
+  }
+  like.shearcalib=1;
 }
