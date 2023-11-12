@@ -592,7 +592,7 @@ void init_survey(char *surveyname)
   if(strcmp(surveyname,"WFIRST_WL")==0) set_survey_parameters_to_WFIRST_WL();
   if(strcmp(surveyname,"WFIRST_KL")==0) set_survey_parameters_to_WFIRST_KL();
   if(strncmp(surveyname,"DESI2_KL",8)==0) set_survey_parameters_to_DESI2_KL(surveyname);
-  if(strncmp(surveyname,"DSA_allsky")==0) set_survey_parameters_to_DSA_allsky();
+  if(strcmp(surveyname,"DSA_allsky")==0) set_survey_parameters_to_DSA_allsky();
 
   printf("Survey set to %s\n",survey.name);
   printf("Survey area: %f deg^2\n",survey.area);
@@ -1607,7 +1607,7 @@ void set_wlphotoz_DSA_allsky()
   }
   like.wlphotoz=1;
 }
-void set_clphotoz_DESI2_KL()
+void set_clphotoz_DSA_allsky()
 {
   int i;
   printf("\n");
