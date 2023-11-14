@@ -13,7 +13,7 @@
 #SBATCH --mail-user=yhhuang@arizona.edu
 
 module load gsl
-module load openmpi3
+module load mpich
 WORKDIR=/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST
 cd ${WORKDIR}
 
