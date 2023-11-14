@@ -659,7 +659,7 @@ int main(int argc, char** argv)
     // sprintf(covparams.outdir, 
     //   "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");
     sprintf(covparams.outdir,
-        "/home/yu-hsiuhuang/code/cosmology/dsa/covpara");
+        "/home/u15/yhhuang/cosmology/dsa/covpara/");
 
     printf("----------------------------------\n");  
     printf("area: %.2f n_source: %.2f n_lens: %.2f\n",
