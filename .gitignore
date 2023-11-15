@@ -18,3 +18,4 @@ chains/
 compute_covariances_fourier
 
 .vscode
+*.err
