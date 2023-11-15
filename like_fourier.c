@@ -787,7 +787,7 @@ int main(int argc, char** argv)
   #endif
 
   init_clusters();
-  init_IA("NLA_HF", "GAMA");
+  init_IA("none", "GAMA");
   init_probes(argv[3]);
   
   /* compute fiducial data vector */
