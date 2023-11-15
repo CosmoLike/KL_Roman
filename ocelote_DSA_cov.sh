@@ -2,6 +2,7 @@
 
 #SBATCH --job-name=covDSA
 #SBATCH --output=log/covDSA-%A_%a.out
+#SBATCH --error=log/covDSA-%A_%a.err
 #SBATCH --array=1-770
 #SBATCH --nodes=1
 #SBATCH --ntasks=1

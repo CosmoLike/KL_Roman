@@ -1,7 +1,8 @@
 #!/bin/bash
 
 #SBATCH --job-name=dvDSA
-###SBATCH --output=dvDSA-%A_%a.out
+#SBATCH --output=log/dvDSA-%A_%a.out
+#SBATCH --error=log/dvDSA-%A_%a.err
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
