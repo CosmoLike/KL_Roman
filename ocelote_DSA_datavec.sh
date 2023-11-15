@@ -18,4 +18,4 @@ module swap openmpi3 mpich/3.3.1
 WORKDIR=/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST
 cd ${WORKDIR}
 
-./like_fourier 0 0 shear_shear dm
+./like_fourier 0 0 shear_shear dmo
