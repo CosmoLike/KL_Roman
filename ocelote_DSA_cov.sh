@@ -8,7 +8,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=standard
-#SBATCH --qos=user_qos_timeifler
+#SBATCH --qos=qual_qos_timeifler
 #SBATCH --account=timeifler
 #SBATCH --time=0:20:00
 #SBATCH --mail-type=ALL
