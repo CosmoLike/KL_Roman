@@ -318,7 +318,7 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
     set_wlphotoz_DESI2_KL();
     set_clphotoz_DESI2_KL();
   }
-  if(strcmp(Prior1,"spec_DSA")==0){
+  if(strcmp(Prior1,"spec_DSA_allsky")==0){
     set_wlphotoz_DSA_allsky();
     set_clphotoz_DSA_allsky();
   }
@@ -450,7 +450,7 @@ void init_priors_IA(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
     set_wlphotoz_DESI2_KL();
     set_clphotoz_DESI2_KL();
   }
-  if(strcmp(Prior1,"spec_DSA")==0){
+  if(strcmp(Prior1,"spec_DSA_allsky")==0){
     set_wlphotoz_DSA_allsky();
     set_clphotoz_DSA_allsky();
   }
@@ -544,7 +544,7 @@ void init_priors_KL(char *Prior1, char *Prior2, char *Prior3, char *Prior4)
     set_wlphotoz_DESI2_KL();
     set_clphotoz_DESI2_KL();
   }
-  if(strcmp(Prior1,"spec_DSA")==0){}
+  if(strcmp(Prior1,"spec_DSA_allsky")==0){}
   if(strcmp(Prior2,"shear_KL_WFIRST")==0){
     set_shear_priors_WFIRST_KL();
   }
