@@ -45,7 +45,7 @@
 #include "init_WFIRST_forecasts.c"
 #include "../cosmolike_core/theory/init_baryon.c"
 
-#define _WRITE_NZ_TOMO_ 0
+#define _WRITE_NZ_TOMO_ 1
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
 #define _COMPUTE_LIKELIHOOD_ 0  
@@ -762,7 +762,7 @@ int main(int argc, char** argv)
   sprintf(_photoz_prior, "spec_%s", strat);
   sprintf(_shearm_prior, "shear_%s", strat);
   init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-    false, 3.0, 1.2, 3.8, 2.0, true, 40.0, 10.0, 0.8);
+    false, 3.0, 1.2, 3.8, 2.0, false, 16, 1.9, 0.7);
   init_survey(strat);
   // customize shape noise here
   //survey.sigma_e = shape_noise_rms[i_SN];
@@ -775,7 +775,7 @@ int main(int argc, char** argv)
     FILE *tomo_zdist;
     char tomo_zdist_fname[500];
     sprintf(tomo_zdist_fname, 
-      "zdistris/tomo_zdist_src_%s_%d", strat, i_Selection);
+      "zdistris/tomo_zdist_src_%s", strat);
     tomo_zdist = fopen(tomo_zdist_fname, "w");
     if(tomo_zdist!=NULL){
       fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\n");

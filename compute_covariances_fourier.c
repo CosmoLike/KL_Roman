@@ -642,7 +642,7 @@ int main(int argc, char** argv)
     sprintf(_photoz_prior, "spec_%s", survey_names[i_selection]);
     sprintf(_shearm_prior, "shear_%s", survey_names[i_selection]);
     init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-      false, 3.0, 1.2, 3.8, 2.0, true, 16, 1.9, 0.7);
+      false, 3.0, 1.2, 3.8, 2.0, false, 16, 1.9, 0.7);
     init_survey(_surveyname);
     // init survey name, area, n_gal, shape noise, magnitude limit, K-correction
     //sprintf(survey.name, "%s_%d%d", "DESI2_KL_v2", i_selection, i_shape_noise);
