@@ -45,10 +45,10 @@
 #include "init_WFIRST_forecasts.c"
 #include "../cosmolike_core/theory/init_baryon.c"
 
-#define _WRITE_NZ_TOMO_ 1
+#define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 0  
+#define _COMPUTE_LIKELIHOOD_ 1  
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -818,9 +818,11 @@ int main(int argc, char** argv)
   #endif
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
-  init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
-    "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo_test",
-    "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_9sim.pca");
+  init_data_inv("/home/u15/yhhuang/cosmology/dsa/incov/DSA_allsky_ssss_invcov_Ncl15_Ntomo4",
+    "datav/DSA_allsky_shear_shear_Ntomo4_Ncl15_dmo");
+  // init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
+  //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo_test",
+  //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_9sim.pca");
   begin = clock();
   loglike=log_multi_like(
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
