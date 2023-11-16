@@ -8,6 +8,10 @@ import matplotlib.image as mpimg
 from numpy import linalg as LA
 import numpy as np
 
+sys.path.append('../../dsa/src/')
+from common import my_plot_style
+my_plot_style()
+
 # covariance matrix
 # DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
 # #infile_fmt = "DESI2_KL_v2_%d%d_ssss_cov_Ncl%d_Ntomo%d"
@@ -22,15 +26,15 @@ Area_list = [30000]
 N_area = 1
 #N_selection = 6
 N_selection = 1
-years = [1, 10]
+#years = [1, 10]
 #N_tomo_list = [4, 4, 4, 4, 4, 4]
 N_tomo_list = [4]
 #Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])*3600
-Nsrc_list = np.array([11.112, 27.737])
+Nsrc_list = np.array([0.0459])*3600
 #N_shape_noise = 6
 N_shape_noise = 1
 #SN_list = [0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 0.10*1.4142, 0.20*1.4142, 0.30*1.4142]
-SN_list = [0.0459]
+SN_list = [0.05]
 plot_corrmat = True
 
 for iArea in range(N_area):
@@ -213,6 +217,7 @@ for iArea in range(N_area):
 
 				plt.colorbar(im)
 				#plt.show()
-				figfilename_fmt = "test_imgs/"+outfile_fmt+".png"
+				figfilename_fmt = DATA_DIR+"figure/"+outfile_fmt+".png"
 				#plt.savefig(figfilename_fmt%(jSelect,kSN,Ncl,N_tomo), format="png")
-				plt.savefig(figfilename_fmt%(year), format="png")
+				# plt.savefig(figfilename_fmt%(year), format="png")
+				plt.savefig(figfilename_fmt, format="png")
