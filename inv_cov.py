@@ -9,25 +9,28 @@ from numpy import linalg as LA
 import numpy as np
 
 # covariance matrix
-DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
-#infile_fmt = "DESI2_KL_v2_%d%d_ssss_cov_Ncl%d_Ntomo%d"
-#outfile_fmt = "DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
-infile_fmt = "LSST_Y%d_ssss_cov_Ncl15_Ntomo10"
-outfile_fmt = "LSST_Y%d_ssss_invcov_Ncl15_Ntomo10"
+# DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
+# #infile_fmt = "DESI2_KL_v2_%d%d_ssss_cov_Ncl%d_Ntomo%d"
+# #outfile_fmt = "DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
+# infile_fmt = "LSST_Y%d_ssss_cov_Ncl15_Ntomo10"
+# outfile_fmt = "LSST_Y%d_ssss_invcov_Ncl15_Ntomo10"
+DATA_DIR = '../../dsa/'
+infile_fmt = "DSA_allsky_ssss_cov_Ncl15_Ntomo4"
+outfile_fmt = "DSA_allsky_ssss_invcov_Ncl15_Ntomo4"
 Ncl = 15
-Area_list = [12300, 14300]
+Area_list = [30000]
 N_area = 1
 #N_selection = 6
-N_selection = 2
+N_selection = 1
 years = [1, 10]
 #N_tomo_list = [4, 4, 4, 4, 4, 4]
-N_tomo_list = [10, 10]
+N_tomo_list = [4]
 #Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])*3600
 Nsrc_list = np.array([11.112, 27.737])
 #N_shape_noise = 6
 N_shape_noise = 1
 #SN_list = [0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 0.10*1.4142, 0.20*1.4142, 0.30*1.4142]
-SN_list = [0.26,]
+SN_list = [0.0459]
 plot_corrmat = True
 
 for iArea in range(N_area):
@@ -35,18 +38,18 @@ for iArea in range(N_area):
 	for jSelect in range(N_selection):
 		N_tomo = N_tomo_list[jSelect]
 		Nsrc = Nsrc_list[jSelect]
-		year = years[jSelect]
+		#year = years[jSelect]
 		Area = Area_list[jSelect]
 		for kSN in range(N_shape_noise):
 			SN = SN_list[kSN]
 			fig_title = "$\Omega_s=$%d deg$^{2}$, $n_\mathrm{src}=$%d deg$^{-2}$, $\sigma_\epsilon^\mathrm{rms}$=%.2f"%(Area, Nsrc, SN)
 			#infile = DATA_DIR+"cov/"+infile_fmt%(jSelect,kSN,Ncl,N_tomo)
-			infile = DATA_DIR+"cov/"+infile_fmt%(year)
+			infile = DATA_DIR+"cov/"+infile_fmt#%(year)
 			if not os.path.exists(infile):
 				print(f'File {infile} does not exist! Continue')
 				continue
 			#outname = DATA_DIR+"invcov/"+outfile_fmt%(jSelect,kSN,Ncl,N_tomo)
-			outname = DATA_DIR+"invcov/"+outfile_fmt%(year)
+			outname = DATA_DIR+"invcov/"+outfile_fmt#%(year)
 			### Set data vector dimensions
 			nggl = 0 	# number of ggl power spectra
 			ngcl = 0	# number of cluster-source galaxy power spectra
