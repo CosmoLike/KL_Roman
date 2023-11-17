@@ -818,7 +818,7 @@ int main(int argc, char** argv)
   #endif
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
-  init_data_inv("/home/u15/yhhuang/cosmology/dsa/incov/DSA_allsky_ssss_invcov_Ncl15_Ntomo4",
+  init_data_inv("/home/u15/yhhuang/cosmology/dsa/invcov/DSA_allsky_ssss_invcov_Ncl15_Ntomo4",
     "datav/DSA_allsky_shear_shear_Ntomo4_Ncl15_dmo");
   // init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
   //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo_test",
