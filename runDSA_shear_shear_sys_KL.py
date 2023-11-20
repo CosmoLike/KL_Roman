@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/u15/yhhuang/CosmoLike/KL_WFIRST')
+sys.path.append('/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST')
 
 from cosmolike_libs_opti import * 
 from schwimmbad import MPIPool
