@@ -1593,15 +1593,15 @@ void set_wlphotoz_DSA_allsky()
   printf("Source sample: DSA all-sky spec-z uncertainty initialized\n");
   for (i=0;i<tomo.shear_Nbin; i++){
     nuisance.bias_zphot_shear[i]=0.0;
-    nuisance.sigma_zphot_shear[i]=0.0002; 
+    nuisance.sigma_zphot_shear[i]=0.0005; 
     printf("nuisance.bias_zphot_shear[%d]=%le\n",i,nuisance.bias_zphot_shear[i]);
     printf("nuisance.sigma_zphot_shear[%d]=%le\n",i,nuisance.sigma_zphot_shear[i]);
     // center of Gaussian priors: estimated from DSA spectral resolution at z=1
     prior.bias_zphot_shear[i][0]=nuisance.bias_zphot_shear[i];
     prior.sigma_zphot_shear[i][0]=nuisance.sigma_zphot_shear[i];
     // rms width of Gaussian priors: randomly pick a number
-    prior.bias_zphot_shear[i][1] = 0.00004;
-    prior.sigma_zphot_shear[i][1]= 0.00004;
+    prior.bias_zphot_shear[i][1] = 0.0001;
+    prior.sigma_zphot_shear[i][1]= 0.0001;
     printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_shear[i][0],prior.bias_zphot_shear[i][1]);
     printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_shear[i][0],prior.sigma_zphot_shear[i][1]); 
   }
@@ -1614,15 +1614,15 @@ void set_clphotoz_DSA_allsky()
   printf("Lens sample: DSA all-sky KL spec-z uncertainty initialized\n");
   for (i=0;i<tomo.clustering_Nbin; i++){
     nuisance.bias_zphot_clustering[i]=0.0;
-    nuisance.sigma_zphot_clustering[i]=0.0002; 
+    nuisance.sigma_zphot_clustering[i]=0.0005; 
     printf("nuisance.bias_zphot_clustering[%d]=%le\n",i,nuisance.bias_zphot_clustering[i]);
     printf("nuisance.sigma_zphot_clustering[%d]=%le\n",i,nuisance.sigma_zphot_clustering[i]);
     // center of Gaussian priors
     prior.bias_zphot_clustering[i][0]=nuisance.bias_zphot_clustering[i];
     prior.sigma_zphot_clustering[i][0]=nuisance.sigma_zphot_clustering[i];
     // rms width of Gaussian priors
-    prior.bias_zphot_clustering[i][1] = 0.00004;
-    prior.sigma_zphot_clustering[i][1]= 0.00004;
+    prior.bias_zphot_shear[i][1] = 0.0001;
+    prior.sigma_zphot_shear[i][1]= 0.0001;
     printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_clustering[i][0],prior.bias_zphot_clustering[i][1]);
     printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_clustering[i][0],prior.sigma_zphot_clustering[i][1]); 
   }
