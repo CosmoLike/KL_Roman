@@ -8,9 +8,6 @@ import matplotlib.image as mpimg
 from numpy import linalg as LA
 import numpy as np
 
-sys.path.append('../../dsa/src/')
-from common import my_plot_style
-my_plot_style()
 
 # covariance matrix
 # DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
