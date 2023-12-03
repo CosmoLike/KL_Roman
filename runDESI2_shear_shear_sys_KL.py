@@ -33,11 +33,12 @@ data_vector_file = "datav/DESI2_KL_%d0_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
 baryon_PCS_file = "datav/DESI2_KL_%d%d_shear_shear_Ntomo%d_Ncl%d_9sim.pca"
 #chain_output_file = "chains/DESI2_KL_v2_PlanckBAOJLA_%d%d_ss_Ncl%d_Ntomo%d"
-chain_output_file = "chains/DESI2_KL_LCDM_s8split_%d%d_ss_Ncl%d_Ntomo%d"
+chain_output_file = "chains/DESI2_KL_s8split_only_zlow015_%d%d_ss_Ncl%d_Ntomo%d"
 #external_prior = "Planck15_BAO_H070p6_JLA_w0wa" # default: "none"
 external_prior = "none"
 NPCs_used = 2
-cosmo_model = "LCDM_split"
+#cosmo_model = "LCDM_split"
+cosmo_model = "s8split_only"
 runmode = "halofit_split"
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files[args.iSelection])

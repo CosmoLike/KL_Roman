@@ -3,25 +3,25 @@
 #SBATCH --output=DESI2_KL-%A_%a.out
 
 ### 1. puma
-###SBATCH --nodes=1
-###SBATCH --array=1-18
-###SBATCH --ntasks-per-node=80
-###SBATCH --ntasks-per-socket=40
-###SBATCH --cpus-per-task=1
-###SBATCH --partition=high_priority
-###SBATCH --qos=user_qos_timeifler
-###SBATCH --account=timeifler
-###SBATCH --time=72:00:00
-
-### 2. ocelote
-#SBATCH --nodes=10
+#SBATCH --nodes=1
 #SBATCH --array=1-18
-#SBATCH --ntasks-per-node=28
+#SBATCH --ntasks-per-node=80
+#SBATCH --ntasks-per-socket=40
 #SBATCH --cpus-per-task=1
-#SBATCH --partition=standard
-#SBATCH --qos=qual_qos_timeifler
+#SBATCH --partition=high_priority
+#SBATCH --qos=user_qos_timeifler
 #SBATCH --account=timeifler
 #SBATCH --time=72:00:00
+
+### 2. ocelote
+###SBATCH --nodes=10
+###SBATCH --array=1-18
+###SBATCH --ntasks-per-node=28
+###SBATCH --cpus-per-task=1
+###SBATCH --partition=standard
+###SBATCH --qos=qual_qos_timeifler
+###SBATCH --account=timeifler
+###SBATCH --time=48:00:00
 
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jiachuanxu@arizona.edu
