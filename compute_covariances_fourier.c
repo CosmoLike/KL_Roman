@@ -9,7 +9,7 @@
 #include <string.h>
 
 #include <fftw3.h>
-
+#define __COV_BREAK_UP__ 1
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_integration.h>
@@ -521,65 +521,69 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
   F1 =fopen(filename,"w");
   for (nl1 = 0; nl1 < like.Ncl; nl1 ++){
     for (nl2 = 0; nl2 < like.Ncl; nl2 ++){
+      #if __COV_BREAK_UP__==0
       c_ng = 0.; c_g = 0.;
       if (ell[nl1] < like.lmax_shear && ell[nl2] < like.lmax_shear){
         c_ng = cov_NG_shear_shear_tomo(ell[nl1],ell[nl2],z1,z2,z3,z4);
       }
       if (nl1 == nl2){
         c_g =  cov_G_shear_shear_tomo(ell[nl1],dell[nl1],z1,z2,z3,z4);
-        if (ell[nl1] > like.lmax_shear && n1!=n2){c_g = 0.;} 
+        if (ell[nl1] > like.lmax_shear && n1!=n2){c_g = 0.;}
+        
       }         
       fprintf(F1,"%d %d %e %e %d %d %d %d %e %e\n",like.Ncl*n1+nl1,like.Ncl*(n2)+nl2,ell[nl1],ell[nl2],z1,z2,z3,z4,c_g,c_ng);
-      //printf("%d %d %e %e %d %d %d %d %e %e\n", like.Ncl*n1+nl1,like.Ncl*(n2)+nl2, ell[nl1],ell[nl2],z1,z2,z3,z4,c_g,c_ng);
+      #elif __COV_BREAK_UP__==1
+      c_ng = 0.;
+      double res[3] = {0.0, 0.0, 0.0};
+      if (ell[nl1] < like.lmax_shear && ell[nl2] < like.lmax_shear){
+        c_ng = cov_NG_shear_shear_tomo(ell[nl1],ell[nl2],z1,z2,z3,z4);
+      }
+      if (nl1 == nl2){
+        cov_G_shear_shear_tomo_break_up(ell[nl1],dell[nl1],z1,z2,z3,z4,res);
+        if (ell[nl1] > like.lmax_shear && n1!=n2){res[0]=0.;res[1]=0.0;res[2]=0.0;}
+        
+      }         
+      fprintf(F1,"%d %d %e %e %d %d %d %d %e %e %e %e\n",like.Ncl*n1+nl1,like.Ncl*(n2)+nl2,ell[nl1],ell[nl2],z1,z2,z3,z4,res[0],res[1],res[2],c_ng);
+      #endif
     }
   }
   fclose(F1);
 }
 
-
-int main(int argc, char** argv)
+int run_DESI2(int argc, char**argv)
 {
   int i,l,m,n,o,s,p,nl1,t,k;
   char OUTFILE[400],filename[400];
-  
   // Setting Scenarios (survey area, source density, lens density)
   // As a comparison, LSST (12300 deg2) assumes 15 bins from ell=20 to 3000
-  // Roman HLIS (5000 deg2) assumes 20 bins from ell=30 to 4000
   // Three sets of survey area settings
   // The DESI BGS is 14000 deg2, can be smaller than that
-  //double survey_area = 14000.0;
-  int N_scenarios_area = 2;
-  double survey_area[2] = {12300.0, 14300.0};
-  char survey_names[2][100] = {"LSST_Y1", "LSST_Y10"};
+  char survey_names[100];
+  sprintf(survey_names, "DESI2");
   // We do not sample survey area any more, just scale that!
-  //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
   //printf("%d survey area scenarios\n", N_scenarios_area);
   // Six sets of target selection criteria, each with different n(z)
-  int N_scenarios_selection = 2;
+  int N_scenarios_selection = 6;
   // Start with 4 source tomo bins 
-  //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
-  int Ntomo_source[2] = {10, 10};
+  int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
   // example, zdistris/zdistri_WFIRST_grism_norm
-  // char dndz[6][100] = {
-  //   //"zdistris/zdistri_DESI2_KL_sample1",
-  //   //"zdistris/zdistri_DESI2_KL_sample2", 
-  //   //"zdistris/zdistri_DESI2_KL_sample3", 
-  //   //"zdistris/zdistri_DESI2_KL_sample4",
-  //   "zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
-  //   "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Any_sample1_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Any_sample2_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
-  // };
-  char dndz[2][100] = {
-    "zdistris/src_LSSTY1", "zdistris/src_LSSTY10"
+  char dndz[6][100] = {
+     //"zdistris/zdistri_DESI2_KL_sample1",
+     //"zdistris/zdistri_DESI2_KL_sample2", 
+     //"zdistris/zdistri_DESI2_KL_sample3", 
+     //"zdistris/zdistri_DESI2_KL_sample4",
+     "zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
+     "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
+     "zdistris/zdistri_DESI2_KL_BGS_Any_sample1_v2",
+     "zdistris/zdistri_DESI2_KL_BGS_Any_sample2_v2",
+     "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
+     "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   };
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // Six shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
   // selection here.
-  int N_scenarios_shape_noise = 1;
+  int N_scenarios_shape_noise = 6;
   printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
   // Lens galaxies not used, set to random value
   float lens_density = 66.0;
@@ -592,8 +596,7 @@ int main(int argc, char** argv)
   double ell_max = 3000.0;
   double ell_max_shear = 3000.0;
   // Now count how many scenarios
-  //int N_scenarios = N_scenarios_selection * N_scenarios_shape_noise;
-  int N_scenarios = 2;
+  int N_scenarios = N_scenarios_selection * N_scenarios_shape_noise;
   //double scenario_table[1][3]={ {2000.0, 8.0, 66.0} };
 
   int hit=atoi(argv[1]);
@@ -623,12 +626,443 @@ int main(int argc, char** argv)
 
 
   for(t=0;t<N_scenarios;t++){
-    // int temp = t;
-    // int i_selection = temp/N_scenarios_shape_noise;
-    // temp -= i_selection * N_scenarios_shape_noise;
-    // int i_shape_noise = temp;
-    // temp -= i_shape_noise;
-    // assert(temp==0);
+    int temp = t;
+    int i_selection = temp/N_scenarios_shape_noise;
+    temp -= i_selection * N_scenarios_shape_noise;
+    int i_shape_noise = temp;
+    temp -= i_shape_noise;
+    assert(temp==0);
+    printf("Selection %d and Shape noise %d\n", i_selection, i_shape_noise);
+    //RUN MODE setup
+    init_cosmo_runmode("halofit");
+    init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, 
+    Ntomo_source[i_selection], Ntomo_lens);
+    char _surveyname[10];
+    sprintf(_surveyname, "DESI2_KL_%d%d", i_selection, i_shape_noise);
+    char _photoz_prior[100];
+    char _shearm_prior[100];
+    sprintf(_photoz_prior, "spec_DESI2");
+    sprintf(_shearm_prior, "shear_KL_DESI2");
+    init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
+      true, 3.0, 1.2, 3.8, 2.0, true, 16, 1.9, 0.7);
+    init_survey(_surveyname);
+    // init source and lens n(z) and photo-z 
+    init_galaxies(dndz[i_selection], 
+      "zdistris/lens_LSSTY1", 
+      "gaussian", "gaussian", "SN10");// the last arg is lens sample
+    //init_clusters(); // not used if we don't have clusters
+    init_IA("none", "GAMA");// KL assumes no IA; WL assumes NLA_HF
+    printf("test\n");
+    init_probes("shear_shear");
+    sprintf(covparams.outdir, 
+      "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");
+
+    printf("----------------------------------\n");  
+    printf("area: %.2f n_source: %.2f n_lens: %.2f\n",
+      survey.area,survey.n_gal,survey.n_lens);
+    printf("----------------------------------\n");
+    /******************************* START ************************************/
+    /********************** cosmic shear - cosmic shear  **********************/
+    if(like.shear_shear==1){
+      sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0; l<tomo.shear_Npowerspectra; l++){
+        for (m=l;m<tomo.shear_Npowerspectra; m++){
+          if(k==hit){
+            printf("catch k=%d\n", hit); 
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+              run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              printf("Exit normally!\n");return 0;
+            }
+          }
+          k=k+1;
+        }
+      }
+    }
+    /**********************       ggl    -       ggl     **********************/
+    if(like.shear_pos==1){
+      sprintf(OUTFILE, "%s_lsls_cov_Ncl%d_Ntomo%d",
+        survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.ggl_Npowerspectra; l++){
+        for (m=l;m<tomo.ggl_Npowerspectra; m++){
+          if(k==hit){
+			      printf("catch k=%d\n", hit);
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+              run_cov_ggl(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              printf("Exit normally!\n");return 0;
+            }
+          }
+          k=k+1;
+        }
+      }
+    }
+    /**********************   clustering - clustering    **********************/
+    if(like.pos_pos==1){
+      sprintf(OUTFILE,"%s_llll_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.clustering_Npowerspectra; l++){ //auto bins only for now!
+        for (m=l;m<tomo.clustering_Npowerspectra; m++){
+          if(k==hit){ 
+            printf("catch k=%d\n", hit); 
+			      sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+              run_cov_clustering(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              printf("Exit normally!\n");return 0;
+            }
+          }
+          k=k+1;
+        }
+      }
+    }
+    /**********************   clustering - cosmic shear  **********************/
+    if((like.pos_pos==1) && (like.shear_shear==1)){
+      sprintf(OUTFILE,"%s_llss_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.clustering_Npowerspectra; l++){
+        for (m=0;m<tomo.shear_Npowerspectra; m++){
+          if(k==hit){
+			      printf("catch k=%d\n", hit);
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+              run_cov_clustering_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              printf("Exit normally!\n");return 0;
+            }
+          }
+          k=k+1;
+        }
+      }
+    }
+    /**********************   clustering -       ggl     **********************/
+    if((like.pos_pos==1) && (like.shear_pos==1)){
+      sprintf(OUTFILE,"%s_llls_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.clustering_Npowerspectra; l++){
+        for (m=0;m<tomo.ggl_Npowerspectra; m++){
+          if(k==hit){
+			      printf("catch k=%d\n", hit);
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+              run_cov_clustering_ggl(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              printf("Exit normally!\n");return 0;
+            }
+          }
+          k=k+1;
+        }
+      }
+    }
+    /**********************       ggl    - cosmic shear  **********************/
+    if((like.shear_pos==1) && (like.shear_shear)){
+      sprintf(OUTFILE,"%s_lsss_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.ggl_Npowerspectra; l++){
+        for (m=0;m<tomo.shear_Npowerspectra; m++){
+          if(k==hit){
+			      printf("catch k=%d\n", hit);
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+              run_cov_ggl_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              printf("Exit normally!\n");return 0;
+            }
+          }
+          k=k+1;
+        }
+      }
+    }
+    //****************************** 
+    //******cluster covariance****** 
+    //******************************
+
+    /******************** cluster counts - cluster counts *********************/
+    if(like.clusterN==1){
+      sprintf(OUTFILE,"%s_nn_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.cluster_Nbin; l++){
+        for (m=0;m<tomo.cluster_Nbin; m++){
+          if(k==hit){
+			      printf("catch k=%d\n", hit);
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+              run_cov_N_N (OUTFILE,covparams.outdir,l,m,k);
+              printf("Exit normally!\n");return 0;
+            }
+          }
+          k=k+1;
+        }
+      }
+    }
+    /******************* cluster lensing - cluster lensing ********************/
+    if(like.clusterWL==1){
+      sprintf(OUTFILE,"%s_cscs_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.cgl_Npowerspectra; l++){
+        for (m=0;m<tomo.cgl_Npowerspectra; m++){
+          if(k==hit){
+			      printf("catch k=%d\n", hit);
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+              run_cov_cgl_cgl (OUTFILE,covparams.outdir,ell_Cluster,dell_Cluster,l,m,k);
+              printf("Exit normally!\n");return 0;
+            }
+          }
+          k=k+1;
+        } 
+      }
+    }
+    /******************** cluster lensing - cluster counts ********************/
+    if((like.clusterWL==1) && (like.clusterN==1)){
+      sprintf(OUTFILE,"%s_csn_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.cgl_Npowerspectra; l++){
+        for (m=0;m<tomo.cluster_Nbin; m++){
+          if(k==hit){
+			      printf("catch k=%d\n", hit);
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+              run_cov_cgl_N (OUTFILE,covparams.outdir,ell_Cluster,dell_Cluster,l,m,k);
+              printf("Exit normally!\n");return 0;
+            }
+          }
+          k=k+1;
+        }
+      }
+    }
+    /********************** cosmic shear - cluster counts *********************/
+    if((like.shear_shear==1) && (like.clusterN==1)){
+      printf(OUTFILE,"%s_ssn_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.shear_Npowerspectra; l++){
+        for (m=0;m<tomo.cluster_Nbin; m++){
+          if(k==hit){
+			      printf("catch k=%d\n", hit);
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+             run_cov_shear_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
+             printf("Exit normally!\n");return 0;
+           }
+         }
+         k=k+1;
+       }
+     }
+   }
+   /********************** cosmic shear - cluster lensing *********************/
+   if((like.shear_shear==1) && (like.clusterWL==1)){
+     sprintf(OUTFILE,"%s_sscs_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+     for (l=0;l<tomo.shear_Npowerspectra; l++){
+        for (m=0;m<tomo.cgl_Npowerspectra; m++){
+            if(k==hit){
+			        printf("catch k=%d\n", hit);
+              sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+              if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+              else {
+                run_cov_shear_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
+                printf("Exit normally!\n");return 0;
+              }
+            }
+            k=k+1;
+        }
+      }
+    }
+    /**********************     ggl - cluster counts     **********************/
+    if((like.shear_pos==1) && (like.clusterN==1)){
+      sprintf(OUTFILE,"%s_lsn_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.ggl_Npowerspectra; l++){
+        for (m=0;m<tomo.cluster_Nbin; m++){
+          if(k==hit){
+			      printf("catch k=%d\n", hit);
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+             run_cov_ggl_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
+             printf("Exit normally!\n");return 0;
+            }
+          }
+          k=k+1;
+        }
+      }
+    }
+    /**********************     ggl    - cluster lensing **********************/
+    if((like.shear_pos==1) && (like.clusterWL==1)){
+      sprintf(OUTFILE,"%s_lscs_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.ggl_Npowerspectra; l++){
+        for (m=0;m<tomo.cgl_Npowerspectra; m++){
+            if(k==hit){
+			        printf("catch k=%d\n", hit);
+              sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+              if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+              else {
+                run_cov_ggl_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
+                printf("Exit normally!\n");return 0;
+              }
+            }       
+            k=k+1;
+        }
+      }
+    }
+    /********************** clustering - cluster counts  **********************/
+    if((like.pos_pos==1) && (like.clusterN==1)){
+      sprintf(OUTFILE,"%s_lln_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.clustering_Npowerspectra; l++){
+        for (m=0;m<tomo.cluster_Nbin; m++){
+          if(k==hit){
+			      printf("catch k=%d\n", hit);
+            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+            if (fopen(filename, "r") != NULL){
+              printf("File %s already exist! Forced not to overwrite!\n",
+                      filename);
+              exit(1);
+            }
+            else {
+             run_cov_cl_N (OUTFILE,covparams.outdir,ell,dell,l,m,k);
+             printf("Exit normally!\n");return 0;
+            }
+          } 
+          k=k+1;
+        }
+      }
+    }
+    /********************** clustering - cluster lensing **********************/
+    if((like.pos_pos==1) && (like.clusterWL==1)){
+      sprintf(OUTFILE,"%s_llcs_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+      for (l=0;l<tomo.clustering_Npowerspectra; l++){
+        for (m=0;m<tomo.cgl_Npowerspectra; m++){
+            if(k==hit){
+			        printf("catch k=%d\n", hit);
+              sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+              if (fopen(filename, "r") != NULL){
+				        printf("File %s already exist! Forced not to overwrite!\n", 
+					       filename);
+				        exit(1);
+			        }
+              else {
+                run_cov_cl_cgl (OUTFILE,covparams.outdir,ell,dell,ell_Cluster,dell_Cluster,l,m,nl1,k);
+                printf("Exit normally!\n");return 0;
+              }
+            }
+            k=k+1;
+        }
+      }
+    }
+    /******************************** END *************************************/
+  }
+  printf("number of cov blocks for parallelization: %d\n",k-1); 
+  printf("-----------------\n");
+  printf("PROGRAM EXECUTED\n");
+  printf("-----------------\n");
+  return 0; 
+
+}
+
+int run_LSST(int argc, char**argv)
+{
+  int i,l,m,n,o,s,p,nl1,t,k;
+  char OUTFILE[400],filename[400];
+  
+  // Setting Scenarios (survey area, source density, lens density)
+  // As a comparison, LSST (12300 deg2) assumes 15 bins from ell=20 to 3000
+  int N_scenarios_area = 2;
+  double survey_area[2] = {12300.0, 14300.0};
+  char survey_names[2][100] = {"LSST_Y1", "LSST_Y10"};
+  int N_scenarios_selection = 2;
+  int Ntomo_source[2] = {10, 10};
+  char dndz[2][100] = {
+    "zdistris/src_LSSTY1", "zdistris/src_LSSTY10"
+  };
+  printf("%d target selection scenarios\n", N_scenarios_selection);
+  // selection here.
+  int N_scenarios_shape_noise = 1;
+  printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
+  float lens_density = 66.0;
+  int Ntomo_lens = 10;
+  double Rmin_bias = 21.0; // not used 
+  // 15 ell bins in Fourier space, from 20 to 3000
+  int Nell = 15;
+  double ell_min = 20.0;
+  double ell_max = 3000.0;
+  double ell_max_shear = 3000.0;
+  int N_scenarios = 2;
+
+  int hit=atoi(argv[1]);
+  Ntable.N_a=20;
+
+  k=1;
+  //set l-bins for shear, ggl, clustering, clusterWL
+  double logdl=(log(ell_max)-log(ell_min))/Nell;
+  double *ell, *dell, *ell_Cluster, *dell_Cluster;
+  ell=create_double_vector(0,Nell-1);
+  dell=create_double_vector(0,Nell-1);
+  ell_Cluster=create_double_vector(0,Cluster.lbin-1);
+  dell_Cluster=create_double_vector(0,Cluster.lbin-1);
+  int j=0;
+  printf("Ell array:\n");
+  for(i=0;i<Nell;i++){
+    ell[i]=exp(log(ell_min)+(i+0.5)*logdl);
+    dell[i]=exp(log(ell_min)+(i+1)*logdl)-exp(log(ell_min)+(i*logdl));
+    if(ell[i]<ell_max_shear) printf("%le\n",ell[i]);
+    if(ell[i]>ell_max_shear){
+      ell_Cluster[j]=ell[i];
+      dell_Cluster[j]=dell[i];
+      printf("%le %le\n",ell[i],ell_Cluster[j]);
+      j++;
+    }
+  } 
+
+
+  for(t=0;t<N_scenarios;t++){
     int i_selection = t;
     int i_SN = 0;
 
@@ -637,7 +1071,6 @@ int main(int argc, char** argv)
     init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, 
     Ntomo_source[i_selection], Ntomo_lens);
     char _surveyname[10];
-    //sprintf(_surveyname, "DESI2_KL_%d%d", i_selection, i_shape_noise);
     sprintf(_surveyname, survey_names[i_selection]);
     char _photoz_prior[100];
     char _shearm_prior[100];
@@ -646,16 +1079,11 @@ int main(int argc, char** argv)
     init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
       false, 3.0, 1.2, 3.8, 2.0, true, 16, 1.9, 0.7);
     init_survey(_surveyname);
-    // init survey name, area, n_gal, shape noise, magnitude limit, K-correction
-    //sprintf(survey.name, "%s_%d%d", "DESI2_KL_v2", i_selection, i_shape_noise);
-    //survey.area = survey_area;
-    //survey.n_gal = source_density[i_selection];
-    //survey.sigma_e = shape_noise_rms[i_shape_noise];
     // init source and lens n(z) and photo-z 
     init_galaxies(dndz[i_selection], 
       "zdistris/lens_LSSTY1", 
       "gaussian", "gaussian", "SN10");// the last arg is lens sample
-    init_clusters(); // not used if we don't have clusters
+    //init_clusters(); // not used if we don't have clusters
     init_IA("NLA_HF", "GAMA");// KL assumes no IA; WL assumes NLA_HF
     init_probes("shear_shear");
     sprintf(covparams.outdir, 
@@ -1008,5 +1436,12 @@ int main(int argc, char** argv)
   printf("PROGRAM EXECUTED\n");
   printf("-----------------\n");
   return 0; 
+
+}
+
+
+int main(int argc, char** argv)
+{
+  return run_DESI2(argc, argv);
 }
 
