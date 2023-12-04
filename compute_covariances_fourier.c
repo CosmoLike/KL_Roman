@@ -637,14 +637,14 @@ int run_DESI2(int argc, char**argv)
     init_cosmo_runmode("halofit");
     init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, 
     Ntomo_source[i_selection], Ntomo_lens);
-    char _surveyname[10];
+    char _surveyname[20];
     sprintf(_surveyname, "DESI2_KL_%d%d", i_selection, i_shape_noise);
     char _photoz_prior[100];
     char _shearm_prior[100];
     sprintf(_photoz_prior, "spec_DESI2");
     sprintf(_shearm_prior, "shear_KL_DESI2");
     init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-      true, 3.0, 1.2, 3.8, 2.0, true, 16, 1.9, 0.7);
+      false, 3.0, 1.2, 3.8, 2.0, false, 16, 1.9, 0.7);
     init_survey(_surveyname);
     // init source and lens n(z) and photo-z 
     init_galaxies(dndz[i_selection], 
@@ -1070,7 +1070,7 @@ int run_LSST(int argc, char**argv)
     init_cosmo_runmode("halofit");
     init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, 
     Ntomo_source[i_selection], Ntomo_lens);
-    char _surveyname[10];
+    char _surveyname[20];
     sprintf(_surveyname, survey_names[i_selection]);
     char _photoz_prior[100];
     char _shearm_prior[100];
