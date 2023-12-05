@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -l
 #SBATCH --job-name=DSA_KL_cn
 #SBATCH --output=log/cnDSA_KL-%A_%a.out
 #SBATCH --error=log/cnDSA_KL-%A_%a.err
@@ -10,7 +10,7 @@
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
 #SBATCH --account=timeifler
-#SBATCH --time=48:00:00
+#SBATCH --time=96:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=yhhuang@arizona.edu
 

@@ -27,9 +27,9 @@ external_prior = "none"
 #Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])
 nz_src_files = "zdistris/zdistri_DSA_allsky"
 nz_lens_file = "zdistris/lens_LSSTY1"
-data_vector_file = "datav/DSA_allsky_shear_shear_Ntomo%d_Ncl%d_dmo"
+data_vector_file = "datav/DSA_allsky_shear_shear_Ntomo%d_Ncl%d_dmo_Om40_test"
 invcovmat_file = "invcov/DSA_allsky_ssss_invcov_Ncl%d_Ntomo%d"
-chain_output_file = "chains/DSA_allsky_LCDM_ss_Ncl%d_Ntomo%d"
+chain_output_file = "chains/DSA_allsky_LCDM_ss_Ncl%d_Ntomo%d_Om40_test"
 DE_FLAG = False
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files)
