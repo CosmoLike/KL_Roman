@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash 
 #SBATCH --job-name=DSA_KL_cn
 #SBATCH --output=log/cnDSA_KL-%A_%a.out
 #SBATCH --error=log/cnDSA_KL-%A_%a.err
@@ -10,7 +10,7 @@
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
 #SBATCH --account=timeifler
-#SBATCH --time=96:00:00
+#SBATCH --time=48:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=yhhuang@arizona.edu
 
@@ -21,9 +21,9 @@ echo "SLURM_ARRAY_TASK_ID = ${SLURM_ARRAY_TASK_ID}"
 # echo "Target Selection Scenario = ${iSELECT}"
 # echo "Shape Noise Scenario = ${iSN}"
 
+module load anaconda
 module load gsl
 module swap openmpi3 mpich/3.3.1
-module load anaconda
 conda init bash
 source ~/.bashrc
 
