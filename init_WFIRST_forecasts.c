@@ -1596,7 +1596,7 @@ void set_wlphotoz_DSA_allsky()
     nuisance.sigma_zphot_shear[i]=0.0005; 
     printf("nuisance.bias_zphot_shear[%d]=%le\n",i,nuisance.bias_zphot_shear[i]);
     printf("nuisance.sigma_zphot_shear[%d]=%le\n",i,nuisance.sigma_zphot_shear[i]);
-    // center of Gaussian priors: estimated from DSA spectral resolution at z=1
+    // center of Gaussian priors: copy from DESI-II
     prior.bias_zphot_shear[i][0]=nuisance.bias_zphot_shear[i];
     prior.sigma_zphot_shear[i][0]=nuisance.sigma_zphot_shear[i];
     // rms width of Gaussian priors: randomly pick a number
@@ -1609,6 +1609,7 @@ void set_wlphotoz_DSA_allsky()
 }
 void set_clphotoz_DSA_allsky()
 {
+  // copy from DESI-II
   int i;
   printf("\n");
   printf("Lens sample: DSA all-sky KL spec-z uncertainty initialized\n");
