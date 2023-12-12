@@ -27,9 +27,9 @@ external_prior = "none"
 #Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])
 nz_src_files = "zdistris/zdistri_DSA_allsky"
 nz_lens_file = "zdistris/lens_LSSTY1"
-data_vector_file = "datav/DSA_allsky_shear_shear_Ntomo%d_Ncl%d_dmo_Om40_test"
+data_vector_file = "datav/DSA_allsky_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/DSA_allsky_ssss_invcov_Ncl%d_Ntomo%d"
-chain_output_file = "chains/DSA_allsky_LCDM_ss_Ncl%d_Ntomo%d_Om40_test"
+chain_output_file = "chains/DSA_allsky_LCDM_ss_Ncl%d_Ntomo%d_params2"
 DE_FLAG = False
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files)
@@ -51,9 +51,9 @@ initia("none","GAMA")
 initprobes("shear_shear")
 initdatainv(cov_file ,data_file)
 
-#sample_params=sample_LCDM_only()
+# sample_params=sample_LCDM_only()
 #sample_params= sample_cosmology_only()
-sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
+
 # Fix Q3, not constraining that
 #sample_params += ['bary_%d'%i for i in xrange(2)]
 #print "Dim of param space: ", len(sample_params)
@@ -61,5 +61,9 @@ sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
 #sample_params = sample_cosmology_2pt_nuisance_IA_marg(get_N_tomo_shear(),get_N_tomo_clustering())
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
 
-sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
+# only sample two parameters
+sample_params = ['omega_m','sigma_8']
+sample_main(sample_params, 1000, 400, 1, chain_file+"_1000", blind=False, pool=MPIPool(), KL=True)
+# sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
+# sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
 
