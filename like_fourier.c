@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 0  
+#define _COMPUTE_LIKELIHOOD_ 1  
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
