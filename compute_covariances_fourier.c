@@ -548,14 +548,14 @@ int main(int argc, char** argv)
   // Three sets of survey area settings
   // The DESI BGS is 14000 deg2, can be smaller than that
   //double survey_area = 14000.0;
-  int N_scenarios_area = 2;
+  int N_scenarios_area = 1;
   double survey_area[1] = {30000.0};
   char survey_names[1][100] = {"DSA_allsky"};
   // We do not sample survey area any more, just scale that!
   //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
   //printf("%d survey area scenarios\n", N_scenarios_area);
   // Six sets of target selection criteria, each with different n(z)
-  int N_scenarios_selection = 2;
+  int N_scenarios_selection = 1;
   // Start with 4 source tomo bins 
   //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
   int Ntomo_source[1] = {4};
