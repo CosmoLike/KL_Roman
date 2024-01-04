@@ -63,7 +63,7 @@ void run_cov_clustering_ggl(char *OUTFILE, char *PATH, double *ell, double *dell
 void run_cov_clustering(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 void run_cov_ggl(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
-
+void run_cov_shear_shear_one(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 
 void run_cov_N_N (char *OUTFILE, char *PATH, int nzc1, int nzc2,int start)
 {
@@ -536,6 +536,35 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
   fclose(F1);
 }
 
+void run_cov_shear_shear_one(char *OUTFILE, char *PATH, double *ell, double *dell,int n1, int n2,int start)
+{
+  int z1,z2,z3,z4,nl1,nl2,weight;
+  double c_ng, c_g;
+  FILE *F1;
+  char filename[300];
+  z1 = Z1(n1); z2 = Z2(n1);
+  printf("N_shear = %d\n", n1);
+  z3 = Z1(n2); z4 = Z2(n2);
+  printf("N_shear = %d (%d, %d)\n",n2,z3,z4);
+  sprintf(filename,"%s%s_%d",PATH,OUTFILE,start);
+  F1 =fopen(filename,"w");
+  for (nl1 = 0; nl1 < like.Ncl; nl1 ++){
+    for (nl2 = 0; nl2 < like.Ncl; nl2 ++){
+      c_ng = 0.; c_g = 0.;
+      // if (ell[nl1] < like.lmax_shear && ell[nl2] < like.lmax_shear){
+      //   c_ng = cov_NG_shear_shear_tomo(ell[nl1],ell[nl2],z1,z2,z3,z4);
+      // }
+      if (nl1 == nl2){
+        c_g =  0.25*cov_G_shear_shear_tomo(ell[nl1],dell[nl1],z1,z2,z3,z4);
+        if (ell[nl1] > like.lmax_shear && n1!=n2){c_g = 0.;} 
+      }         
+      fprintf(F1,"%d %d %e %e %d %d %d %d %e %e\n",like.Ncl*n1+nl1,like.Ncl*(n2)+nl2,ell[nl1],ell[nl2],z1,z2,z3,z4,c_g,c_ng);
+      //printf("%d %d %e %e %d %d %d %d %e %e\n", like.Ncl*n1+nl1,like.Ncl*(n2)+nl2, ell[nl1],ell[nl2],z1,z2,z3,z4,c_g,c_ng);
+    }
+  }
+  fclose(F1);
+}
+
 
 int main(int argc, char** argv)
 {
@@ -551,6 +580,8 @@ int main(int argc, char** argv)
   int N_scenarios_area = 1;
   double survey_area[1] = {30000.0};
   char survey_names[1][100] = {"DSA_allsky"};
+  // 1 if single component
+  int one = 1;
   // We do not sample survey area any more, just scale that!
   //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
   //printf("%d survey area scenarios\n", N_scenarios_area);
@@ -668,23 +699,48 @@ int main(int argc, char** argv)
     /******************************* START ************************************/
     /********************** cosmic shear - cosmic shear  **********************/
     if(like.shear_shear==1){
-      sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
-      for (l=0; l<tomo.shear_Npowerspectra; l++){
-        for (m=l;m<tomo.shear_Npowerspectra; m++){
-          if(k==hit){
-            printf("catch k=%d\n", hit); 
-            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){
-              printf("File %s already exist! Forced not to overwrite!\n",
-                      filename);
-              exit(1);
+      // one component
+      if (one == 1){
+        sprintf(OUTFILE, "%s_ssss_one_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+        for (l=0; l<tomo.shear_Npowerspectra; l++){
+          for (m=l; m<tomo.shear_Npowerspectra; m++){
+            if (k==hit){
+              printf("catch k=%d", hit);
+              sprintf(filename, "%s%s_%d", covparams.outdir, OUTFILE, k);
+              if (fopen(filename, "r") != NULL){
+                printf("File %s already exist! Foreced not to overwrite!\n", filename);
+                exit(1);
+              }
+              else{
+                run_cov_shear_shear_one(OUTFILE, covparams.outdir, ell, dell, l, m, k);
+                printf("Exit normally!\n");
+                return 0;
+              }
             }
-            else {
-              run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
-              printf("Exit normally!\n");return 0;
-            }
+            k = k+1;
           }
-          k=k+1;
+        }
+      }
+      // normal case
+      else {
+        sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+        for (l=0; l<tomo.shear_Npowerspectra; l++){
+          for (m=l;m<tomo.shear_Npowerspectra; m++){
+            if(k==hit){
+              printf("catch k=%d\n", hit); 
+              sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+              if (fopen(filename, "r") != NULL){
+                printf("File %s already exist! Forced not to overwrite!\n",
+                        filename);
+                exit(1);
+              }
+              else {
+                run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+                printf("Exit normally!\n");return 0;
+              }
+            }
+            k=k+1;
+          }
         }
       }
     }

@@ -54,17 +54,17 @@
 double C_shear_tomo_sys(double ell,int z1,int z2);
 double C_cgl_tomo_sys(double ell_Cluster,int zl,int nN, int zs);
 double C_gl_tomo_sys(double ell,int zl,int zs);
-void set_data_shear(int Ncl, double *ell, double *data, int start);
+void set_data_shear(int Ncl, double *ell, double *data, int start, int one);
 void set_data_ggl(int Ncl, double *ell, double *data, int start);
 void set_data_clustering(int Ncl, double *ell, double *data, int start);
 void set_data_cluster_N(double *data, int start);
 void set_data_cgl(double *ell_Cluster, double *data, int start);
 double log_L_3x2pt_clusterN_clusterWL_GRS_SN();
 double log_L_3x2pt_clusterN_clusterWL_GRS();
-void compute_data_vector(char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, char *bary_sce);
-double log_multi_like(double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, double PSHOT, double KSTAR, double Q1, double Q2, double Q3);
+void compute_data_vector(char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, char *bary_sce, int one);
+double log_multi_like(double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, double PSHOT, double KSTAR, double Q1, double Q2, double Q3, int one);
 void write_vector_wrapper(char *details, char *bary_sce, input_cosmo_params ic, input_nuisance_params in);
-double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in, input_nuisance_params_grs ingr);
+double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in, input_nuisance_params_grs ingr, int one);
 int get_N_tomo_shear(void);
 int get_N_tomo_clustering(void);
 int get_N_ggl(void);
@@ -121,14 +121,21 @@ double C_cgl_tomo_sys(double ell_Cluster, int zl,int nN, int zs)
 return C;
 }      
 
-void set_data_shear(int Ncl, double *ell, double *data, int start)
+void set_data_shear(int Ncl, double *ell, double *data, int start, int one)
 {
   int i,z1,z2,nz;
   double a;
   for (nz = 0; nz < tomo.shear_Npowerspectra; nz++){
     z1 = Z1(nz); z2 = Z2(nz);
     for (i = 0; i < Ncl; i++){
-      if (ell[i] < like.lmax_shear){ data[Ncl*nz+i] = C_shear_tomo_sys(ell[i],z1,z2);}
+      if (ell[i] < like.lmax_shear){ 
+        if (one == 1) {
+          data[Ncl*nz+i] = 0.5*C_shear_tomo_sys(ell[i],z1,z2);
+        }
+        else {
+          data[Ncl*nz+i] = C_shear_tomo_sys(ell[i],z1,z2);
+        }
+      }
       else {data[Ncl*nz+i] = 0.;}
     }
   }
@@ -425,7 +432,7 @@ double log_multi_like(
   double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, 
   double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, 
   double PSHOT, double KSTAR,
-  double Q1, double Q2, double Q3)
+  double Q1, double Q2, double Q3, int one)
 {
   //printf("%le %le\n",SPS1,CPS1);
   int i,j,k,m=0,l;
@@ -509,7 +516,7 @@ double log_multi_like(
   int start=0;  
   
   if(like.shear_shear==1) {
-    set_data_shear(like.Ncl, ell, pred, start);
+    set_data_shear(like.Ncl, ell, pred, start, one);
     start=start+like.Ncl*tomo.shear_Npowerspectra;
   }
   if(like.shear_pos==1){
@@ -551,7 +558,7 @@ double log_multi_like(
   return -0.5*chisqr+log_L_prior;
 }
 
-void compute_data_vector(char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5,double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q, double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, char *bary_sce)
+void compute_data_vector(char *details, double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5,double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q, double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, char *bary_sce, int one)
 {
 
   int i,j,k,m=0,l;
@@ -587,7 +594,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   
   int start=0;  
   if(like.shear_shear==1) {
-    set_data_shear(like.Ncl, ell, pred, start);
+    set_data_shear(like.Ncl, ell, pred, start, one);
     start=start+like.Ncl*tomo.shear_Npowerspectra;
   }
   if(like.shear_pos==1){
@@ -645,7 +652,7 @@ void write_vector_wrapper(char *details, char *bary_sce, input_cosmo_params ic, 
     in.m_lambda[4], in.m_lambda[5], bary_sce);
 }
 
-double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in,input_nuisance_params_grs ingr)
+double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in,input_nuisance_params_grs ingr, int one)
 {
   double like = log_multi_like(ic.omega_m, ic.sigma_8, ic.n_s, ic.w0, ic.wa, ic.omega_b, ic.h0, ic.MGSigma, ic.MGmu,
     in.bias[0], in.bias[1], in.bias[2], in.bias[3],in.bias[4], in.bias[5], in.bias[6], in.bias[7],in.bias[8], in.bias[9], 
@@ -661,7 +668,7 @@ double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in,input_nu
     in.lf[0], in.lf[1], in.lf[2], in.lf[3], in.lf[4], in.lf[5], 
     in.m_lambda[0], in.m_lambda[1], in.m_lambda[2], in.m_lambda[3], in.m_lambda[4], in.m_lambda[5],
     ingr.grsbias[0],ingr.grsbias[1],ingr.grsbias[2],ingr.grsbias[3],ingr.grsbias[4],ingr.grsbias[5],ingr.grsbias[6],ingr.grssigmap[0],ingr.grssigmap[1],ingr.grssigmap[2],ingr.grssigmap[3],ingr.grssigmap[4],ingr.grssigmap[5],ingr.grssigmap[6],ingr.grssigmaz,ingr.grspshot,ingr.grskstar,
-    in.bary[0], in.bary[1], in.bary[2]);
+    in.bary[0], in.bary[1], in.bary[2], one);
   return like;
 }
 
@@ -718,6 +725,7 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
   char survey_names[1][100] = {"DSA_allsky"};
+  int one = 1;
   char dndz[1][100] = {"zdistris/zdistri_DSA_allsky"};
   int Ntomo_source = 4;
   printf("%d target selection scenarios\n", N_scenarios_selection);
@@ -816,7 +824,9 @@ int main(int argc, char** argv)
     // clus: mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm
     3.207,0.993,0.0,0.456,
     // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope, baryon scenario
-    0.0, 0.0, argv[4]);
+    0.0, 0.0, argv[4], 
+    // one component
+    one);
   #endif
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
@@ -854,7 +864,9 @@ int main(int argc, char** argv)
     // Pshot, Kstar
     0.0, 0.24,
     // Q1, Q2, Q3
-    0.0, 0.0, 0.0);
+    0.0, 0.0, 0.0,
+    // one-component
+    one);
   printf("%le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));

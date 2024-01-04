@@ -532,12 +532,17 @@ class InputNuisanceParamsGRS(IterableStruct):
         return c
 
 class LikelihoodFunctionWrapper(object):
-    def __init__(self, varied_parameters, KL=False):
+    def __init__(self, varied_parameters, KL=False, one=False):
         self.varied_parameters = varied_parameters
         if KL:
             self.KL_flag = True
         else:
             self.KL_flag = False
+        
+        if one:
+            self.one = True
+        else:
+            self.one = False
 
 
     def fill_varied(self, icp, inp, inpgrs, x):
@@ -576,14 +581,17 @@ class LikelihoodFunctionWrapper(object):
         #inp.print_struct()
         #inpgrs.print_struct()
         #print
-        like = lib.log_like_wrapper(icp, inp, inpgrs)
+        if self.one:
+            like = lib.log_like_wrapper(icp, inp, inpgrs, 1)
+        else:
+            like = lib.log_like_wrapper(icp, inp, inpgrs, 0)
         #print "like before" , like
         if like < -1.0e+14:
             return -np.inf
         return like
 
 
-lib.log_like_wrapper.argtypes = [InputCosmologyParams, InputNuisanceParams, InputNuisanceParamsGRS]
+lib.log_like_wrapper.argtypes = [InputCosmologyParams, InputNuisanceParams, InputNuisanceParamsGRS, int]
 lib.log_like_wrapper.restype = double
 log_like_wrapper = lib.log_like_wrapper
 
@@ -770,7 +778,7 @@ def sample_cosmology_SN_WFIRST():
 
     return varied_parameters
 
-def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blind=False, pool=None, KL=False):
+def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blind=False, pool=None, KL=False, one=False):
     print varied_parameters
 
     ### Choose your cosmology: Fiducial or DEu/l95CPL?
@@ -787,13 +795,20 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
         starting_point += InputNuisanceParamsGRS().fiducial().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma_KL().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
-        likelihood = LikelihoodFunctionWrapper(varied_parameters,KL=True)
+        if one:
+            likelihood = LikelihoodFunctionWrapper(varied_parameters, KL=True, one=True)
+        else:
+            likelihood = LikelihoodFunctionWrapper(varied_parameters, KL=True)
     else:
         starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
         starting_point += InputNuisanceParamsGRS().fiducial().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
-        likelihood = LikelihoodFunctionWrapper(varied_parameters)
+        if one:
+            likelihood = LikelihoodFunctionWrapper(varied_parameters, one=True)
+        else:
+            likelihood = LikelihoodFunctionWrapper(varied_parameters)
+    
 
     p0 = emcee.utils.sample_ball(starting_point, std, size=nwalker)
 

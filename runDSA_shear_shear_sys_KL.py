@@ -20,6 +20,7 @@ Ncl = 15
 ell_min, ell_max, ell_max_shear = 20.0, 3000.0, 3000.0
 Rmin_bias = 21.0
 strat = "DSA_allsky"
+one = True # one component
 #external_prior = "Planck15_BAO_H070p6_JLA_w0wa" # default: "none"
 external_prior = "none"
 
@@ -63,7 +64,7 @@ initdatainv(cov_file ,data_file)
 
 # only sample two parameters
 sample_params = ['omega_m','sigma_8']
-sample_main(sample_params, 1000, 400, 1, chain_file+"_1000", blind=False, pool=MPIPool(), KL=True)
+sample_main(sample_params, 1000, 400, 1, chain_file+"_1000", blind=False, pool=MPIPool(), KL=True, one=one)
 # sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
 # sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
 
