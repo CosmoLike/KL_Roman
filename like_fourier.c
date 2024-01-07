@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 1
+#define _COMPUTE_LIKELIHOOD_ 0
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -620,7 +620,14 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
+  else {
+    if (one == 1) {
+      sprintf(filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OneComp",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);
+    }
+    else {
+      sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);
+    }
+  }
   // else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_Om40",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
@@ -830,8 +837,14 @@ int main(int argc, char** argv)
   #endif
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
-  init_data_inv("/home/u15/yhhuang/cosmology/dsa/invcov/DSA_allsky_ssss_invcov_Ncl15_Ntomo4",
+  if (one==1){
+    init_data_inv("/home/u15/yhhuang/cosmology/dsa/invcov/DSA_allsky_ssss_invcov_Ncl15_Ntomo4_OneComp",
+    "datav/DSA_allsky_shear_shear_Ntomo4_Ncl15_dmo_OneComp");
+  }
+  else {
+    init_data_inv("/home/u15/yhhuang/cosmology/dsa/invcov/DSA_allsky_ssss_invcov_Ncl15_Ntomo4",
     "datav/DSA_allsky_shear_shear_Ntomo4_Ncl15_dmo");
+  }
   // init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
   //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo_test",
   //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_9sim.pca");
