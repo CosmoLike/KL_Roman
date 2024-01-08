@@ -701,7 +701,7 @@ int main(int argc, char** argv)
     if(like.shear_shear==1){
       // one component
       if (one == 1){
-        sprintf(OUTFILE, "%s_ssss_one_cov_Ncl%d_Ntomo%d_OneComp",survey.name,like.Ncl,tomo.shear_Nbin);
+        sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d_OneComp",survey.name,like.Ncl,tomo.shear_Nbin);
         for (l=0; l<tomo.shear_Npowerspectra; l++){
           for (m=l; m<tomo.shear_Npowerspectra; m++){
             if (k==hit){
