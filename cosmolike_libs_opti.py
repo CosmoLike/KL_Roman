@@ -591,7 +591,7 @@ class LikelihoodFunctionWrapper(object):
         return like
 
 
-lib.log_like_wrapper.argtypes = [InputCosmologyParams, InputNuisanceParams, InputNuisanceParamsGRS, int]
+lib.log_like_wrapper.argtypes = [InputCosmologyParams, InputNuisanceParams, InputNuisanceParamsGRS, ctypes.c_int]
 lib.log_like_wrapper.restype = double
 log_like_wrapper = lib.log_like_wrapper
 
