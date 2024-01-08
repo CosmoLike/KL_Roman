@@ -16,8 +16,8 @@ import numpy as np
 # infile_fmt = "LSST_Y%d_ssss_cov_Ncl15_Ntomo10"
 # outfile_fmt = "LSST_Y%d_ssss_invcov_Ncl15_Ntomo10"
 DATA_DIR = '../../dsa/'
-infile_fmt = "DSA_allsky_ssss_cov_Ncl15_Ntomo4"
-outfile_fmt = "DSA_allsky_ssss_invcov_Ncl15_Ntomo4"
+infile_fmt = "DSA_allsky_ssss_cov_Ncl15_Ntomo4_OneComp"
+outfile_fmt = "DSA_allsky_ssss_invcov_Ncl15_Ntomo4_OneComp"
 Ncl = 15
 Area_list = [30000]
 N_area = 1
