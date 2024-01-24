@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 1
+#define _COMPUTE_LIKELIHOOD_ 0
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -734,7 +734,7 @@ int main(int argc, char** argv)
   char survey_names[1][100] = {"DSA_allsky"};
   int one = 1;
   char dndz[1][100] = {"zdistris/zdistri_DSA_allsky"};
-  int Ntomo_source = 4;
+  int Ntomo_source = 1;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
   // detailed settings are stored in `set_survey_parameters_to_DESI2_KL()`
