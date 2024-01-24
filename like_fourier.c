@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 0
+#define _COMPUTE_LIKELIHOOD_ 1
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -838,8 +838,8 @@ int main(int argc, char** argv)
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
   if (one==1){
-    init_data_inv("/home/u15/yhhuang/cosmology/dsa/invcov/DSA_allsky_ssss_invcov_Ncl15_Ntomo4_OneComp",
-    "datav/DSA_allsky_shear_shear_Ntomo4_Ncl15_dmo_OneComp");
+    init_data_inv("/home/u15/yhhuang/cosmology/dsa/invcov/DSA_allsky_ssss_invcov_Ncl15_Ntomo1_OneComp",
+    "datav/DSA_allsky_shear_shear_Ntomo1_Ncl15_dmo_OneComp");
   }
   else {
     init_data_inv("/home/u15/yhhuang/cosmology/dsa/invcov/DSA_allsky_ssss_invcov_Ncl15_Ntomo4",
