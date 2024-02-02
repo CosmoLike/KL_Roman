@@ -655,7 +655,7 @@ int run_DESI2(int argc, char**argv)
     printf("test\n");
     init_probes("shear_shear");
     sprintf(covparams.outdir, 
-      "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");
+      "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v3/");
 
     printf("----------------------------------\n");  
     printf("area: %.2f n_source: %.2f n_lens: %.2f\n",

@@ -8,45 +8,48 @@ import matplotlib.image as mpimg
 from numpy import linalg as LA
 import numpy as np
 
-# covariance matrix
-DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
-#infile_fmt = "DESI2_KL_v2_%d%d_ssss_cov_Ncl%d_Ntomo%d"
-#outfile_fmt = "DESI2_KL_v2_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
-infile_fmt = "LSST_Y%d_ssss_cov_Ncl15_Ntomo10"
-outfile_fmt = "LSST_Y%d_ssss_invcov_Ncl15_Ntomo10"
 Ncl = 15
-Area_list = [12300, 14300]
-N_area = 1
-#N_selection = 6
-N_selection = 2
-years = [1, 10]
-#N_tomo_list = [4, 4, 4, 4, 4, 4]
-N_tomo_list = [10, 10]
-#Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])*3600
-Nsrc_list = np.array([11.112, 27.737])
-#N_shape_noise = 6
-N_shape_noise = 1
-#SN_list = [0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 0.10*1.4142, 0.20*1.4142, 0.30*1.4142]
-SN_list = [0.26,]
+which_survey = "DESI2" # "LSST"
+if which_survey=="DESI2":
+	# covariance matrix for DESI-II KL
+	DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
+	infile_fmt = "DESI2_KL_v3_%d%d_ssss_cov_Ncl%d_Ntomo%d"
+	outfile_fmt = "DESI2_KL_v3_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
+	Area_list = [14000]; N_area = 1
+	N_tomo_list = [4, 4, 4, 4, 4, 4];N_selection = 6
+	#Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])*3600 # old TS
+	Nsrc_list = np.array([0.5256, 0.1717, 0.1789, 0.0953, 0.1189, 0.0811])*3600 # new TS
+	#SN_list = [0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 0.10*1.4142, 0.20*1.4142, 0.30*1.4142]
+	SN_list = [0.04, 0.05, 0.06, 0.07, 0.09, 0.11];N_shape_noise = 6
+elif which_survey=="LSST":
+	# covariance matrix for LSST
+	infile_fmt = "LSST_Y%d_ssss_cov_Ncl15_Ntomo10"
+	outfile_fmt = "LSST_Y%d_ssss_invcov_Ncl15_Ntomo10"
+	Area_list = [12300, 14300]
+	N_selection = 2
+	years = [1, 10]
+	N_tomo_list = [10, 10]
+	Nsrc_list = np.array([11.112, 27.737])
+	SN_list = [0.26,];N_shape_noise = 1
 plot_corrmat = True
 
 for iArea in range(N_area):
-	#Area = Area_list[iArea]
+	Area = Area_list[iArea]
 	for jSelect in range(N_selection):
 		N_tomo = N_tomo_list[jSelect]
 		Nsrc = Nsrc_list[jSelect]
-		year = years[jSelect]
-		Area = Area_list[jSelect]
+		#year = years[jSelect]
+		#Area = Area_list[jSelect]
 		for kSN in range(N_shape_noise):
 			SN = SN_list[kSN]
 			fig_title = "$\Omega_s=$%d deg$^{2}$, $n_\mathrm{src}=$%d deg$^{-2}$, $\sigma_\epsilon^\mathrm{rms}$=%.2f"%(Area, Nsrc, SN)
-			#infile = DATA_DIR+"cov/"+infile_fmt%(jSelect,kSN,Ncl,N_tomo)
-			infile = DATA_DIR+"cov/"+infile_fmt%(year)
+			infile = DATA_DIR+"cov/"+infile_fmt%(jSelect,kSN,Ncl,N_tomo)
+			#infile = DATA_DIR+"cov/"+infile_fmt%(year)
 			if not os.path.exists(infile):
 				print(f'File {infile} does not exist! Continue')
 				continue
-			#outname = DATA_DIR+"invcov/"+outfile_fmt%(jSelect,kSN,Ncl,N_tomo)
-			outname = DATA_DIR+"invcov/"+outfile_fmt%(year)
+			outname = DATA_DIR+"invcov/"+outfile_fmt%(jSelect,kSN,Ncl,N_tomo)
+			#outname = DATA_DIR+"invcov/"+outfile_fmt%(year)
 			### Set data vector dimensions
 			nggl = 0 	# number of ggl power spectra
 			ngcl = 0	# number of cluster-source galaxy power spectra
@@ -211,5 +214,5 @@ for iArea in range(N_area):
 				plt.colorbar(im)
 				#plt.show()
 				figfilename_fmt = "test_imgs/"+outfile_fmt+".png"
-				#plt.savefig(figfilename_fmt%(jSelect,kSN,Ncl,N_tomo), format="png")
-				plt.savefig(figfilename_fmt%(year), format="png")
+				plt.savefig(figfilename_fmt%(jSelect,kSN,Ncl,N_tomo), format="png")
+				#plt.savefig(figfilename_fmt%(year), format="png")

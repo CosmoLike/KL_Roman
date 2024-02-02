@@ -1378,9 +1378,12 @@ void set_survey_parameters_to_WFIRST_KL()
 void set_survey_parameters_to_DESI2_KL(char *surveyname)
 {
   // example surveyname: DESI2_KL_00
-  double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
-  double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
-                               0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
+  //double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
+  double source_density[6] = {0.5256, 0.1717, 0.1789, 0.0953, 0.1189, 0.0811};
+  //double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
+  //                             0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
+  double shape_noise_rms[6] = {0.04, 0.05, 0.06, 0.07, 0.09, 0.11};
+
   char _iSelect[2];
   char _iSN[2];
   strncpy(_iSelect, surveyname+9, 1);
