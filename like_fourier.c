@@ -718,6 +718,7 @@ int main(int argc, char** argv)
   clock_t begin, end;
   double time_spent, loglike=0.0, init=0.0;
   int i;
+  char incov_filename[300], datav_filename[300];
 
   // 6 sets of target selections results in different src density [/arcmin2]
   //double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
@@ -731,9 +732,9 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
-  char survey_names[1][100] = {"DSA_allsky"};
-  int one = 1;
-  char dndz[1][100] = {"zdistris/zdistri_DSA_allsky"};
+  char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc.
+  int one = 1;                                      // enable sigal componenet
+  char dndz[1][100] = {"zdistris/zdistri_SKA_WL"};  // redshift distribution
   int Ntomo_source = 1;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
@@ -837,14 +838,20 @@ int main(int argc, char** argv)
   #endif
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
-  if (one==1){
-    init_data_inv("/home/u15/yhhuang/cosmology/dsa/invcov/DSA_allsky_ssss_invcov_Ncl15_Ntomo1_OneComp",
-    "datav/DSA_allsky_shear_shear_Ntomo1_Ncl15_dmo_OneComp");
+  
+  if (one=1) {
+    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/
+    %s_ssss_invcov_Ncl%d_Ntomo%d_OneComp", survey_names[0], Nell, Ntomo_source)
+    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OmeComp",
+    survey_names[0], argv[3], Ntomo_source, Nell, argv[4])
   }
   else {
-    init_data_inv("/home/u15/yhhuang/cosmology/dsa/invcov/DSA_allsky_ssss_invcov_Ncl15_Ntomo4",
-    "datav/DSA_allsky_shear_shear_Ntomo4_Ncl15_dmo");
+    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d",
+      survey_names[0], Nell, Ntomo_source)
+    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s",
+      survey_names[0], argv[3], Ntomo_source, Nell, argv[4])
   }
+  init_data_inv(incov_filename, datav_filename)
   // init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
   //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo_test",
   //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_9sim.pca");

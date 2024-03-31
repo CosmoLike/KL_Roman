@@ -579,7 +579,7 @@ int main(int argc, char** argv)
   //double survey_area = 14000.0;
   int N_scenarios_area = 1;
   double survey_area[1] = {30000.0};
-  char survey_names[1][100] = {"DSA_allsky"};
+  char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc
   // 1 if single component
   int one = 1;
   // We do not sample survey area any more, just scale that!
@@ -603,7 +603,7 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
-  char dndz[1][100] = {"zdistris/zdistri_DSA_allsky"};
+  char dndz[1][100] = {"zdistris/zdistri_SKA_WL"};
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // Six shape noise scenarios
   // Note that we do not include correlation between shape noise and target 

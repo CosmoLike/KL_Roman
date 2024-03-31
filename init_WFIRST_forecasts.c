@@ -1641,3 +1641,71 @@ void set_shear_priors_DSA_allsky()
   }
   like.shearcalib=1;
 }
+
+// Full SKA configuration
+void set_survey_parameters_to_SKA_WL()
+{
+  // Harrison et al. 2016 Table 1
+  survey.area   = 30000.0;
+  survey.n_gal  = 10;
+  survey.sigma_e  = 0.3;
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor = 1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim = 24.5;
+  sprintf(survey.name,"SKA_WL");
+}
+void set_wlphotoz_SKA_WL()
+{
+  int i;
+  printf("\n");
+  printf("Source sample: SKA WL spec-z uncertainty initialized\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    nuisance.bias_zphot_shear[i]=0.0;
+    nuisance.sigma_zphot_shear[i]=0.0005; 
+    printf("nuisance.bias_zphot_shear[%d]=%le\n",i,nuisance.bias_zphot_shear[i]);
+    printf("nuisance.sigma_zphot_shear[%d]=%le\n",i,nuisance.sigma_zphot_shear[i]);
+    // center of Gaussian priors: copy from DESI-II
+    prior.bias_zphot_shear[i][0]=nuisance.bias_zphot_shear[i];
+    prior.sigma_zphot_shear[i][0]=nuisance.sigma_zphot_shear[i];
+    // rms width of Gaussian priors: randomly pick a number
+    prior.bias_zphot_shear[i][1] = 0.0001;
+    prior.sigma_zphot_shear[i][1]= 0.0001;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_shear[i][0],prior.bias_zphot_shear[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_shear[i][0],prior.sigma_zphot_shear[i][1]); 
+  }
+  like.wlphotoz=1;
+}
+void set_clphotoz_SKA_WL()
+{
+  // copy from DESI-II
+  int i;
+  printf("\n");
+  printf("Lens sample: SKA WL spec-z uncertainty initialized\n");
+  for (i=0;i<tomo.clustering_Nbin; i++){
+    nuisance.bias_zphot_clustering[i]=0.0;
+    nuisance.sigma_zphot_clustering[i]=0.0005; 
+    printf("nuisance.bias_zphot_clustering[%d]=%le\n",i,nuisance.bias_zphot_clustering[i]);
+    printf("nuisance.sigma_zphot_clustering[%d]=%le\n",i,nuisance.sigma_zphot_clustering[i]);
+    // center of Gaussian priors
+    prior.bias_zphot_clustering[i][0]=nuisance.bias_zphot_clustering[i];
+    prior.sigma_zphot_clustering[i][0]=nuisance.sigma_zphot_clustering[i];
+    // rms width of Gaussian priors
+    prior.bias_zphot_clustering[i][1] = 0.0001;
+    prior.sigma_zphot_clustering[i][1]= 0.0001;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n",prior.bias_zphot_clustering[i][0],prior.bias_zphot_clustering[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n",prior.sigma_zphot_clustering[i][0],prior.sigma_zphot_clustering[i][1]); 
+  }
+  like.clphotoz=1;
+}
+void set_shear_priors_SKA_WL() 
+{
+  // copy from DESI-II
+  int i;
+  printf("\nSetting Gaussian shear calibration Priors SKA WL\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    prior.shear_calibration_m[i][0] = 0.0;
+    prior.shear_calibration_m[i][1] = 0.0004;
+    printf("Mean=%le, Sigma=%le\n",prior.shear_calibration_m[i][0],prior.shear_calibration_m[i][1]);
+  }
+  like.shearcalib=1;
+}
