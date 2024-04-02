@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 1
+#define _COMPUTE_LIKELIHOOD_ 0
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -733,8 +733,8 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
   char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc.
-  int one = 1;                                      // enable sigal componenet
-  char dndz[1][100] = {"zdistris/zdistri_SKA_WL"};  // redshift distribution
+  int one = 0;                                   // enable sigal componenet
+  char dndz[1][100] = {"zdistris/zdistri_SKA"};  // redshift distribution
   int Ntomo_source = 1;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
@@ -768,24 +768,28 @@ int main(int argc, char** argv)
   // "dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",...
   init_bary(argv[4]);
   // This one is used for applying PCs reduced from a range of simulations
-  //sprintf(like.BARY_FILE,"%s","datav/WFIRST_shear_shear_opti_Ntomo10_Ncl20_sigmae0.37_ia");
-  //init = bary_read(0,1,1);
+  // sprintf(like.BARY_FILE,"%s","datav/WFIRST_shear_shear_opti_Ntomo10_Ncl20_sigmae0.37_ia");
+  // init = bary_read(0,1,1);
 
   init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, 
     Rmin_bias, Ntomo_source, Ntomo_lens);
-  //init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
+  // init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
   char _photoz_prior[100];
   char _shearm_prior[100];
   sprintf(_photoz_prior, "spec_%s", strat);
   sprintf(_shearm_prior, "shear_%s", strat);
   init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-    false, 3.0, 1.2, 3.8, 2.0, false, 16, 1.9, 0.7);
+    // IA_flag, A, beta, eta, etaZ
+    true, 3.0, 1.2, 3.8, 2.0,
+    // bary_flag, Q1, Q2, Q3 
+    false, 16, 1.9, 0.7);
   init_survey(strat);
+
   // customize shape noise here
-  //survey.sigma_e = shape_noise_rms[i_SN];
+  // survey.sigma_e = shape_noise_rms[i_SN];
   init_galaxies(dndz[i_Selection], 
       "zdistris/lens_LSSTY1", 
-      "gaussian", "gaussian", "SN10");// the last arg is lens sample
+      "gaussian", "gaussian", "SN10"); // the last arg is lens sample
   
   #if _WRITE_NZ_TOMO_ == 1
     // write redshift boundary of each tomo bin
@@ -804,7 +808,7 @@ int main(int argc, char** argv)
   #endif
 
   init_clusters();
-  init_IA("none", "GAMA");
+  init_IA("NLA_HF", "GAMA");    // KL assumes no IA; WL assumes NLA_HF
   init_probes(argv[3]);
   
   /* compute fiducial data vector */

@@ -581,7 +581,7 @@ int main(int argc, char** argv)
   double survey_area[1] = {30000.0};
   char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc
   // 1 if single component
-  int one = 1;
+  int one = 0;
   // We do not sample survey area any more, just scale that!
   //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
   //printf("%d survey area scenarios\n", N_scenarios_area);
@@ -603,7 +603,7 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
-  char dndz[1][100] = {"zdistris/zdistri_SKA_WL"};
+  char dndz[1][100] = {"zdistris/zdistri_SKA"};
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // Six shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
@@ -673,7 +673,10 @@ int main(int argc, char** argv)
     sprintf(_photoz_prior, "spec_%s", survey_names[i_selection]);
     sprintf(_shearm_prior, "shear_%s", survey_names[i_selection]);
     init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-      false, 3.0, 1.2, 3.8, 2.0, false, 16, 1.9, 0.7);
+      // IA_flag, A, beta, eta, etaZ
+      true, 3.0, 1.2, 3.8, 2.0, 
+      // bary_flag, Q1, Q2, Q3
+      false, 16, 1.9, 0.7);
     init_survey(_surveyname);
     // init survey name, area, n_gal, shape noise, magnitude limit, K-correction
     //sprintf(survey.name, "%s_%d%d", "DESI2_KL_v2", i_selection, i_shape_noise);
@@ -684,8 +687,8 @@ int main(int argc, char** argv)
     init_galaxies(dndz[i_selection], 
       "zdistris/lens_LSSTY1", 
       "gaussian", "gaussian", "SN10");// the last arg is lens sample
-    init_clusters(); // not used if we don't have clusters
-    init_IA("none", "GAMA");// KL assumes no IA; WL assumes NLA_HF
+    init_clusters();                  // not used if we don't have clusters
+    init_IA("NLA_HF", "GAMA");          // KL assumes no IA; WL assumes NLA_HF
     init_probes("shear_shear");
     // sprintf(covparams.outdir, 
     //   "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");
