@@ -735,7 +735,7 @@ int main(int argc, char** argv)
   char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc.
   int one = 0;                                   // enable sigal componenet
   char dndz[1][100] = {"zdistris/zdistri_SKA"};  // redshift distribution
-  int Ntomo_source = 1;
+  int Ntomo_source = 10;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
   // detailed settings are stored in `set_survey_parameters_to_DESI2_KL()`

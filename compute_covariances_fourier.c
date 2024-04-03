@@ -589,7 +589,7 @@ int main(int argc, char** argv)
   int N_scenarios_selection = 1;
   // Start with 4 source tomo bins 
   //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
-  int Ntomo_source[1] = {1};
+  int Ntomo_source[1] = {10};
   // example, zdistris/zdistri_WFIRST_grism_norm
   // char dndz[6][100] = {
   //   //"zdistris/zdistri_DESI2_KL_sample1",
