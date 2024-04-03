@@ -42,6 +42,8 @@ void set_wlphotoz_LSST_Y10();
 void set_clphotoz_LSST_Y10();
 void set_wlphotoz_DSA_allsky();
 void set_clphotoz_DSA_allsky();
+void set_wlphotoz_SKA_WL();
+void set_clphotoz_SKA_WL();
 
 void set_shear_priors_WFIRST_KL();
 void set_shear_priors_DESI2_KL();
@@ -50,6 +52,7 @@ void set_shear_priors_WFIRST_pessi();
 void set_shear_priors_LSST_Y1();
 void set_shear_priors_LSST_Y10();
 void set_shear_priors_DSA_allsky();
+void set_shear_priors_SKA_WL();
 
 void set_survey_parameters_to_WFIRST_WL();
 void set_survey_parameters_to_WFIRST_KL();
@@ -57,6 +60,7 @@ void set_survey_parameters_to_DESI2_KL(char *surveyname);
 void set_survey_parameters_to_LSST_Y1();
 void set_survey_parameters_to_LSST_Y10();
 void set_survey_parameters_to_DSA_allsky();
+void set_survey_parameters_to_SKA_WL();
 
 void init_clusterMobs();
 void set_equal_tomo_bins();
