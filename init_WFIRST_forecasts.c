@@ -1683,7 +1683,7 @@ void set_wlphotoz_SKA_WL()
   printf("Source sample: SKA WL spec-z uncertainty initialized\n");
   for (i=0;i<tomo.shear_Nbin; i++){
     // Harrison et al. 2016, Table 1
-    if (tomo.shar_zmax[i]>2.0){
+    if (tomo.shear_zmax[i]>2.0){
       nuisance.bias_zphot_shear[i]=0.0;
       nuisance.sigma_zphot_shear[i]=0.3;         
       // rms width of Gaussian priors: 1/5 of the nuisance
