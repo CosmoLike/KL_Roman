@@ -844,16 +844,14 @@ int main(int argc, char** argv)
   #if _COMPUTE_LIKELIHOOD_ == 1
   
   if (one=1) {
-    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/
-    %s_ssss_invcov_Ncl%d_Ntomo%d_OneComp", survey_names[0], Nell, Ntomo_source)
-    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OmeComp",
-    survey_names[0], argv[3], Ntomo_source, Nell, argv[4])
+    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov%s_ssss_invcov_Ncl%d_Ntomo%d_OneComp", survey_names[0], Nell, Ntomo_source)
+    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OmeComp", survey_names[0], argv[3], Ntomo_source, Nell, argv[4])
   }
   else {
     sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d",
-      survey_names[0], Nell, Ntomo_source)
-    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s",
-      survey_names[0], argv[3], Ntomo_source, Nell, argv[4])
+    survey_names[0], Nell, Ntomo_source)
+    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s", 
+    survey_names[0], argv[3], Ntomo_source, Nell, argv[4])
   }
   init_data_inv(incov_filename, datav_filename)
   // init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
