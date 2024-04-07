@@ -16,22 +16,30 @@ import numpy as np
 # infile_fmt = "LSST_Y%d_ssss_cov_Ncl15_Ntomo10"
 # outfile_fmt = "LSST_Y%d_ssss_invcov_Ncl15_Ntomo10"
 DATA_DIR = '../../dsa/'
+'''
+### DSA-2000
 infile_fmt = "DSA_allsky_ssss_cov_Ncl15_Ntomo1_OneComp"
 outfile_fmt = "DSA_allsky_ssss_invcov_Ncl15_Ntomo1_OneComp"
 Ncl = 15
 Area_list = [30000]
 N_area = 1
-#N_selection = 6
 N_selection = 1
-#years = [1, 10]
-#N_tomo_list = [4, 4, 4, 4, 4, 4]
 N_tomo_list = [1]
-#Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])*3600
 Nsrc_list = np.array([0.0459])*3600
-#N_shape_noise = 6
 N_shape_noise = 1
-#SN_list = [0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 0.10*1.4142, 0.20*1.4142, 0.30*1.4142]
 SN_list = [0.05]
+'''
+### SKA
+infile_fmt = "SKA_WL_ssss_cov_Ncl15_Ntomo10"
+outfile_fmt = "SKA_WL_ssss_invcov_Ncl15_Ntomo10"
+Ncl = 15
+Area_list = [30000]
+N_area = 1
+N_selection = 1
+N_tomo_list = [10]
+Nsrc_list = np.array([10.])*3600
+N_shape_noise = 1
+SN_list = [0.3]
 plot_corrmat = True
 
 for iArea in range(N_area):
