@@ -1,5 +1,5 @@
 #!/bin/bash 
-#SBATCH --job-name=DSA_KL_cn
+#SBATCH --job-name=SKA_KL_cn
 ##SBATCH --output=log/cnSKA_KL-%A_%a.out
 #SBATCH --error=log/cnSKA_KL-%A_%a.err
 #SBATCH --nodes=1
@@ -38,5 +38,5 @@ conda activate forecast
 export MPI_DSM_DISTRIBUTE
 date
 #/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_opti.py
-/usr/bin/time mpiexec -n 400 python runSKA_shear_shear_sys_KL.py #${iSELECT} ${iSN}
+/usr/bin/time mpiexec -n 400 python runSKA_shear_shear_sys_WL.py #${iSELECT} ${iSN}
 date
