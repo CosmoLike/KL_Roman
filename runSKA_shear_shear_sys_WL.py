@@ -63,7 +63,7 @@ initdatainv(cov_file ,data_file)
 
 # only sample two parameters
 sample_params = ['omega_m','sigma_8']
-sample_main(sample_params, 5000, 400, 1, chain_file+"_1000", blind=False, pool=MPIPool(), KL=True, one=one)
+sample_main(sample_params, 5000, 400, 1, chain_file+"_5000", blind=False, pool=MPIPool(), KL=True, one=one)
 # sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
 # sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
 
