@@ -424,7 +424,8 @@ class InputNuisanceParams(IterableStruct):
     @classmethod
     def fiducial(cls):
         c = cls()
-        c.bias[:] = [1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2]
+        # c.bias[:] = [1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2] 
+        c.bias[:] = [1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75]
         c.source_z_bias[:] = np.repeat(0.0, 10)
         c.source_z_s = 0.01
         c.lens_z_bias[:] = np.repeat(0.0, 10)
