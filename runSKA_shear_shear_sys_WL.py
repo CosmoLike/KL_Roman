@@ -20,9 +20,10 @@ Ncl = 15
 ell_min, ell_max, ell_max_shear = 20.0, 3000.0, 3000.0
 Rmin_bias = 21.0
 strat = "SKA_WL"
-one = False # one component
-#external_prior = "Planck15_BAO_H070p6_JLA_w0wa" # default: "none"
-external_prior = "none"
+
+## external prior, e.g. "Planck15_BAO_H070p6_JLA_w0wa"
+## default is "none"
+external_prior = "none"    
 
 #sigmae_list = np.array([0.02, 0.04, 0.06, 0.10, 0.20, 0.30])*np.sqrt(2)
 #Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])
@@ -31,7 +32,17 @@ nz_lens_file = "zdistris/lens_LSSTY1"
 data_vector_file = "datav/SKA_WL_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/SKA_WL_ssss_invcov_Ncl%d_Ntomo%d"
 chain_output_file = "chains/SKA_WL_LCDM_ss_Ncl%d_Ntomo%d"
+
+## flag
 DE_FLAG = False
+KL_FLAG = False     # true if perform KL forecast
+one = False         # one component
+
+## mcmc setting
+nsteps = 5000
+nwalkers = 400
+nthreads = 1
+
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files)
 file_lens_z = os.path.join(dirname, nz_lens_file)
@@ -63,7 +74,7 @@ initdatainv(cov_file ,data_file)
 
 # only sample two parameters
 sample_params = ['omega_m','sigma_8']
-sample_main(sample_params, 5000, 400, 1, chain_file+"_5000", blind=False, pool=MPIPool(), KL=False, one=one)
+sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one)
 # sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
 # sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
 
