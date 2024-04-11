@@ -775,6 +775,8 @@ void init_probes(char *probes)
     like.shear_shear = 1;
     printf("Initializing: kk, ks, ss\n");
   }
+  printf("check\n");
+  printf("%d",like.Ndata);
   printf("Total number of data points like.Ndata=%d\n",like.Ndata);
 }
 
