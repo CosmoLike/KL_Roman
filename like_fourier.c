@@ -844,7 +844,7 @@ int main(int argc, char** argv)
   #if _COMPUTE_LIKELIHOOD_ == 1
   
   if (one=1) {
-    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov%s_ssss_invcov_Ncl%d_Ntomo%d_OneComp", survey_names[0], Nell, Ntomo_source);
+    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d_OneComp", survey_names[0], Nell, Ntomo_source);
     sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OmeComp", survey_names[0], argv[3], Ntomo_source, Nell, argv[4]);
   }
   else {
