@@ -809,8 +809,8 @@ int main(int argc, char** argv)
 
   init_clusters();
   init_IA("NLA_HF", "GAMA");    // KL assumes no IA; WL assumes NLA_HF
-  init_probes(argv[3]);
   printf("read files\n");
+  init_probes(argv[3]);
   /* compute fiducial data vector */
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21
   // NOTE: different target selections have different data vectors
