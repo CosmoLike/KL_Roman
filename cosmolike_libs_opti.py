@@ -779,7 +779,7 @@ def sample_cosmology_SN_WFIRST():
 
     return varied_parameters
 
-def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blind=False, pool=None, KL=False, one=False):
+def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blind=False, pool=None, KL=False, one=False, save=False):
     print varied_parameters
 
     ### Choose your cosmology: Fiducial or DEu/l95CPL?
@@ -848,6 +848,17 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
             f.write('%s %e\n' % (p_text,logl))
         f.flush()
     f.close()
+    
+    if save:
+        save_filename = filename+"_state.pickle"
+        save_file = open(save_filename, 'wb')
+        if save_file:
+            print "Save random state..."
+        else:
+            print "fail to open %s"%save_filename
+        import pickle
+        pickle.dump(state, save_file)
+        
     
     pool.close()
 
