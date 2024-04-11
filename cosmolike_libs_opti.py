@@ -859,6 +859,9 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
         import pickle
         pickle.dump(state, save_file)
         
+        save_filename = filename+"_pos.npy"
+        np.save(save_file, p)
+        
     
     pool.close()
 
