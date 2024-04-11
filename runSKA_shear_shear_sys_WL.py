@@ -39,7 +39,7 @@ KL_FLAG = False     # true if perform KL forecast
 one = False         # one component
 
 ## mcmc setting
-nsteps = 5000
+nsteps = 1000
 nwalkers = 400
 nthreads = 1
 
@@ -74,7 +74,7 @@ initdatainv(cov_file ,data_file)
 
 # only sample two parameters
 sample_params = ['omega_m','sigma_8']
-sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one)
+sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d_test"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one)
 # sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
 # sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
 
