@@ -1,7 +1,7 @@
 #!/bin/bash 
-#SBATCH --job-name=SKA_KL_cn
-#SBATCH --output=log/cnSKA_KL-%A_%a.out
-#SBATCH --error=log/cnSKA_KL-%A_%a.err
+#SBATCH --job-name=SKA_WL_cn
+#SBATCH --output=log/cnSKA_WL-%A_%a.out
+#SBATCH --error=log/cnSKA_WL-%A_%a.err
 #SBATCH --nodes=1
 #SBATCH --array=1-18
 #SBATCH --ntasks-per-node=80
