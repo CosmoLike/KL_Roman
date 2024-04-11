@@ -809,7 +809,7 @@ int main(int argc, char** argv)
 
   init_clusters();
   init_IA("NLA_HF", "GAMA");    // KL assumes no IA; WL assumes NLA_HF
-  init_probes(argv[3]);
+  // init_probes(argv[3]);
   /* compute fiducial data vector */
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21
   // NOTE: different target selections have different data vectors
@@ -847,12 +847,10 @@ int main(int argc, char** argv)
     sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OmeComp", survey_names[0], argv[3], Ntomo_source, Nell, argv[4]);
   }
   else {
-    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d",
-    survey_names[0], Nell, Ntomo_source);
-    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s", 
-    survey_names[0], argv[3], Ntomo_source, Nell, argv[4]);
+    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d" survey_names[0], Nell, Ntomo_source);
+    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s", survey_names[0], argv[3], Ntomo_source, Nell, argv[4]);
   }
-  
+  printf('read files\n');
   init_data_inv(incov_filename, datav_filename);
   // init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
   //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo_test",
