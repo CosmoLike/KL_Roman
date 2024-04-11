@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 0
+#define _COMPUTE_LIKELIHOOD_ 1
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -853,6 +853,7 @@ int main(int argc, char** argv)
     sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s", 
     survey_names[0], argv[3], Ntomo_source, Nell, argv[4]);
   }
+  printf("read files\n");
   init_data_inv(incov_filename, datav_filename);
   // init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
   //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo_test",
