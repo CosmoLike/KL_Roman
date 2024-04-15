@@ -1682,21 +1682,26 @@ void set_wlphotoz_SKA_WL()
   printf("\n");
   printf("Source sample: SKA WL spec-z uncertainty initialized\n");
   for (i=0;i<tomo.shear_Nbin; i++){
+    nuisance.bias_zphot_shear[i]=0.0;
+    nuisance.sigma_zphot_shear[i]=0.3;         
+    // rms width of Gaussian priors: 1/5 of the nuisance
+    prior.bias_zphot_shear[i][1] = 0.06;
+    prior.sigma_zphot_shear[i][1]= 0.06;
     // Harrison et al. 2016, Table 1
-    if (tomo.shear_zmax[i]>2.0){
-      nuisance.bias_zphot_shear[i]=0.0;
-      nuisance.sigma_zphot_shear[i]=0.3;         
-      // rms width of Gaussian priors: 1/5 of the nuisance
-      prior.bias_zphot_shear[i][1] = 0.06;
-      prior.sigma_zphot_shear[i][1]= 0.06;
-    }
-    else {
-      nuisance.bias_zphot_shear[i]=0.0;
-      nuisance.sigma_zphot_shear[i]=0.03;         
-      // rms width of Gaussian priors: 1/5 of the nuisance
-      prior.bias_zphot_shear[i][1] = 0.006;
-      prior.sigma_zphot_shear[i][1]= 0.006;
-    }      
+    // if (tomo.shear_zmax[i]>2.0){
+    //   nuisance.bias_zphot_shear[i]=0.0;
+    //   nuisance.sigma_zphot_shear[i]=0.3;         
+    //   // rms width of Gaussian priors: 1/5 of the nuisance
+    //   prior.bias_zphot_shear[i][1] = 0.06;
+    //   prior.sigma_zphot_shear[i][1]= 0.06;
+    // }
+    // else {
+    //   nuisance.bias_zphot_shear[i]=0.0;
+    //   nuisance.sigma_zphot_shear[i]=0.03;         
+    //   // rms width of Gaussian priors: 1/5 of the nuisance
+    //   prior.bias_zphot_shear[i][1] = 0.006;
+    //   prior.sigma_zphot_shear[i][1]= 0.006;
+    // }      
     printf("nuisance.bias_zphot_shear[%d]=%le\n",i,nuisance.bias_zphot_shear[i]);
     printf("nuisance.sigma_zphot_shear[%d]=%le\n",i,nuisance.sigma_zphot_shear[i]);
     // center of Gaussian priors
@@ -1713,21 +1718,26 @@ void set_clphotoz_SKA_WL()
   printf("\n");
   printf("Lens sample: SKA WL spec-z uncertainty initialized\n");
   for (i=0;i<tomo.clustering_Nbin; i++){
+    nuisance.bias_zphot_clustering[i]=0.0;
+    nuisance.sigma_zphot_clustering[i]=0.3; 
+    // rms width of Gaussian priors: 1/5 of the nuisance
+    prior.bias_zphot_clustering[i][1] = 0.06;
+    prior.sigma_zphot_clustering[i][1]= 0.06;
     // Harrison et al. 2016, Table 1
-    if (tomo.cluster_zmax[i]>2.0){
-      nuisance.bias_zphot_clustering[i]=0.0;
-      nuisance.sigma_zphot_clustering[i]=0.3; 
-      // rms width of Gaussian priors: 1/5 of the nuisance
-      prior.bias_zphot_clustering[i][1] = 0.06;
-      prior.sigma_zphot_clustering[i][1]= 0.06;
-    }
-    else {
-      nuisance.bias_zphot_clustering[i]=0.0;
-      nuisance.sigma_zphot_clustering[i]=0.03; 
-      // rms width of Gaussian priors: 1/5 of the nuisance
-      prior.bias_zphot_clustering[i][1] = 0.006;
-      prior.sigma_zphot_clustering[i][1]= 0.006;
-    }
+    // if (tomo.cluster_zmax[i]>2.0){
+    //   nuisance.bias_zphot_clustering[i]=0.0;
+    //   nuisance.sigma_zphot_clustering[i]=0.3; 
+    //   // rms width of Gaussian priors: 1/5 of the nuisance
+    //   prior.bias_zphot_clustering[i][1] = 0.06;
+    //   prior.sigma_zphot_clustering[i][1]= 0.06;
+    // }
+    // else {
+    //   nuisance.bias_zphot_clustering[i]=0.0;
+    //   nuisance.sigma_zphot_clustering[i]=0.03; 
+    //   // rms width of Gaussian priors: 1/5 of the nuisance
+    //   prior.bias_zphot_clustering[i][1] = 0.006;
+    //   prior.sigma_zphot_clustering[i][1]= 0.006;
+    // }
     printf("nuisance.bias_zphot_clustering[%d]=%le\n",i,nuisance.bias_zphot_clustering[i]);
     printf("nuisance.sigma_zphot_clustering[%d]=%le\n",i,nuisance.sigma_zphot_clustering[i]);
     // center of Gaussian priors

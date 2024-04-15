@@ -427,9 +427,9 @@ class InputNuisanceParams(IterableStruct):
         # c.bias[:] = [1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2] 
         c.bias[:] = [1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75]
         c.source_z_bias[:] = np.repeat(0.0, 10)
-        c.source_z_s = 0.01
+        c.source_z_s = 0.3
         c.lens_z_bias[:] = np.repeat(0.0, 10)
-        c.lens_z_s = 0.01
+        c.lens_z_s = 0.3
         c.shear_m[:] = np.repeat(0.0, 10)
         c.A_ia = 5.92# 5.95 from Eifler et. al. 2020
         c.beta_ia = 1.1# 1.1
@@ -466,9 +466,9 @@ class InputNuisanceParams(IterableStruct):
         c = cls()
         c.bias[:] = np.repeat(0.15, 10)
         c.source_z_bias[:] = np.repeat(0.005, 10)
-        c.source_z_s = 0.002
+        c.source_z_s = 0.06
         c.lens_z_bias[:] = np.repeat(0.005, 10)
-        c.lens_z_s = 0.002
+        c.lens_z_s = 0.06
         c.shear_m[:] = np.repeat(0.005, 10)
         c.A_ia = 0.05
         c.beta_ia = 0.01

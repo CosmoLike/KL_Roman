@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 1
+#define _COMPUTE_LIKELIHOOD_ 0
 #define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -823,9 +823,9 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.3,
     // lens galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.3,
     // additive shear calibration bias[0-9]
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
     // IA: A_ia, beta_ia, eta_ia, eta_ia_highz
@@ -862,10 +862,10 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.3,
     // 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
     // lens galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.002,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.3,
     // 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
     // additive shear calibration bias[0-9]
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
