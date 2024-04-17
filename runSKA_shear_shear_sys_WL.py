@@ -37,6 +37,7 @@ chain_output_file = "chains/SKA_WL_LCDM_ss_Ncl%d_Ntomo%d"
 DE_FLAG = False
 KL_FLAG = False     # true if perform KL forecast
 one = False         # one component
+photoz_flag = True  # enable different sigma_photoz senario
 
 ## mcmc setting
 nsteps = 1000
@@ -63,7 +64,7 @@ initprobes("shear_shear")
 initdatainv(cov_file ,data_file)
 
 # sample_params=sample_LCDM_only()
-#sample_params= sample_cosmology_only()
+sample_params= sample_cosmology_only()
 
 # Fix Q3, not constraining that
 #sample_params += ['bary_%d'%i for i in xrange(2)]
@@ -73,8 +74,9 @@ initdatainv(cov_file ,data_file)
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
 
 # only sample two parameters
-sample_params = ['omega_m','sigma_8']
-sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d_test"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one)
+# sample_params = ['omega_m','sigma_8']
+
+sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d_test"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one, photoz_flag=photoz_flag)
 # sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
 # sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
 

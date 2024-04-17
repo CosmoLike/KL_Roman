@@ -427,9 +427,9 @@ class InputNuisanceParams(IterableStruct):
         # c.bias[:] = [1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2] 
         c.bias[:] = [1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75]
         c.source_z_bias[:] = np.repeat(0.0, 10)
-        c.source_z_s = 0.3
+        c.source_z_s = 0.03
         c.lens_z_bias[:] = np.repeat(0.0, 10)
-        c.lens_z_s = 0.3
+        c.lens_z_s = 0.03
         c.shear_m[:] = np.repeat(0.0, 10)
         c.A_ia = 5.92# 5.95 from Eifler et. al. 2020
         c.beta_ia = 1.1# 1.1
@@ -466,9 +466,9 @@ class InputNuisanceParams(IterableStruct):
         c = cls()
         c.bias[:] = np.repeat(0.15, 10)
         c.source_z_bias[:] = np.repeat(0.005, 10)
-        c.source_z_s = 0.06
+        c.source_z_s = 0.006
         c.lens_z_bias[:] = np.repeat(0.005, 10)
-        c.lens_z_s = 0.06
+        c.lens_z_s = 0.006
         c.shear_m[:] = np.repeat(0.005, 10)
         c.A_ia = 0.05
         c.beta_ia = 0.01
@@ -533,18 +533,15 @@ class InputNuisanceParamsGRS(IterableStruct):
         return c
 
 class LikelihoodFunctionWrapper(object):
-    def __init__(self, varied_parameters, KL=False, one=False):
+    def __init__(self, varied_parameters, KL=False, one=False, photoz_flag=False):
         self.varied_parameters = varied_parameters
         if KL:
             self.KL_flag = True
         else:
             self.KL_flag = False
         
-        if one:
-            self.one = True
-        else:
-            self.one = False
-
+        self.one = one
+        self.photoz_flag = photoz_flag
 
     def fill_varied(self, icp, inp, inpgrs, x):
         assert len(x) == len(self.varied_parameters), "Wrong number of parameters"
@@ -582,17 +579,15 @@ class LikelihoodFunctionWrapper(object):
         #inp.print_struct()
         #inpgrs.print_struct()
         #print
-        if self.one:
-            like = lib.log_like_wrapper(icp, inp, inpgrs, 1)
-        else:
-            like = lib.log_like_wrapper(icp, inp, inpgrs, 0)
+        like = lib.log_like_wrapper(icp, inp, inpgrs, self.one, self.photoz_flag)
+        
         #print "like before" , like
         if like < -1.0e+14:
             return -np.inf
         return like
 
 
-lib.log_like_wrapper.argtypes = [InputCosmologyParams, InputNuisanceParams, InputNuisanceParamsGRS, ctypes.c_int]
+lib.log_like_wrapper.argtypes = [InputCosmologyParams, InputNuisanceParams, InputNuisanceParamsGRS, ctypes.c_int, ctypes.c_int]
 lib.log_like_wrapper.restype = double
 log_like_wrapper = lib.log_like_wrapper
 
@@ -779,7 +774,7 @@ def sample_cosmology_SN_WFIRST():
 
     return varied_parameters
 
-def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blind=False, pool=None, KL=False, one=False, save=False):
+def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blind=False, pool=None, KL=False, one=False, photoz_flag=False, save=False):
     print varied_parameters
 
     ### Choose your cosmology: Fiducial or DEu/l95CPL?
@@ -789,26 +784,27 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
 
     std = InputCosmologyParams.fiducial_sigma().convert_to_vector_filter(varied_parameters)
     #std += InputNuisanceParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
-
     ### Choose your nuisance: weak lensing or kinematic lensing?
     if KL:
         starting_point += InputNuisanceParams().fiducial_KL().convert_to_vector_filter(varied_parameters)
         starting_point += InputNuisanceParamsGRS().fiducial().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma_KL().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
-        if one:
-            likelihood = LikelihoodFunctionWrapper(varied_parameters, KL=True, one=True)
-        else:
-            likelihood = LikelihoodFunctionWrapper(varied_parameters, KL=True)
+        likelihood = LikelihoodFunctionWrapper(varied_parameters, KL=True, one=one, photoz_flag=photoz_flag)
+        # if one:
+        #     likelihood = LikelihoodFunctionWrapper(varied_parameters, KL=True, one=True)
+        # else:
+        #     likelihood = LikelihoodFunctionWrapper(varied_parameters, KL=True)
     else:
         starting_point += InputNuisanceParams().fiducial().convert_to_vector_filter(varied_parameters)
         starting_point += InputNuisanceParamsGRS().fiducial().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParams().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
-        if one:
-            likelihood = LikelihoodFunctionWrapper(varied_parameters, one=True)
-        else:
-            likelihood = LikelihoodFunctionWrapper(varied_parameters)
+        likelihood = LikelihoodFunctionWrapper(varied_parameters, one=one, photoz_flag=photoz_flag)
+        # if one:
+        #     likelihood = LikelihoodFunctionWrapper(varied_parameters, one=True)
+        # else:
+        #     likelihood = LikelihoodFunctionWrapper(varied_parameters)
     
 
     p0 = emcee.utils.sample_ball(starting_point, std, size=nwalker)
