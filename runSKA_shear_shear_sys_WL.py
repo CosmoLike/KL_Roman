@@ -64,7 +64,7 @@ initprobes("shear_shear")
 initdatainv(cov_file ,data_file)
 
 # sample_params=sample_LCDM_only()
-sample_params= sample_cosmology_only()
+# sample_params= sample_cosmology_only()
 
 # Fix Q3, not constraining that
 #sample_params += ['bary_%d'%i for i in xrange(2)]
@@ -74,7 +74,7 @@ sample_params= sample_cosmology_only()
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
 
 # only sample two parameters
-# sample_params = ['omega_m','sigma_8']
+sample_params = ['omega_m','sigma_8']
 
 sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d_test"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one, photoz_flag=photoz_flag)
 # sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
