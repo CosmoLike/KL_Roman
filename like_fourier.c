@@ -887,7 +887,7 @@ int main(int argc, char** argv)
   #if _COMPUTE_DATAVECTOR_ == 1
   printf("like.IA = %d\n", like.IA);
   printf("like.baryons = %d\n", like.baryons);
-  compute_data_vector_SKA(argv[1],
+  compute_data_vector(argv[1],
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
     // 0.4,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
@@ -928,7 +928,7 @@ int main(int argc, char** argv)
   //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_dmo_test",
   //   "datav/LSST_Y1_shear_shear_Ntomo10_Ncl15_9sim.pca");
   begin = clock();
-  loglike=log_SKA_like(
+  loglike=log_multi_like(
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,
     // 0.4,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
