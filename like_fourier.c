@@ -333,7 +333,7 @@ int set_nuisance_clustering_photoz_limit(double CP1,double CP2,double CP3,double
   
   for (i=0;i<tomo.clustering_Nbin; i++){ 
     if (tomo.cluster_zmax[i]>_photoz_limit_) nuisance.sigma_zphot_clustering[i]=_sigma_photoz_limit_;
-    else enuisance.sigma_zphot_clustering[i]=CPS1;
+    else nuisance.sigma_zphot_clustering[i]=CPS1;
 
     if (nuisance.sigma_zphot_clustering[i]<0.0002) return 0;
   }
