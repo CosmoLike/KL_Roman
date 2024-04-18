@@ -3,7 +3,7 @@
 #SBATCH --output=log/cnSKA_WL-%A_%a.out
 #SBATCH --error=log/cnSKA_WL-%A_%a.err
 #SBATCH --nodes=1
-#SBATCH --array=1-10
+#SBATCH --array=1-12
 #SBATCH --ntasks-per-node=80
 #SBATCH --ntasks-per-socket=40
 #SBATCH --cpus-per-task=1
