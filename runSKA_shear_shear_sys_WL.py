@@ -2,7 +2,7 @@ import sys
 sys.path.append('/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST')
 
 from cosmolike_libs_opti import * 
-# from schwimmbad import MPIPool
+from schwimmbad import MPIPool
 # from argparse import ArgumentParser
 
 # parser = ArgumentParser()
@@ -53,19 +53,18 @@ chain_file = os.path.join(outdirname, chain_output_file%(Ncl, Ntomo_src))
 
 initcosmo("halofit")
 initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
-
-initsurvey(strat)
-initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
 initpriors_IA_bary("spec_SKA_WL", "shear_SKA_WL", "none", external_prior,
     True, 3.0, 1.2, 3.8, 2.0, 
     False, 16, 1.9, 0.7)
+initsurvey(strat)
+initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
 initclusters()
 initia("NLA_HF","GAMA")
 initprobes("shear_shear")
 initdatainv(cov_file ,data_file)
 
 # sample_params=sample_LCDM_only()
-# sample_params= sample_cosmology_onlxy()
+sample_params= sample_cosmology_only()
 
 # Fix Q3, not constraining that
 #sample_params += ['bary_%d'%i for i in xrange(2)]
@@ -78,7 +77,7 @@ initdatainv(cov_file ,data_file)
 # sample_params = ['omega_m','sigma_8']
 
 # The `sample_main` function is being called with several parameters:
-# sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one, photoz_flag=photoz_flag)
+sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one, photoz_flag=photoz_flag)
 # sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
 # sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
 
