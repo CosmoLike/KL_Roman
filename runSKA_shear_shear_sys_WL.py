@@ -53,14 +53,12 @@ chain_file = os.path.join(outdirname, chain_output_file%(Ncl, Ntomo_src))
 
 initcosmo("halofit")
 initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
-print "PHOTOZ %f %f"%(tomo.shear_zmax[0], tomo.shear_zmax[7])
+
+initsurvey(strat)
+initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
 initpriors_IA_bary("spec_SKA_WL", "shear_SKA_WL", "none", external_prior,
     True, 3.0, 1.2, 3.8, 2.0, 
     False, 16, 1.9, 0.7)
-print "PHOTOZ %f %f"%(tomo.shear_zmax[0], tomo.shear_zmax[7])
-initsurvey(strat)
-initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
-print "PHOTOZ %f %f"%(tomo.shear_zmax[0], tomo.shear_zmax[7])
 initclusters()
 initia("NLA_HF","GAMA")
 initprobes("shear_shear")
