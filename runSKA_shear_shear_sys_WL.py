@@ -63,8 +63,8 @@ initia("NLA_HF","GAMA")
 initprobes("shear_shear")
 initdatainv(cov_file ,data_file)
 
-# sample_params=sample_LCDM_only()
-sample_params= sample_cosmology_only()
+sample_params=sample_LCDM_only()
+# sample_params= sample_cosmology_only()
 
 # Fix Q3, not constraining that
 #sample_params += ['bary_%d'%i for i in xrange(2)]
