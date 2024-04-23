@@ -9,6 +9,7 @@ like_fourier.so.dSYM/
 *.so
 
 chains/
+datav/
 
 *.pyc
 
