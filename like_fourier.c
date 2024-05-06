@@ -894,9 +894,9 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
     // lens galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
     // additive shear calibration bias[0-9]
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
     // IA: A_ia, beta_ia, eta_ia, eta_ia_highz
@@ -917,7 +917,7 @@ int main(int argc, char** argv)
 
   if (one==1) {
     sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d_OneComp", survey_names[0], Nell, Ntomo_source);
-    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OmeComp", survey_names[0], argv[3], Ntomo_source, Nell, argv[4]);
+    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OneComp", survey_names[0], argv[3], Ntomo_source, Nell, argv[4]);
   }
   else {
     sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d", survey_names[0], Nell, Ntomo_source);
@@ -935,10 +935,10 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
     // 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
     // lens galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
     // 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
     // additive shear calibration bias[0-9]
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
@@ -964,7 +964,7 @@ int main(int argc, char** argv)
     // photo-z limit
     photoz_flag
     );
-  printf("%le\n",loglike);
+  printf("%.le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
   end = clock();
