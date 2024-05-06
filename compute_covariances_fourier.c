@@ -579,9 +579,9 @@ int main(int argc, char** argv)
   //double survey_area = 14000.0;
   int N_scenarios_area = 1;
   double survey_area[1] = {30000.0};
-  char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc
+  char survey_names[1][100] = {"SKA_KL"}; // DSA_allsky, SKA_WL, etc
   // 1 if single component
-  int one = 0;
+  int one = 1;
   // We do not sample survey area any more, just scale that!
   //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
   //printf("%d survey area scenarios\n", N_scenarios_area);
@@ -603,7 +603,7 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
-  char dndz[1][100] = {"zdistris/zdistri_SKA"};
+  char dndz[1][100] = {"zdistris/zdistri_SKA_KL"};
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // Six shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
@@ -688,7 +688,7 @@ int main(int argc, char** argv)
       "zdistris/lens_LSSTY1", 
       "gaussian", "gaussian", "SN10");// the last arg is lens sample
     init_clusters();                  // not used if we don't have clusters
-    init_IA("NLA_HF", "GAMA");          // KL assumes no IA; WL assumes NLA_HF
+    init_IA("none", "GAMA");          // KL assumes no IA (none); WL assumes NLA_HF
     init_probes("shear_shear");
     // sprintf(covparams.outdir, 
     //   "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");

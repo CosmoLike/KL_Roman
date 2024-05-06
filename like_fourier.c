@@ -48,10 +48,10 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 1
+#define _COMPUTE_LIKELIHOOD_ 0
 #define _VERBOSE_ 0 
 
-#define _photoz_limit_ 2.0
+#define _photoz_limit_ 20.0     // set to a large number if not using
 #define _sigma_photoz_limit_ 0.3
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
@@ -802,10 +802,10 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
-  char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc.
-  int one = 0;                                   // enable sigal componenet
-  int photoz_flag = 1;                           // enable two photoz uncertainties
-  char dndz[1][100] = {"zdistris/zdistri_SKA"};  // redshift distribution
+  char survey_names[1][100] = {"SKA_KL"}; // DSA_allsky, SKA_WL, etc.
+  int one = 1;                                   // enable sigal componenet
+  int photoz_flag = 0;                           // enable two photoz uncertainties
+  char dndz[1][100] = {"zdistris/zdistri_SKA_KL"};  // redshift distribution
   int Ntomo_source = 10;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
@@ -879,7 +879,7 @@ int main(int argc, char** argv)
   #endif
 
   init_clusters();
-  init_IA("NLA_HF", "GAMA");    // KL assumes no IA; WL assumes NLA_HF
+  init_IA("none", "GAMA");    // KL assumes no IA (none); WL assumes NLA_HF
   init_probes(argv[3]);
   /* compute fiducial data vector */
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21
