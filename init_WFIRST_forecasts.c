@@ -334,6 +334,10 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
     set_wlphotoz_SKA_WL();
     set_clphotoz_SKA_WL();
   }
+  if(strcmp(Prior1,"spec_SKA_KL")==0){
+    set_wlphotoz_SKA_KL();
+    set_clphotoz_SKA_KL();
+  }
   // Initializing shear calibration priors
   if(strcmp(Prior2,"shear_opti")==0){
     set_shear_priors_WFIRST_opti();
@@ -358,6 +362,9 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
   }
   if(strcmp(Prior2,"shear_SKA_WL")==0){
     set_shear_priors_SKA_WL();
+  }
+  if(strcmp(Prior2,"shear_SKA_KL")==0){
+    set_shear_priors_SKA_KL();
   }
   if(strcmp(Prior3,"GRS")==0) like.GRS=1;
   // external probes
@@ -619,6 +626,7 @@ void init_survey(char *surveyname)
   if(strncmp(surveyname,"DESI2_KL",8)==0) set_survey_parameters_to_DESI2_KL(surveyname);
   if(strcmp(surveyname,"DSA_allsky")==0) set_survey_parameters_to_DSA_allsky();
   if(strcmp(surveyname,"SKA_WL")==0) set_survey_parameters_to_SKA_WL();
+  if(strcmp(surveyname,"SKA_KL")==0) set_survey_parameters_to_SKA_KL();
 
   printf("Survey set to %s\n",survey.name);
   printf("Survey area: %f deg^2\n",survey.area);
