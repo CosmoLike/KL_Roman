@@ -53,7 +53,7 @@ chain_file = os.path.join(outdirname, chain_output_file%(Ncl, Ntomo_src))
 
 initcosmo("halofit")
 initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
-initpriors_IA_bary("spec_SKA_WL", "shear_SKA_WL", "none", external_prior,
+initpriors_IA_bary("spec_SKA_KL", "shear_SKA_KL", "none", external_prior,
     False, 3.0, 1.2, 3.8, 2.0, 
     False, 16, 1.9, 0.7)
 initsurvey(strat)
