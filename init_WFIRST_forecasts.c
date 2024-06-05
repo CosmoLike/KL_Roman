@@ -1770,7 +1770,7 @@ void set_survey_parameters_to_SKA_KL()
 {
   // Harrison et al. 2016, Table 1
   survey.area   = 30000.0;
-  survey.n_gal  = 3.2157;
+  survey.n_gal  = 0.2116;
   survey.sigma_e  = 0.05;
   survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
   survey.n_gal_conversion_factor = 1.0/constants.arcmin/constants.arcmin;
