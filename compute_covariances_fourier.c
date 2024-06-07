@@ -589,7 +589,7 @@ int main(int argc, char** argv)
   int N_scenarios_selection = 1;
   // Start with 4 source tomo bins 
   //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
-  int Ntomo_source[1] = {10};
+  int Ntomo_source[1] = {4};
   // example, zdistris/zdistri_WFIRST_grism_norm
   // char dndz[6][100] = {
   //   //"zdistris/zdistri_DESI2_KL_sample1",
@@ -613,7 +613,7 @@ int main(int argc, char** argv)
   // Lens galaxies not used, set to random value
   float lens_density = 66.0;
   // Lens galaxies not used, set to random value
-  int Ntomo_lens = 10;
+  int Ntomo_lens = 4;
   double Rmin_bias = 21.0; // not used 
   // 15 ell bins in Fourier space, from 20 to 3000
   int Nell = 15;
