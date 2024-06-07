@@ -36,8 +36,13 @@ Ncl = 15
 Area_list = [30000]
 N_area = 1
 N_selection = 1
+<<<<<<< HEAD
 N_tomo_list = [1]
 Nsrc_list = np.array([3.2157])*3600
+=======
+N_tomo_list = [10]
+Nsrc_list = np.array([0.2116])*3600
+>>>>>>> refs/remotes/origin/dsa
 N_shape_noise = 1
 SN_list = [0.05]
 plot_corrmat = True
