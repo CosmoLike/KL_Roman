@@ -46,6 +46,7 @@
 #include "../cosmolike_core/theory/covariances_cluster.c"
 #include "init_WFIRST_forecasts.c"
 
+double cov_G_shear_shear_tomo_one(double l, double delta_l, int z1, int z2, int z3, int z4);
 void run_cov_N_N (char *OUTFILE, char *PATH, int nzc1, int nzc2,int start);
 void run_cov_cgl_N (char *OUTFILE, char *PATH, double *ell_Cluster, double *dell_Cluster,int N1, int nzc2, int start);
 void run_cov_cgl_cgl (char *OUTFILE, char *PATH, double *ell_Cluster, double *dell_Cluster,int N1, int N2, int start);
@@ -64,6 +65,22 @@ void run_cov_clustering(char *OUTFILE, char *PATH, double *ell, double *dell, in
 void run_cov_ggl(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 void run_cov_shear_shear_one(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
+
+double cov_G_shear_shear_tomo_one(double l, double delta_l, int z1, int z2, int z3, int z4){
+  double C13, C14, C23, C24, N13 =0, N14=0, N23=0, N24=0;
+  double fsky = survey.area/41253.0;
+  /* one component power spectra */
+  C13 = 0.25*C_shear_tomo_nointerp(l,z1,z3);C24 = 0.25*C_shear_tomo_nointerp(l,z2,z4);
+  C14 = 0.25*C_shear_tomo_nointerp(l,z1,z4);C23 = 0.25*C_shear_tomo_nointerp(l,z2,z3);
+
+  /* this is one component shot noise*/
+  if (z1 == z3){N13= pow(survey.sigma_e,2.0)/(nsource(z1)*survey.n_gal_conversion_factor);}
+  if (z1 == z4){N14= pow(survey.sigma_e,2.0)/(nsource(z1)*survey.n_gal_conversion_factor);}
+  if (z2 == z3){N23= pow(survey.sigma_e,2.0)/(nsource(z2)*survey.n_gal_conversion_factor);}
+  if (z2 == z4){N24=pow(survey.sigma_e,2.0)/(nsource(z2)*survey.n_gal_conversion_factor);}
+  
+  return (C13*C24+ C13*N24+N13*C24 + C14*C23+C14*N23+N14*C23+N13*N24+N14*N23)/((2.*l+1.)*delta_l*fsky);
+}
 
 void run_cov_N_N (char *OUTFILE, char *PATH, int nzc1, int nzc2,int start)
 {
@@ -555,7 +572,7 @@ void run_cov_shear_shear_one(char *OUTFILE, char *PATH, double *ell, double *del
       //   c_ng = cov_NG_shear_shear_tomo(ell[nl1],ell[nl2],z1,z2,z3,z4);
       // }
       if (nl1 == nl2){
-        c_g =  0.25*cov_G_shear_shear_tomo(ell[nl1],dell[nl1],z1,z2,z3,z4);
+        c_g =  cov_G_shear_shear_tomo_one(ell[nl1],dell[nl1],z1,z2,z3,z4);
         if (ell[nl1] > like.lmax_shear && n1!=n2){c_g = 0.;} 
       }         
       fprintf(F1,"%d %d %e %e %d %d %d %d %e %e\n",like.Ncl*n1+nl1,like.Ncl*(n2)+nl2,ell[nl1],ell[nl2],z1,z2,z3,z4,c_g,c_ng);
@@ -589,7 +606,7 @@ int main(int argc, char** argv)
   int N_scenarios_selection = 1;
   // Start with 4 source tomo bins 
   //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
-  int Ntomo_source[1] = {1};
+  int Ntomo_source[1] = {10};
   // example, zdistris/zdistri_WFIRST_grism_norm
   // char dndz[6][100] = {
   //   //"zdistris/zdistri_DESI2_KL_sample1",
@@ -613,7 +630,7 @@ int main(int argc, char** argv)
   // Lens galaxies not used, set to random value
   float lens_density = 66.0;
   // Lens galaxies not used, set to random value
-  int Ntomo_lens = 1;
+  int Ntomo_lens = 10;
   double Rmin_bias = 21.0; // not used 
   // 15 ell bins in Fourier space, from 20 to 3000
   int Nell = 15;
