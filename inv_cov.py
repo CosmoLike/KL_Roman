@@ -30,8 +30,8 @@ N_shape_noise = 1
 SN_list = [0.05]
 '''
 ### SKA
-infile_fmt = "SKA_KL_ssss_cov_Ncl15_Ntomo1_OneComp"
-outfile_fmt = "SKA_KL_ssss_invcov_Ncl15_Ntomo1_OneComp"
+infile_fmt = "SKA_KL_ssss_cov_Ncl15_Ntomo1"
+outfile_fmt = "SKA_KL_ssss_invcov_Ncl15_Ntomo1"
 Ncl = 15
 Area_list = [30000]
 N_area = 1
