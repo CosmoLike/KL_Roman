@@ -30,7 +30,7 @@ external_prior = "none"
 nz_src_files = "zdistris/zdistri_SKA_KL"
 nz_lens_file = "zdistris/lens_LSSTY1"
 data_vector_file = "datav/SKA_KL_shear_shear_Ntomo%d_Ncl%d_dmo_OneComp"
-invcovmat_file = "invcov/SKA_KL_ssss_invcov_Ncl%d_Ntomo%d"          # test if using two-component covariance matrix
+invcovmat_file = "invcov/SKA_KL_ssss_invcov_Ncl%d_Ntomo%d_OneComp"
 chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d_OneComp"
 
 ## flag
