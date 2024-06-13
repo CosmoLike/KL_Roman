@@ -30,13 +30,13 @@ N_shape_noise = 1
 SN_list = [0.05]
 '''
 ### SKA
-infile_fmt = "SKA_KL_ssss_cov_Ncl15_Ntomo10_OneComp"
-outfile_fmt = "SKA_KL_ssss_invcov_Ncl15_Ntomo10_OneComp"
+infile_fmt = "SKA_KL_ssss_cov_Ncl15_Ntomo1_OneComp"
+outfile_fmt = "SKA_KL_ssss_invcov_Ncl15_Ntomo1_OneComp"
 Ncl = 15
 Area_list = [30000]
 N_area = 1
 N_selection = 1
-N_tomo_list = [10]
+N_tomo_list = [1]
 Nsrc_list = np.array([0.2116])*3600
 N_shape_noise = 1
 SN_list = [0.05]
@@ -101,8 +101,8 @@ for iArea in range(N_area):
 			print("Eigvals range of covmat (%.3e, %.3e)"%(np.min(a), np.max(a)))
 			f = open(outname, 'w')
 			for i in range(0,nshear*ncl):
-			  	for j in range(0,nshear*ncl):
-			  		f.write("%d %d %e\n" %(i, j, inv[i,j]*mask[i]*mask[j]))
+    			for j in range(0,nshear*ncl):
+           			f.write("%d %d %e\n" %(i, j, inv[i,j]*mask[i]*mask[j]))
 			f.close()
 			'''	
 			# ############### invert clustering covariance #################
@@ -115,7 +115,7 @@ for iArea in range(N_area):
 			for i in range(0,nlens*ncl):
 				inv[i,i]=inv[i,i]*mask[(nshear+nggl)*ncl+i]
 				for j in range(0,nlens*ncl):
-			  		f.write("%d %d %e\n" %(i,j, inv[i,j]))
+					f.write("%d %d %e\n" %(i,j, inv[i,j]))
 			f.close()
 
 			# ############### invert 2pt covariance #################
@@ -127,8 +127,8 @@ for iArea in range(N_area):
 			f = open(outfile, "w")
 			for i in range(0,n2pt):
 				inv[i,i]=inv[i,i]*mask[i]
-			  	for j in range(0,n2pt):
-			  		f.write("%d %d %e\n" %( i,j, inv[i,j]))
+				for j in range(0,n2pt):
+					f.write("%d %d %e\n" %( i,j, inv[i,j]))
 			f.close()
 
 
