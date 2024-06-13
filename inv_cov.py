@@ -101,8 +101,8 @@ for iArea in range(N_area):
 			print("Eigvals range of covmat (%.3e, %.3e)"%(np.min(a), np.max(a)))
 			f = open(outname, 'w')
 			for i in range(0,nshear*ncl):
-    			for j in range(0,nshear*ncl):
-           			f.write("%d %d %e\n" %(i, j, inv[i,j]*mask[i]*mask[j]))
+                for j in range(0,nshear*ncl):
+                    f.write("%d %d %e\n" %(i, j, inv[i,j]*mask[i]*mask[j]))
 			f.close()
 			'''	
 			# ############### invert clustering covariance #################
