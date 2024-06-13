@@ -55,6 +55,7 @@
 #define _sigma_photoz_limit_ 0.3
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
+double C_shear_tomo_sys_one(double ell, int z1, int z2);
 double C_cgl_tomo_sys(double ell_Cluster,int zl,int nN, int zs);
 double C_gl_tomo_sys(double ell,int zl,int zs);
 void set_data_shear(int Ncl, double *ell, double *data, int start, int one);
@@ -103,6 +104,21 @@ double C_shear_tomo_sys(double ell, int z1, int z2)
 return C;
 }
 
+double C_shear_tomo_sys_one(double ell, int z1, int z2)
+{
+  double C;
+  // C= C_shear_tomo_nointerp(ell,z1,z2);
+  // if(like.IA==1) C+=C_II_nointerp(ell,z1,z2)+C_GI_nointerp(ell,z1,z2);
+  
+  if(like.IA!=1) C= 0.25*C_shear_tomo_nointerp(ell,z1,z2);
+  //if(like.IA==1) C= C_shear_shear_IA(ell,z1,z2);
+  // if(like.IA==1) C = C_shear_tomo_nointerp(ell,z1,z2)+C_II_nointerp(ell,z1,z2)+C_GI_nointerp(ell,z1,z2);
+  // if(like.IA==2) C += C_II_lin_nointerp(ell,z1,z2)+C_GI_lin_nointerp(ell,z1,z2);  
+  if(like.shearcalib==1) C *=(1.0+nuisance.shear_calibration_m[z1])*(1.0+nuisance.shear_calibration_m[z2]);
+  //printf("%le %d %d %le\n",ell,z1,z2,C_shear_tomo_nointerp(ell,z1,z2)+C_II_JB_nointerp(ell,z1,z2)+C_GI_JB_nointerp(ell,z1,z2));
+return C;
+}
+
 double C_gl_tomo_sys(double ell,int zl,int zs)
 {
   double C;
@@ -134,7 +150,7 @@ void set_data_shear(int Ncl, double *ell, double *data, int start, int one)
     for (i = 0; i < Ncl; i++){
       if (ell[i] < like.lmax_shear){ 
         if (one == 1) {
-          data[Ncl*nz+i] = 0.25*C_shear_tomo_sys(ell[i],z1,z2);
+          data[Ncl*nz+i] = C_shear_tomo_sys_one(ell[i],z1,z2);
         }
         else {
           data[Ncl*nz+i] = C_shear_tomo_sys(ell[i],z1,z2);
@@ -806,7 +822,7 @@ int main(int argc, char** argv)
   int one = 1;                                   // enable sigal componenet
   int photoz_flag = 0;                           // enable two photoz uncertainties
   char dndz[1][100] = {"zdistris/zdistri_SKA_KL"};  // redshift distribution
-  int Ntomo_source = 10;
+  int Ntomo_source = 1;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
   // detailed settings are stored in `set_survey_parameters_to_DESI2_KL()`
@@ -815,7 +831,7 @@ int main(int argc, char** argv)
   // Lens galaxies not used, set to random value
   double lens_density = 66.0;
   // Lens galaxies not used, set to random value
-  int Ntomo_lens = 10;
+  int Ntomo_lens = 1;
   double Rmin_bias = 21.0; // not used 
   // 15 ell bins in Fourier space, from 20 to 3000
   int Nell = 15;
