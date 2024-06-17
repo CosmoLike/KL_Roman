@@ -31,7 +31,8 @@ nz_src_files = "zdistris/zdistri_SKA_KL"
 nz_lens_file = "zdistris/lens_LSSTY1"
 data_vector_file = "datav/SKA_KL_shear_shear_Ntomo%d_Ncl%d_dmo_OneComp"
 invcovmat_file = "invcov/SKA_KL_ssss_invcov_Ncl%d_Ntomo%d_OneComp"
-chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d_OneComp"
+# chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d_OneComp"
+chain_output_file = "chains/SKA_KL_OmS8_ss_Ncl%d_Ntomo%d_OneComp"
 
 ## flag
 DE_FLAG = False
@@ -63,7 +64,7 @@ initia("none","GAMA")
 initprobes("shear_shear")
 initdatainv(cov_file ,data_file)
 
-sample_params=sample_LCDM_only()
+# sample_params=sample_LCDM_only()
 # sample_params= sample_cosmology_only()
 
 # Fix Q3, not constraining that
@@ -74,7 +75,7 @@ sample_params=sample_LCDM_only()
 #sample_params = sample_cosmology_2pt_cluster_nuisance(get_N_tomo_shear(),get_N_tomo_clustering()) 
 
 # only sample two parameters
-# sample_params = ['omega_m','sigma_8']
+sample_params = ['omega_m','sigma_8']
 
 # The `sample_main` function is being called with several parameters:
 sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one, photoz_flag=photoz_flag)
