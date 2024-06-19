@@ -74,10 +74,10 @@ double cov_G_shear_shear_tomo_one(double l, double delta_l, int z1, int z2, int 
   C14 = 0.25*C_shear_tomo_nointerp(l,z1,z4);C23 = 0.25*C_shear_tomo_nointerp(l,z2,z3);
 
   /* this is one component shot noise*/
-  if (z1 == z3){N13= pow(survey.sigma_e,2.0)/(nsource(z1)*survey.n_gal_conversion_factor);}
-  if (z1 == z4){N14= pow(survey.sigma_e,2.0)/(nsource(z1)*survey.n_gal_conversion_factor);}
-  if (z2 == z3){N23= pow(survey.sigma_e,2.0)/(nsource(z2)*survey.n_gal_conversion_factor);}
-  if (z2 == z4){N24=pow(survey.sigma_e,2.0)/(nsource(z2)*survey.n_gal_conversion_factor);}
+  if (z1 == z3){N13= pow(survey.sigma_e,2.0)/(2.0*nsource(z1)*survey.n_gal_conversion_factor);}
+  if (z1 == z4){N14= pow(survey.sigma_e,2.0)/(2.0*nsource(z1)*survey.n_gal_conversion_factor);}
+  if (z2 == z3){N23= pow(survey.sigma_e,2.0)/(2.0*nsource(z2)*survey.n_gal_conversion_factor);}
+  if (z2 == z4){N24=pow(survey.sigma_e,2.0)/(2.0*nsource(z2)*survey.n_gal_conversion_factor);}
   
   return (C13*C24+ C13*N24+N13*C24 + C14*C23+C14*N23+N14*C23+N13*N24+N14*N23)/((2.*l+1.)*delta_l*fsky);
 }
