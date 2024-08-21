@@ -29,15 +29,15 @@ external_prior = "none"
 #Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])
 nz_src_files = "zdistris/zdistri_trecs_WL"
 nz_lens_file = "zdistris/lens_LSSTY1"
-data_vector_file = "datav/SKA_KL_shear_shear_Ntomo%d_Ncl%d_dmo_OneComp"
-invcovmat_file = "invcov/SKA_KL_ssss_invcov_Ncl%d_Ntomo%d_OneComp"
+data_vector_file = "datav/SKA_WL_shear_shear_Ntomo%d_Ncl%d_dmo_OneComp"
+invcovmat_file = "invcov/SKA_WL_ssss_invcov_Ncl%d_Ntomo%d_OneComp"
 # chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d_OneComp"
-chain_output_file = "chains/SKA_KL_OmS8_ss_Ncl%d_Ntomo%d_OneComp"
+chain_output_file = "chains/SKA_WL_OmS8_ss_Ncl%d_Ntomo%d_OneComp"
 
 ## flag
 DE_FLAG = False
-KL_FLAG = True          # true if perform KL forecast
-one = True              # one component
+KL_FLAG = False         # true if perform KL forecast
+one = False              # one component
 photoz_flag = False     # enable different sigma_photoz senario
 
 ## mcmc setting
