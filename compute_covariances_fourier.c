@@ -598,7 +598,7 @@ int main(int argc, char** argv)
   double survey_area[1] = {30000.0};
   char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc
   // 1 if single component
-  int one = 1;
+  int one = 0;
   // We do not sample survey area any more, just scale that!
   //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
   //printf("%d survey area scenarios\n", N_scenarios_area);

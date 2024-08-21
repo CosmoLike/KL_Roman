@@ -819,7 +819,7 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
   char survey_names[1][100] = {"SKA_WL"};       // DSA_allsky, SKA_WL, etc.
-  int one = 1;                                  // enable sigal componenet
+  int one = 0;                                  // enable sigal componenet
   int photoz_flag = 0;                          // enable two photoz uncertainties
   char dndz[1][100] = {"zdistris/zdistri_trecs_WL"};  // redshift distribution
   int Ntomo_source = 1;
