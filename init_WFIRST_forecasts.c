@@ -1679,9 +1679,9 @@ void set_shear_priors_DSA_allsky()
 // Full SKA configuration
 void set_survey_parameters_to_SKA_WL()
 {
-  // Harrison et al. 2016, Table 1
   survey.area   = 30000.0;
-  survey.n_gal  = 10;
+  // survey.n_gal  = 10;       // Harrison et al. 2016, Table 1
+  survey.n_gal = 4.49;         // T-RECS + SKA2
   // survey.sigma_e  = 0.42;   // shape noise in quadrature (0.3 per component)
   survey.sigma_e  = 0.3;
   survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
@@ -1695,21 +1695,26 @@ void set_wlphotoz_SKA_WL()
   printf("\n");
   printf("Source sample: SKA WL spec-z uncertainty initialized\n");
   for (i=0;i<tomo.shear_Nbin; i++){
+    nuisance.bias_zphot_shear[i]=0.0;
+    nuisance.sigma_zphot_shear[i]=0.03;         
+    // rms width of Gaussian priors: 1/5 of the nuisance
+    prior.bias_zphot_shear[i][1] = 0.006;
+    prior.sigma_zphot_shear[i][1]= 0.006;
     // Harrison et al. 2016, Table 1
-    if (tomo.shear_zmax[i]>2.0){
-      nuisance.bias_zphot_shear[i]=0.0;
-      nuisance.sigma_zphot_shear[i]=0.3;         
-      // rms width of Gaussian priors: 1/5 of the nuisance
-      prior.bias_zphot_shear[i][1] = 0.06;
-      prior.sigma_zphot_shear[i][1]= 0.06;
-    }
-    else {
-      nuisance.bias_zphot_shear[i]=0.0;
-      nuisance.sigma_zphot_shear[i]=0.03;         
-      // rms width of Gaussian priors: 1/5 of the nuisance
-      prior.bias_zphot_shear[i][1] = 0.006;
-      prior.sigma_zphot_shear[i][1]= 0.006;
-    }      
+    // if (tomo.shear_zmax[i]>2.0){
+    //   nuisance.bias_zphot_shear[i]=0.0;
+    //   nuisance.sigma_zphot_shear[i]=0.3;         
+    //   // rms width of Gaussian priors: 1/5 of the nuisance
+    //   prior.bias_zphot_shear[i][1] = 0.06;
+    //   prior.sigma_zphot_shear[i][1]= 0.06;
+    // }
+    // else {
+    //   nuisance.bias_zphot_shear[i]=0.0;
+    //   nuisance.sigma_zphot_shear[i]=0.03;         
+    //   // rms width of Gaussian priors: 1/5 of the nuisance
+    //   prior.bias_zphot_shear[i][1] = 0.006;
+    //   prior.sigma_zphot_shear[i][1]= 0.006;
+    // }      
     printf("nuisance.bias_zphot_shear[%d]=%le\n",i,nuisance.bias_zphot_shear[i]);
     printf("nuisance.sigma_zphot_shear[%d]=%le\n",i,nuisance.sigma_zphot_shear[i]);
     // center of Gaussian priors
@@ -1726,21 +1731,26 @@ void set_clphotoz_SKA_WL()
   printf("\n");
   printf("Lens sample: SKA WL spec-z uncertainty initialized\n");
   for (i=0;i<tomo.clustering_Nbin; i++){
+    nuisance.bias_zphot_clustering[i]=0.0;
+    nuisance.sigma_zphot_clustering[i]=0.03; 
+    // rms width of Gaussian priors: 1/5 of the nuisance
+    prior.bias_zphot_clustering[i][1] = 0.006;
+    prior.sigma_zphot_clustering[i][1]= 0.006;
     // Harrison et al. 2016, Table 1
-    if (tomo.cluster_zmax[i]>2.0){
-      nuisance.bias_zphot_clustering[i]=0.0;
-      nuisance.sigma_zphot_clustering[i]=0.3; 
-      // rms width of Gaussian priors: 1/5 of the nuisance
-      prior.bias_zphot_clustering[i][1] = 0.06;
-      prior.sigma_zphot_clustering[i][1]= 0.06;
-    }
-    else {
-      nuisance.bias_zphot_clustering[i]=0.0;
-      nuisance.sigma_zphot_clustering[i]=0.03; 
-      // rms width of Gaussian priors: 1/5 of the nuisance
-      prior.bias_zphot_clustering[i][1] = 0.006;
-      prior.sigma_zphot_clustering[i][1]= 0.006;
-    }
+    // if (tomo.cluster_zmax[i]>2.0){
+    //   nuisance.bias_zphot_clustering[i]=0.0;
+    //   nuisance.sigma_zphot_clustering[i]=0.3; 
+    //   // rms width of Gaussian priors: 1/5 of the nuisance
+    //   prior.bias_zphot_clustering[i][1] = 0.06;
+    //   prior.sigma_zphot_clustering[i][1]= 0.06;
+    // }
+    // else {
+    //   nuisance.bias_zphot_clustering[i]=0.0;
+    //   nuisance.sigma_zphot_clustering[i]=0.03; 
+    //   // rms width of Gaussian priors: 1/5 of the nuisance
+    //   prior.bias_zphot_clustering[i][1] = 0.006;
+    //   prior.sigma_zphot_clustering[i][1]= 0.006;
+    // }
     printf("nuisance.bias_zphot_clustering[%d]=%le\n",i,nuisance.bias_zphot_clustering[i]);
     printf("nuisance.sigma_zphot_clustering[%d]=%le\n",i,nuisance.sigma_zphot_clustering[i]);
     // center of Gaussian priors
@@ -1769,7 +1779,8 @@ void set_shear_priors_SKA_WL()
 void set_survey_parameters_to_SKA_KL()
 {
   survey.area   = 30000.0;
-  survey.n_gal  = 0.2116;   // realistic calculation
+  // survey.n_gal  = 0.2116;   // realistic calculation
+  survey.n_gal = 0.15;      // T-RECS + SKA1 
   survey.sigma_e  = 0.05;   // per component
   survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
   survey.n_gal_conversion_factor = 1.0/constants.arcmin/constants.arcmin;
