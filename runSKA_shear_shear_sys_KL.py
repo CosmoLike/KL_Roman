@@ -19,7 +19,7 @@ Ntomo_src, Ntomo_lens = 1, 1
 Ncl = 15
 ell_min, ell_max, ell_max_shear = 20.0, 3000.0, 3000.0
 Rmin_bias = 21.0
-strat = "SKA_KL"
+strat = "SKA_WL"
 
 ## external prior, e.g. "Planck15_BAO_H070p6_JLA_w0wa"
 ## default is "none"
@@ -27,7 +27,7 @@ external_prior = "none"
 
 #sigmae_list = np.array([0.02, 0.04, 0.06, 0.10, 0.20, 0.30])*np.sqrt(2)
 #Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])
-nz_src_files = "zdistris/zdistri_SKA_KL"
+nz_src_files = "zdistris/zdistri_trecs_WL"
 nz_lens_file = "zdistris/lens_LSSTY1"
 data_vector_file = "datav/SKA_KL_shear_shear_Ntomo%d_Ncl%d_dmo_OneComp"
 invcovmat_file = "invcov/SKA_KL_ssss_invcov_Ncl%d_Ntomo%d_OneComp"
