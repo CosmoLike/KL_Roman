@@ -823,7 +823,7 @@ int main(int argc, char** argv)
   int one = 0;                                  // enable sigal componenet
   int photoz_flag = 0;                          // enable two photoz uncertainties
   char dndz[1][100] = {"zdistris/zdistri_trecs_WL"};  // redshift distribution
-  int Ntomo_source = 1;
+  int Ntomo_source = 4;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
   // detailed settings are stored in `set_survey_parameters_to_DESI2_KL()`
@@ -832,7 +832,7 @@ int main(int argc, char** argv)
   // Lens galaxies not used, set to random value
   double lens_density = 66.0;
   // Lens galaxies not used, set to random value
-  int Ntomo_lens = 1;
+  int Ntomo_lens = 4;
   double Rmin_bias = 21.0; // not used 
   // 15 ell bins in Fourier space, from 20 to 3000
   int Nell = 15;

@@ -15,7 +15,7 @@ from schwimmbad import MPIPool
 #########################################################
 dirname = "/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST"
 outdirname = "/home/u15/yhhuang/cosmology/dsa"
-Ntomo_src, Ntomo_lens = 1, 1
+Ntomo_src, Ntomo_lens = 4, 4
 Ncl = 15
 ell_min, ell_max, ell_max_shear = 20.0, 3000.0, 3000.0
 Rmin_bias = 21.0
