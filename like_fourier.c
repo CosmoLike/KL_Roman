@@ -868,7 +868,7 @@ int main(int argc, char** argv)
   sprintf(_shearm_prior, "shear_%s", strat);
   init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
     // IA_flag, A, beta, eta, etaZ
-    false, 3.0, 1.2, 3.8, 2.0,
+    true, 3.0, 1.2, 3.8, 2.0,
     // bary_flag, Q1, Q2, Q3 
     false, 16, 1.9, 0.7);
   init_survey(strat);
