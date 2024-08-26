@@ -30,16 +30,18 @@ N_shape_noise = 1
 SN_list = [0.05]
 '''
 ### SKA
-infile_fmt = "SKA_KL_ssss_cov_Ncl15_Ntomo1_OneComp"
-outfile_fmt = "SKA_KL_ssss_invcov_Ncl15_Ntomo1_OneComp"
+infile_fmt = "SKA_WL_ssss_cov_Ncl15_Ntomo1"
+outfile_fmt = "SKA_WL_ssss_invcov_Ncl15_Ntomo1"
+# infile_fmt = "SKA_KL_ssss_cov_Ncl15_Ntomo1_OneComp"
+# outfile_fmt = "SKA_KL_ssss_invcov_Ncl15_Ntomo1_OneComp"
 Ncl = 15
 Area_list = [30000]
 N_area = 1
 N_selection = 1
 N_tomo_list = [1]
-Nsrc_list = np.array([0.2116])*3600
+Nsrc_list = np.array([4.49])*3600
 N_shape_noise = 1
-SN_list = [0.05]
+SN_list = [0.3]		# shape noise: 0.3 (WL) or 0.05 (KL)
 plot_corrmat = True
 
 for iArea in range(N_area):
