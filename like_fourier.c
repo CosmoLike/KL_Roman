@@ -819,6 +819,7 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
   char survey_names[1][100] = {"SKA_WL"};       // DSA_allsky, SKA_WL, etc.
+  char ia_model[100] = "NLA_HF";                // IA model: NLA_HF (WL) or none (KL)
   int one = 0;                                  // enable sigal componenet
   int photoz_flag = 0;                          // enable two photoz uncertainties
   char dndz[1][100] = {"zdistris/zdistri_trecs_WL"};  // redshift distribution
@@ -895,7 +896,7 @@ int main(int argc, char** argv)
   #endif
 
   init_clusters();
-  init_IA("none", "GAMA");    // KL assumes no IA (none); WL assumes NLA_HF
+  init_IA(ia_model, "GAMA");    // KL assumes no IA (none); WL assumes NLA_HF
   init_probes(argv[3]);
   /* compute fiducial data vector */
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21

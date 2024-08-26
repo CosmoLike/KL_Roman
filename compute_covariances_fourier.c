@@ -591,37 +591,24 @@ int main(int argc, char** argv)
   // Setting Scenarios (survey area, source density, lens density)
   // As a comparison, LSST (12300 deg2) assumes 15 bins from ell=20 to 3000
   // Roman HLIS (5000 deg2) assumes 20 bins from ell=30 to 4000
-  // Three sets of survey area settings
-  // The DESI BGS is 14000 deg2, can be smaller than that
-  //double survey_area = 14000.0;
   int N_scenarios_area = 1;
   double survey_area[1] = {30000.0};
   char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc
+
+  // IA model
+  char ia_model[100] = "NLA_HF";          // NLA_HF (WL) or none (KL)
+
   // 1 if single component
   int one = 0;
-  // We do not sample survey area any more, just scale that!
-  //int N_scenarios_area = sizeof(survey_area)/sizeof(double);
-  //printf("%d survey area scenarios\n", N_scenarios_area);
+  
   // Six sets of target selection criteria, each with different n(z)
   int N_scenarios_selection = 1;
   // Start with 4 source tomo bins 
   //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
   int Ntomo_source[1] = {1};
-  // example, zdistris/zdistri_WFIRST_grism_norm
-  // char dndz[6][100] = {
-  //   //"zdistris/zdistri_DESI2_KL_sample1",
-  //   //"zdistris/zdistri_DESI2_KL_sample2", 
-  //   //"zdistris/zdistri_DESI2_KL_sample3", 
-  //   //"zdistris/zdistri_DESI2_KL_sample4",
-  //   "zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
-  //   "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Any_sample1_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Any_sample2_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
-  // };
   char dndz[1][100] = {"zdistris/zdistri_trecs_WL"};
   printf("%d target selection scenarios\n", N_scenarios_selection);
+
   // Six shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
   // selection here.
@@ -705,7 +692,7 @@ int main(int argc, char** argv)
       "zdistris/lens_LSSTY1", 
       "gaussian", "gaussian", "SN10");// the last arg is lens sample
     init_clusters();                  // not used if we don't have clusters
-    init_IA("none", "GAMA");          // KL assumes no IA (none); WL assumes NLA_HF
+    init_IA(ia_model, "GAMA");
     init_probes("shear_shear");
     // sprintf(covparams.outdir, 
     //   "/xdisk/timeifler/jiachuanxu/DESI2KL/covpara_v2/");
