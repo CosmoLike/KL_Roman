@@ -30,8 +30,8 @@ N_shape_noise = 1
 SN_list = [0.05]
 '''
 ### SKA
-infile_fmt = "SKA_WL_ssss_cov_Ncl15_Ntomo1"
-outfile_fmt = "SKA_WL_ssss_invcov_Ncl15_Ntomo1"
+infile_fmt = "SKA_WL_ssss_cov_Ncl15_Ntomo4"
+outfile_fmt = "SKA_WL_ssss_invcov_Ncl15_Ntomo4"
 # infile_fmt = "SKA_KL_ssss_cov_Ncl15_Ntomo1_OneComp"
 # outfile_fmt = "SKA_KL_ssss_invcov_Ncl15_Ntomo1_OneComp"
 Ncl = 15
