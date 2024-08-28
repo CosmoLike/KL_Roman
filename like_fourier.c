@@ -818,11 +818,11 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
-  char survey_names[1][100] = {"SKA_WL"};       // DSA_allsky, SKA_WL, etc.
-  char ia_model[100] = "NLA_HF";                // IA model: NLA_HF (WL) or none (KL)
-  int one = 0;                                  // enable sigal componenet
+  char survey_names[1][100] = {"SKA_KL"};       // DSA_allsky, SKA_WL, etc.
+  char ia_model[100] = "none";                  // IA model: NLA_HF (WL) or none (KL)
+  int one = 1;                                  // enable sigal componenet
   int photoz_flag = 0;                          // enable two photoz uncertainties
-  char dndz[1][100] = {"zdistris/zdistri_trecs_WL"};  // redshift distribution
+  char dndz[1][100] = {"zdistris/zdistri_trecs_KL"};  // redshift distribution
   int Ntomo_source = 4;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
@@ -868,7 +868,7 @@ int main(int argc, char** argv)
   sprintf(_shearm_prior, "shear_%s", strat);
   init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
     // IA_flag, A, beta, eta, etaZ
-    true, 3.0, 1.2, 3.8, 2.0,
+    false, 3.0, 1.2, 3.8, 2.0,
     // bary_flag, Q1, Q2, Q3 
     false, 16, 1.9, 0.7);
   init_survey(strat);

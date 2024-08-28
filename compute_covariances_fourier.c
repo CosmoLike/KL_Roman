@@ -593,20 +593,20 @@ int main(int argc, char** argv)
   // Roman HLIS (5000 deg2) assumes 20 bins from ell=30 to 4000
   int N_scenarios_area = 1;
   double survey_area[1] = {30000.0};
-  char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc
+  char survey_names[1][100] = {"SKA_KL"}; // DSA_allsky, SKA_WL, etc
 
   // IA model
-  char ia_model[100] = "NLA_HF";          // NLA_HF (WL) or none (KL)
+  char ia_model[100] = "none";          // NLA_HF (WL) or none (KL)
 
   // 1 if single component
-  int one = 0;
+  int one = 1;
   
   // Six sets of target selection criteria, each with different n(z)
   int N_scenarios_selection = 1;
   // Start with 4 source tomo bins 
   //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
   int Ntomo_source[1] = {4};
-  char dndz[1][100] = {"zdistris/zdistri_trecs_WL"};
+  char dndz[1][100] = {"zdistris/zdistri_trecs_KL"};
   printf("%d target selection scenarios\n", N_scenarios_selection);
 
   // Six shape noise scenarios
