@@ -28,9 +28,9 @@ one = False         # one component
 photoz_flag = False # enable different sigma_photoz senario
 
 ## sample parameters
-sample_params = ['omega_m','sigma_8']
+# sample_params = ['omega_m','sigma_8']
 # sample_params = sample_cosmology_only()
-# sample_params = sample_LCDM_only()
+sample_params = sample_LCDM_only()
 
 ## directory and file names
 nz_src_files = "zdistris/zdistri_trecs_WL"
@@ -56,11 +56,6 @@ data_file = os.path.join(dirname, data_vector_file%(strat, Ntomo_src, Ncl))
 cov_file = os.path.join(outdirname, invcovmat_file%(strat, Ncl, Ntomo_src))
 chain_file = os.path.join(outdirname, chain_output_file%(strat, Ncl, Ntomo_src))
 
-if KL_FLAG:
-    ia_model = "none"
-else:
-    ia_model = "NLA_HF"
-
 initcosmo("halofit")
 initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
 initpriors_IA_bary("spec_%s"%(strat), "shear_%s"%(strat), "none", external_prior,
@@ -69,12 +64,10 @@ initpriors_IA_bary("spec_%s"%(strat), "shear_%s"%(strat), "none", external_prior
 initsurvey(strat)
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
 initclusters()
-initia(ia_model,"GAMA")
+initia("NLA_HF","GAMA")
 initprobes("shear_shear")
 initdatainv(cov_file ,data_file)
 
-# The `sample_main` function is being called with several parameters:
-sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one, photoz_flag=photoz_flag)
-# sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), DE=DE_FLAG)
-# sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
+sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d"%(nsteps), 
+    pool=MPIPool(), blind=False, KL=KL_FLAG, one=one, photoz_flag=photoz_flag)
 
