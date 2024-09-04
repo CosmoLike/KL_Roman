@@ -28,9 +28,9 @@ one = False         # one component
 photoz_flag = False # enable different sigma_photoz senario
 
 ## sample parameters
-# sample_params = ['omega_m','sigma_8']
+sample_params = ['omega_m','sigma_8']
 # sample_params = sample_cosmology_only()
-sample_params = sample_LCDM_only()
+# sample_params = sample_LCDM_only()
 
 ## directory and file names
 nz_src_files = "zdistris/zdistri_trecs_WL"

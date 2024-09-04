@@ -66,8 +66,8 @@ initdatainv(cov_file ,data_file)
 
 # only sample two parameters
 # sample_params = ['omega_m','sigma_8']
-# sample_params=sample_LCDM_only()
-sample_params= sample_cosmology_only()
+sample_params=sample_LCDM_only()
+# sample_params= sample_cosmology_only()
 
 # The `sample_main` function is being called with several parameters:
 sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one, photoz_flag=photoz_flag)
