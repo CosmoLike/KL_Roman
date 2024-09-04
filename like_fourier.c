@@ -818,11 +818,11 @@ int main(int argc, char** argv)
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
   //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
   // };
-  char survey_names[1][100] = {"SKA_KL"};       // DSA_allsky, SKA_WL, etc.
-  char ia_model[100] = "none";                  // IA model: NLA_HF (WL) or none (KL)
-  int one = 1;                                  // enable sigal componenet
+  char survey_names[1][100] = {"SKA_WL"};       // DSA_allsky, SKA_WL, etc.
+  char ia_model[100] = "NLA_HF";                  // IA model: NLA_HF (WL) or none (KL)
+  int one = 0;                                  // enable sigal componenet
   int photoz_flag = 0;                          // enable two photoz uncertainties
-  char dndz[1][100] = {"zdistris/zdistri_trecs_KL"};  // redshift distribution
+  char dndz[1][100] = {"zdistris/zdistri_trecs_WL"};  // redshift distribution
   int Ntomo_source = 4;
   printf("%d target selection scenarios\n", N_scenarios_selection);
   // 6 sets of shape noise, used to refer to covariance matrix only
@@ -911,7 +911,7 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
     // lens galaxy photo-z bias[0-9] + std
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
     // additive shear calibration bias[0-9]
@@ -952,7 +952,7 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
     // 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
     // lens galaxy photo-z bias[0-9] + std
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
