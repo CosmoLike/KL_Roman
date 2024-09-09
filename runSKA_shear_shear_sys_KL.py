@@ -41,7 +41,7 @@ one = True              # one component
 photoz_flag = False     # enable different sigma_photoz senario
 
 ## mcmc setting
-nsteps = 1000
+nsteps = 5000
 nwalkers = 400
 nthreads = 1
 
