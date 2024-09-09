@@ -1,6 +1,6 @@
 #!/bin/bash 
 #SBATCH --job-name=SKA_WL_cn
-#SBATCH --output=log/cnSKA_WL-%A_%a.out
+##SBATCH --output=log/cnSKA_WL-%A_%a.out
 #SBATCH --error=log/cnSKA_WL-%A_%a.err
 #SBATCH --nodes=1
 #SBATCH --array=1-12
