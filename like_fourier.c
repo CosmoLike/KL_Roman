@@ -45,8 +45,8 @@
 #include "init_WFIRST_forecasts.c"
 #include "../cosmolike_core/theory/init_baryon.c"
 
-#define _WRITE_NZ_TOMO_ 0
-#define _WRITE_DATA_VECTOR_ 1
+#define _WRITE_NZ_TOMO_ 1
+#define _WRITE_DATA_VECTOR_ 0
 #define _COMPUTE_DATAVECTOR_ 1
 #define _COMPUTE_LIKELIHOOD_ 0
 #define _VERBOSE_ 0 
@@ -879,21 +879,21 @@ int main(int argc, char** argv)
       "zdistris/lens_LSSTY1", 
       "gaussian", "gaussian", "SN10"); // the last arg is lens sample
   
-  #if _WRITE_NZ_TOMO_ == 1
-    // write redshift boundary of each tomo bin
-    FILE *tomo_zdist;
-    char tomo_zdist_fname[500];
-    sprintf(tomo_zdist_fname, 
-      "zdistris/tomo_zdist_src_%s", strat);
-    tomo_zdist = fopen(tomo_zdist_fname, "w");
-    if(tomo_zdist!=NULL){
-      fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\tn_source\n");
-      for(int i=0; i<tomo.shear_Nbin; i++){
-        fprintf(tomo_zdist,"%d\t%.6f\t%.6f\t%.6f\n",i,tomo.shear_zmin[i],tomo.shear_zmax[i],tomo.n_source[i]);
-      }
-    }
-    fclose(tomo_zdist);
-  #endif
+  // #if _WRITE_NZ_TOMO_ == 1
+  //   // write redshift boundary of each tomo bin
+  //   FILE *tomo_zdist;
+  //   char tomo_zdist_fname[500];
+  //   sprintf(tomo_zdist_fname, 
+  //     "zdistris/tomo_zdist_src_%s", strat);
+  //   tomo_zdist = fopen(tomo_zdist_fname, "w");
+  //   if(tomo_zdist!=NULL){
+  //     fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\tn_source\n");
+  //     for(int i=0; i<tomo.shear_Nbin; i++){
+  //       fprintf(tomo_zdist,"%d\t%.6f\t%.6f\t%.6f\n",i,tomo.shear_zmin[i],tomo.shear_zmax[i],tomo.n_source[i]);
+  //     }
+  //   }
+  //   fclose(tomo_zdist);
+  // #endif
 
   init_clusters();
   init_IA(ia_model, "GAMA");    // KL assumes no IA (none); WL assumes NLA_HF
@@ -929,6 +929,23 @@ int main(int argc, char** argv)
     // photo-z limit
     photoz_flag);
   #endif
+  /* test */
+  #if _WRITE_NZ_TOMO_ == 1
+    // write redshift boundary of each tomo bin
+    FILE *tomo_zdist;
+    char tomo_zdist_fname[500];
+    sprintf(tomo_zdist_fname, 
+      "zdistris/tomo_zdist_src_%s", strat);
+    tomo_zdist = fopen(tomo_zdist_fname, "w");
+    if(tomo_zdist!=NULL){
+      fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\tn_source\n");
+      for(int i=0; i<tomo.shear_Nbin; i++){
+        fprintf(tomo_zdist,"%d\t%.6f\t%.6f\t%.6f\n",i,tomo.shear_zmin[i],tomo.shear_zmax[i],tomo.n_source[i]);
+      }
+    }
+    fclose(tomo_zdist);
+  #endif
+
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
 
