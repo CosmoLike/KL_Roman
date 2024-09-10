@@ -887,9 +887,9 @@ int main(int argc, char** argv)
       "zdistris/tomo_zdist_src_%s", strat);
     tomo_zdist = fopen(tomo_zdist_fname, "w");
     if(tomo_zdist!=NULL){
-      fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\n");
+      fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\tn_source\n");
       for(int i=0; i<tomo.shear_Nbin; i++){
-        fprintf(tomo_zdist,"%d\t%.6f\t%.6f\n",i,tomo.shear_zmin[i],tomo.shear_zmax[i]);
+        fprintf(tomo_zdist,"%d\t%.6f\t%.6f\t%.6f\n",i,tomo.shear_zmin[i],tomo.shear_zmax[i],tomo.n_source[i]);
       }
     }
     fclose(tomo_zdist);
