@@ -46,6 +46,8 @@
 #include "../cosmolike_core/theory/covariances_cluster.c"
 #include "init_WFIRST_forecasts.c"
 
+#define _WRITE_NZ_TOMO_ 1
+
 double cov_G_shear_shear_tomo_one(double l, double delta_l, int z1, int z2, int z3, int z4);
 void run_cov_N_N (char *OUTFILE, char *PATH, int nzc1, int nzc2,int start);
 void run_cov_cgl_N (char *OUTFILE, char *PATH, double *ell_Cluster, double *dell_Cluster,int N1, int nzc2, int start);
@@ -593,20 +595,20 @@ int main(int argc, char** argv)
   // Roman HLIS (5000 deg2) assumes 20 bins from ell=30 to 4000
   int N_scenarios_area = 1;
   double survey_area[1] = {30000.0};
-  char survey_names[1][100] = {"SKA_KL"}; // DSA_allsky, SKA_WL, etc
+  char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc
 
   // IA model
-  char ia_model[100] = "none";          // NLA_HF (WL) or none (KL)
+  char ia_model[100] = "NLA_HF";          // NLA_HF (WL) or none (KL)
 
   // 1 if single component
-  int one = 1;
+  int one = 0;
   
   // Six sets of target selection criteria, each with different n(z)
   int N_scenarios_selection = 1;
   // Start with 4 source tomo bins 
   //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
   int Ntomo_source[1] = {4};
-  char dndz[1][100] = {"zdistris/zdistri_trecs_KL"};
+  char dndz[1][100] = {"zdistris/zdistri_trecs_WL"};
   printf("%d target selection scenarios\n", N_scenarios_selection);
 
   // Six shape noise scenarios
@@ -678,7 +680,7 @@ int main(int argc, char** argv)
     sprintf(_shearm_prior, "shear_%s", survey_names[i_selection]);
     init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
       // IA_flag, A, beta, eta, etaZ
-      false, 3.0, 1.2, 3.8, 2.0, 
+      true, 3.0, 1.2, 3.8, 2.0, 
       // bary_flag, Q1, Q2, Q3
       false, 16, 1.9, 0.7);
     init_survey(_surveyname);
@@ -1066,6 +1068,21 @@ int main(int argc, char** argv)
     }
     /******************************** END *************************************/
   }
+  #if _WRITE_NZ_TOMO_ == 1
+    // write redshift boundary of each tomo bin
+    FILE *tomo_zdist;
+    char tomo_zdist_fname[500];
+    sprintf(tomo_zdist_fname, 
+      "zdistris/tomo_zdist_src_%s", survey.name);
+    tomo_zdist = fopen(tomo_zdist_fname, "w");
+    if(tomo_zdist!=NULL){
+      fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\n");
+      for(int i=0; i<tomo.shear_Nbin; i++){
+        fprintf(tomo_zdist,"%d\t%.6f\t%.6f\n",i,tomo.shear_zmin[i],tomo.shear_zmax[i]);
+      }
+    }
+    fclose(tomo_zdist);
+  #endif
   printf("number of cov blocks for parallelization: %d\n",k-1); 
   printf("-----------------\n");
   printf("PROGRAM EXECUTED\n");
