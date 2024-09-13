@@ -33,11 +33,11 @@ data_vector_file = "datav/DESI2_KL_%d0_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/DESI2_KL_v3_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
 baryon_PCS_file = "datav/DESI2_KL_%d%d_shear_shear_Ntomo%d_Ncl%d_9sim.pca"
 #chain_output_file = "chains/DESI2_KL_v3_PlanckBAOJLA_%d%d_ss_Ncl%d_Ntomo%d"
-chain_output_file = "chains/DESI2_KL_v3_s8split_only_zlow015__%d%d_ss_Ncl%d_Ntomo%d"
+chain_output_file = "chains/DESI2_KL_v3cos_s8split_only_zlow015_%d%d_ss_Ncl%d_Ntomo%d"
 #chain_output_file = "chains_test/DESI2_KL_s8split_only_zlow015_%d%d_ss_Ncl%d_Ntomo%d"
 #external_prior = "Planck15_BAO_H070p6_JLA_w0wa" # default: "none"
 external_prior = "none"
-NPCs_used = 2
+NPCs_used = 0
 #cosmo_model = "LCDM_split"
 cosmo_model = "s8split_only"
 runmode = "halofit_split"
@@ -66,8 +66,8 @@ initprobes("shear_shear")
 initdatainvbary(cov_file ,data_file, bary_file)
 
 sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), 
-    MG=False, NPCs=NPCs_used, cosmology=cosmo_model, source_photo_z=True, 
-    shear_calibration=True, IA=False)
+    MG=False, NPCs=NPCs_used, cosmology=cosmo_model, source_photo_z=False, 
+    shear_calibration=False, IA=False)
 
 sample_main(sample_params,5000,400,1,chain_file+"_5000", blind=False, pool=MPIPool(), KL=True)
 

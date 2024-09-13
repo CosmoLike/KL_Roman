@@ -563,7 +563,7 @@ int run_DESI2(int argc, char**argv)
   // We do not sample survey area any more, just scale that!
   //printf("%d survey area scenarios\n", N_scenarios_area);
   // Six sets of target selection criteria, each with different n(z)
-  int N_scenarios_selection = 6;
+  int N_scenarios_selection = 6; // 6
   // Start with 4 source tomo bins 
   int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
   // example, zdistris/zdistri_WFIRST_grism_norm
@@ -583,7 +583,7 @@ int run_DESI2(int argc, char**argv)
   // Six shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
   // selection here.
-  int N_scenarios_shape_noise = 6;
+  int N_scenarios_shape_noise = 6; // 6
   printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
   // Lens galaxies not used, set to random value
   float lens_density = 66.0;
@@ -632,7 +632,16 @@ int run_DESI2(int argc, char**argv)
     int i_shape_noise = temp;
     temp -= i_shape_noise;
     assert(temp==0);
-    printf("Selection %d and Shape noise %d\n", i_selection, i_shape_noise);
+    // only evaluate covariance for sample 1 and sample 3; shape noise 1--4
+    if ((i_selection!=0) && (i_selection!=2)){
+      printf("skip sample %d\n", i_selection+1);
+      continue;
+    }
+    if (i_shape_noise>=4){
+      printf("skip shape noise %d\n", i_shape_noise+1);
+      continue;
+    }
+    printf("Selection %d and Shape noise %d\n", i_selection+1, i_shape_noise+1);
     //RUN MODE setup
     init_cosmo_runmode("halofit");
     init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, 
@@ -1442,6 +1451,7 @@ int run_LSST(int argc, char**argv)
 
 int main(int argc, char** argv)
 {
-  return run_DESI2(argc, argv);
+  //return run_DESI2(argc, argv);
+  return run_LSST(argc, argv);
 }
 

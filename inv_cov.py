@@ -9,10 +9,12 @@ from numpy import linalg as LA
 import numpy as np
 
 Ncl = 15
-which_survey = "DESI2" # "LSST"
+#which_survey = "DESI2" # "LSST"
+which_survey = "LSST"
+DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
+
 if which_survey=="DESI2":
 	# covariance matrix for DESI-II KL
-	DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
 	infile_fmt = "DESI2_KL_v3_%d%d_ssss_cov_Ncl%d_Ntomo%d"
 	outfile_fmt = "DESI2_KL_v3_%d%d_ssss_invcov_Ncl%d_Ntomo%d"
 	Area_list = [14000, 14000, 14000, 14000, 14000, 14000];
@@ -226,6 +228,9 @@ r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',
 
 			plt.colorbar(im)
 			#plt.show()
-			figfilename_fmt = "test_imgs/"+outfile_fmt+".png"
-			plt.savefig(figfilename_fmt%(jSelect,kSN,Ncl,N_tomo), format="png")
+			if which_survey=="DESI":
+				figfilename_fmt = "test_imgs/"+outfile_fmt%(jSelect,kSN,Ncl,N_tomo)+".png"
+			else:
+				figfilename_fmt = "test_imgs/"+outfile_fmt%(years[jSelect])+".png"
+			plt.savefig(figfilename_fmt, format="png")
 			#plt.savefig(figfilename_fmt%(year), format="png")

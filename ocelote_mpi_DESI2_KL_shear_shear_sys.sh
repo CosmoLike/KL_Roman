@@ -33,7 +33,7 @@ echo Slurm job NAME is $SLURM_JOB_NAME
 echo Slurm job ID is $SLURM_JOBID
 cd $SLURM_SUBMIT_DIR
 conda activate python2
-
+which mpiexec
 export MPI_DSM_DISTRIBUTE
 date
 #/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_opti.py

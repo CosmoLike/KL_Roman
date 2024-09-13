@@ -4,7 +4,7 @@
 
 ### 1. puma
 #SBATCH --nodes=1
-#SBATCH --array=1-18
+#SBATCH --array=1-4,13-16
 #SBATCH --ntasks-per-node=80
 #SBATCH --ntasks-per-socket=40
 #SBATCH --cpus-per-task=1
@@ -37,6 +37,7 @@ echo "Shape Noise Scenario = ${iSN}"
 module load gsl
 module swap openmpi3 mpich/3.3.1
 module load anaconda
+module list
 conda init bash
 source ~/.bashrc
 
@@ -47,7 +48,7 @@ echo Slurm job NAME is $SLURM_JOB_NAME
 echo Slurm job ID is $SLURM_JOBID
 cd $SLURM_SUBMIT_DIR
 conda activate python2
-
+which mpiexec
 export MPI_DSM_DISTRIBUTE
 date
 /usr/bin/time mpiexec -n ${MPI_NPROCESS} python runDESI2_shear_shear_sys_KL.py ${iSELECT} ${iSN}

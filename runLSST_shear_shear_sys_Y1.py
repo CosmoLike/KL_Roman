@@ -18,9 +18,9 @@ data_vector_file = "datav/LSST_Y1_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/LSST_Y1_ssss_invcov_Ncl%d_Ntomo%d"
 baryon_PCS_file = "datav/LSST_Y1_shear_shear_Ntomo%d_Ncl%d_9sim.pca"
 #chain_output_file = "chains/LSST_Y1_ss_Ncl%d_Ntomo%d"
-chain_output_file = "chains/LSST_Y1_s8split_only_zlow015_ss_Ncl%d_Ntomo%d"
+chain_output_file = "chains/LSST_Y1_cos_s8split_only_zlow015_ss_Ncl%d_Ntomo%d"
 external_probe = "none"
-NPCs_used = 2
+NPCs_used = 0
 #cosmo_model = "LCDM_split"
 cosmo_model = "s8split_only"
 runmode = "halofit_split"
@@ -45,7 +45,7 @@ initprobes("shear_shear")
 initdatainvbary(cov_file, data_file, bary_file)
 
 sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), 
-    MG=False, NPCs=NPCs_used, cosmology=cosmo_model, source_photo_z=True, 
-    shear_calibration=True, IA=True)
+    MG=False, NPCs=NPCs_used, cosmology=cosmo_model, source_photo_z=False, 
+    shear_calibration=False, IA=False)
 
-sample_main(sample_params,8000,400,1,chain_file+"_8000", blind=False, pool=MPIPool())
+sample_main(sample_params,1500,400,1,chain_file+"_1500", blind=False, pool=MPIPool())
