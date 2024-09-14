@@ -1498,7 +1498,7 @@ int run_Roman_PIT(int argc, char**argv)
     int i_ellmax = temp;
     temp -= i_ellmax;
     assert(temp==0);
-    printf("Depth case %d and ellmax case %d\n", i_depth+1, iellmax+1);
+    printf("Depth case %d and ellmax case %d\n", i_depth+1, i_ellmax+1);
 
     //set ell-bins for cosmic shear
     int Nell = Nell_list[i_ellmax];
