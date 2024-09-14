@@ -567,6 +567,7 @@ void init_survey(char *surveyname)
   if(strcmp(surveyname,"Euclid")==0) set_survey_parameters_to_Euclid();
   if(strcmp(surveyname,"WFIRST")==0) set_survey_parameters_to_WFIRST();
   if(strcmp(surveyname,"WFIRST_WL")==0) set_survey_parameters_to_WFIRST_WL();
+  if(strncmp(surveyname,"Roman_WL_",9)==0) set_survey_parameters_to_WFIRST_WL_PIT(surveyname);
   if(strcmp(surveyname,"WFIRST_KL")==0) set_survey_parameters_to_WFIRST_KL();
   if(strncmp(surveyname,"DESI2_KL",8)==0) set_survey_parameters_to_DESI2_KL(surveyname);
 
@@ -1397,6 +1398,29 @@ void set_survey_parameters_to_DESI2_KL(char *surveyname)
   survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
   survey.n_gal_conversion_factor=1.0/constants.arcmin/constants.arcmin;
   survey.m_lim=19.5;
+  sprintf(survey.Kcorrect_File,"../zdistris/k+e.dat");
+  sprintf(survey.name,surveyname);
+}
+
+void set_survey_parameters_to_Roman_WL_PIT(char *surveyname)
+{
+  // example surveyname: Roman_WL_00
+  double source_density[5] = {20.0, 25.0, 30.0, 35.0, 40.0};
+  double shape_noise_rms = 0.37;
+
+  char _i_depth[2];
+  char _i_ellmax[2];
+  strncpy(_i_depth, surveyname+9, 1);
+  strncpy(_i_ellmax, surveyname+10, 1);
+  int i_depth = atoi(_i_depth);
+  int i_ellmax = atoi(_i_ellmax);
+  printf("Setting depth %d and ellmax %d\n", i_depth, i_ellmax);
+  survey.area   = 1000.;
+  survey.n_gal   = source_density[i_depth];
+  survey.sigma_e   = shape_noise_rms;
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor=1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim=28;
   sprintf(survey.Kcorrect_File,"../zdistris/k+e.dat");
   sprintf(survey.name,surveyname);
 }
