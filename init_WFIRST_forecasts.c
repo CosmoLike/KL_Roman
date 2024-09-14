@@ -50,6 +50,7 @@ void set_shear_priors_LSST_Y10();
 
 void set_survey_parameters_to_WFIRST_WL();
 void set_survey_parameters_to_WFIRST_KL();
+void set_survey_parameters_to_Roman_WL_PIT(char *surveyname);
 void set_survey_parameters_to_DESI2_KL(char *surveyname);
 void set_survey_parameters_to_LSST_Y1();
 void set_survey_parameters_to_LSST_Y10();
@@ -567,7 +568,7 @@ void init_survey(char *surveyname)
   if(strcmp(surveyname,"Euclid")==0) set_survey_parameters_to_Euclid();
   if(strcmp(surveyname,"WFIRST")==0) set_survey_parameters_to_WFIRST();
   if(strcmp(surveyname,"WFIRST_WL")==0) set_survey_parameters_to_WFIRST_WL();
-  if(strncmp(surveyname,"Roman_WL_",9)==0) set_survey_parameters_to_WFIRST_WL_PIT(surveyname);
+  if(strncmp(surveyname,"Roman_WL_",9)==0) set_survey_parameters_to_Roman_WL_PIT(surveyname);
   if(strcmp(surveyname,"WFIRST_KL")==0) set_survey_parameters_to_WFIRST_KL();
   if(strncmp(surveyname,"DESI2_KL",8)==0) set_survey_parameters_to_DESI2_KL(surveyname);
 
