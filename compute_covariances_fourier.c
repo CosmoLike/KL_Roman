@@ -9,7 +9,7 @@
 #include <string.h>
 
 #include <fftw3.h>
-#define __COV_BREAK_UP__ 1
+#define __COV_BREAK_UP__ 0
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_integration.h>
@@ -523,9 +523,9 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
     for (nl2 = 0; nl2 < like.Ncl; nl2 ++){
       #if __COV_BREAK_UP__==0
       c_ng = 0.; c_g = 0.;
-      if (ell[nl1] < like.lmax_shear && ell[nl2] < like.lmax_shear){
-        c_ng = cov_NG_shear_shear_tomo(ell[nl1],ell[nl2],z1,z2,z3,z4);
-      }
+      // if (ell[nl1] < like.lmax_shear && ell[nl2] < like.lmax_shear){
+      //   c_ng = cov_NG_shear_shear_tomo(ell[nl1],ell[nl2],z1,z2,z3,z4);
+      // }
       if (nl1 == nl2){
         c_g =  cov_G_shear_shear_tomo(ell[nl1],dell[nl1],z1,z2,z3,z4);
         if (ell[nl1] > like.lmax_shear && n1!=n2){c_g = 0.;}
