@@ -256,7 +256,9 @@ r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',
 			#plt.show()
 			if which_survey=="DESI":
 				figfilename_fmt = "test_imgs/"+outfile_fmt%(jSelect,kSN,Ncl,N_tomo)+".png"
-			else:
+			elif which_survey=="LSST":
 				figfilename_fmt = "test_imgs/"+outfile_fmt%(years[jSelect])+".png"
+			elif which_survey=="RomanPIT":
+				figfilename_fmt = "test_imgs/"+outfile_fmt%(jSelect,kSN)+".png"
 			plt.savefig(figfilename_fmt, format="png")
 			#plt.savefig(figfilename_fmt%(year), format="png")
