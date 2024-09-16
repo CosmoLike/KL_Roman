@@ -10,8 +10,9 @@ import numpy as np
 
 Ncl = 15
 #which_survey = "DESI2" # "LSST"
-which_survey = "LSST"
-DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
+which_survey = "RomanPIT"
+#DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
+DATA_DIR = "/xdisk/timeifler/jiachuanxu/RomanPIT"
 
 if which_survey=="DESI2":
 	# covariance matrix for DESI-II KL
@@ -33,22 +34,44 @@ elif which_survey=="LSST":
 	N_tomo_list = [10, 10]
 	Nsrc_list = np.array([11.112, 27.737])
 	SN_list = [0.26,];N_shape_noise = 1
+elif which_survey=="RomanPIT":
+	# covariance matrix for Roman PIT
+	infile_fmt = "Roman_WL_%d%d_ssss_cov_Ncl15_Ntomo10"
+	outfile_fmt = "Roman_WL_%d%d_ssss_invcov_Ncl15_Ntomo10"
+	Area = 1000
+	N_depth = 5 # 5 number density bins
+	N_tomo = 10
+	Nsrc_list = np.array([20, 25, 30, 35, 40])
+	# different ell_max
+	ellmax_list = [1000, 2000, 3000, 4000];N_ellmax = 4
+else:
+	print(f'{which_survey} not supported')
+	exit(1)
+
 plot_corrmat = True
 
-for jSelect in range(N_selection):
-	N_tomo = N_tomo_list[jSelect]
+# for jSelect in range(N_selection):
+# 	N_tomo = N_tomo_list[jSelect]
+# 	Nsrc = Nsrc_list[jSelect]
+# 	Area = Area_list[jSelect]
+# 	for kSN in range(N_shape_noise):
+# 		SN = SN_list[kSN]
+for jSelect in range(N_depth):
 	Nsrc = Nsrc_list[jSelect]
-	Area = Area_list[jSelect]
-	for kSN in range(N_shape_noise):
-		SN = SN_list[kSN]
+	for kSN in range(N_ellmax):
+		ellmax = ellmax_list[kSN]
 		fig_title = \
-		"$\Omega_s=$%d deg$^{2}$, $n_\mathrm{src}=$%d deg$^{-2}$, $\sigma_\epsilon^\mathrm{rms}$=%.2f"%(Area, Nsrc, SN)
+		"$n_\mathrm{src}=$%.0f arcmin$^{-2}$, $\ell_\mathrm{max}$=%.0f"%(Nsrc, ellmax)
 		if which_survey=='DESI2':
 			infile = DATA_DIR+"cov/"+infile_fmt%(jSelect,kSN,Ncl,N_tomo)
 			outname= DATA_DIR+"invcov/"+outfile_fmt%(jSelect,kSN,Ncl,N_tomo)
 		elif which_survey=='LSST':
 			infile = DATA_DIR+"cov/"+infile_fmt%(years[jSelect])
 			outname= DATA_DIR+"invcov/"+outfile_fmt%(years[jSelect])
+		elif which_survey=="RomanPIT":
+			infile = DATA_DIR+"cov/"+infile_fmt%(jSelect,kSN)
+			outname= DATA_DIR+"invcov/"+outfile_fmt%(jSelect,kSN)
+
 		if not os.path.exists(infile):
 			print(f'File {infile} does not exist! Continue')
 			continue
@@ -76,11 +99,14 @@ for jSelect in range(N_selection):
 		cov = np.zeros((ndata,ndata))
 		for l in range(0,covfile.shape[0]):
 			bin1, bin2 = int(covfile[l,0]), int(covfile[l,1])
+			# traditional cosmocov format, g/ng
 			if covfile.shape[1]==10:
 				cov_g, cov_ng = covfile[l,8], covfile[l,9]
+			# break-down version
 			elif covfile.shape[1]==12:
 				cov_g  = covfile[l,8]+covfile[l,9]+covfile[l,10]
 				cov_ng = covfile[l,11]
+			# covariance only
 			elif covfile.shape[1]==3:
 				cov_g = 0; cov_ng = covfile[l,2]
 			else:
