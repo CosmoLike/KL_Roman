@@ -12,7 +12,7 @@ Ncl = 15
 #which_survey = "DESI2" # "LSST"
 which_survey = "RomanPIT"
 #DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
-DATA_DIR = "/xdisk/timeifler/jiachuanxu/RomanPIT"
+DATA_DIR = "/xdisk/timeifler/jiachuanxu/RomanPIT/"
 
 if which_survey=="DESI2":
 	# covariance matrix for DESI-II KL
@@ -256,7 +256,9 @@ r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',
 			#plt.show()
 			if which_survey=="DESI":
 				figfilename_fmt = "test_imgs/"+outfile_fmt%(jSelect,kSN,Ncl,N_tomo)+".png"
-			else:
+			elif which_survey=="LSST":
 				figfilename_fmt = "test_imgs/"+outfile_fmt%(years[jSelect])+".png"
+			elif which_survey=="RomanPIT":
+				figfilename_fmt = "test_imgs/"+outfile_fmt%(jSelect,kSN)+".png"
 			plt.savefig(figfilename_fmt, format="png")
 			#plt.savefig(figfilename_fmt%(year), format="png")
