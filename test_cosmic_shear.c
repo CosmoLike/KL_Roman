@@ -75,7 +75,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
     FILE *tomo_zdist;
     char tomo_zdist_fname[500];
     sprintf(tomo_zdist_fname, 
-      "zdistris/tomo_zdist_src_%s_%d", strat, i_depth);
+      "zdistris/tomo_zdist_src_%s", strat);
     tomo_zdist = fopen(tomo_zdist_fname, "w");
     if(tomo_zdist!=NULL){
       fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\n");
