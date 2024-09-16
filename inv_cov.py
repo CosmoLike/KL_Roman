@@ -12,7 +12,7 @@ Ncl = 15
 #which_survey = "DESI2" # "LSST"
 which_survey = "RomanPIT"
 #DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
-DATA_DIR = "/xdisk/timeifler/jiachuanxu/RomanPIT"
+DATA_DIR = "/xdisk/timeifler/jiachuanxu/RomanPIT/"
 
 if which_survey=="DESI2":
 	# covariance matrix for DESI-II KL

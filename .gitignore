@@ -1,6 +1,7 @@
 test_imgs/*
 datav/*.pca
 datav/DESI2_KL_*
+datav/LSST_Y*_shear_shear*
 like_fourier.dSYM/
 zdistris/tomo_zdist_src_*
 like_fourier
