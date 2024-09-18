@@ -40,8 +40,8 @@ Q1_priors = { # use Illustris Q1 value for the std. of the Q1 prior
 }
 ellmax = ellmax_list[args.i_ellmax]
 neff = neff_list[args.i_depth]
-Q1_std = Q1_priors[f'{args.i_depth}{args.i_ellmax}']
-print(f'ell max = {ellmax}; neff = {neff}; Q1 std = {Q1_std}')
+Q1_std = Q1_priors["%d%d"%(args.i_depth, args.i_ellmax)]
+print "ell max = %.0f; neff = %.0f; Q1 std = %.1f"%(ellmax, neff, Q1_std)
 
 #########################################################
 dirname = "/home/u17/jiachuanxu/CosmoLike/KL_WFIRST"
@@ -51,7 +51,7 @@ Ncl = 15
 ell_min, ell_max_shear = 20.0, 3000.0
 Rmin_bias = 21.0
 strat = "Roman_WL_%d%d"%(args.i_depth, args.i_ellmax)
-print(f'Survey strat = {strat}')
+print "Survey strat = ", strat
 nz_src_file = "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff%:.0f"%(neff)
 nz_lens_file = "zdistris/lens_LSSTY1"
 data_vector_file = "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_dmo"%(args.i_depth, args.i_ellmax)
@@ -92,4 +92,4 @@ sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(),
     MG=False, NPCs=NPCs_used, cosmology=cosmo_model, source_photo_z=False, 
     shear_calibration=False, IA=False)
 
-sample_main(sample_params,args.nsteps,args.nwalkers,1,chain_file+f'_{args.nsteps}', blind=False, pool=MPIPool())
+sample_main(sample_params,args.nsteps,args.nwalkers,1,chain_file+"_%d"%args.nsteps, blind=False, pool=MPIPool())
