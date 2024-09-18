@@ -116,7 +116,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
     // baryon scenario,
     bary_sce,
     // sigma8 split at low-z
-    0.831, 0.15);
+    0.831, 1.0);
   #endif
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
