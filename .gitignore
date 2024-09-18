@@ -1,4 +1,5 @@
 test_imgs/*
+datav/Roman*
 datav/*.pca
 datav/DESI2_KL_*
 datav/LSST_Y*_shear_shear*
