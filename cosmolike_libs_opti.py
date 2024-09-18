@@ -300,7 +300,7 @@ class InputCosmologyLowzParams(IterableStruct):
     @classmethod
     def fiducial_sigma(cls):
         c = cls()
-        c.sigma_8_lowz = 0.0001
+        c.sigma_8_lowz = 0.1
         c.z_low = 0.02
         return c
 
