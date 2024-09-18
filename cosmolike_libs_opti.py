@@ -294,13 +294,13 @@ class InputCosmologyLowzParams(IterableStruct):
     def fiducial(cls):
         c = cls()
         c.sigma_8_lowz = 0.831
-        c.z_low = 0.15
+        c.z_low = 1.0
         return c
 
     @classmethod
     def fiducial_sigma(cls):
         c = cls()
-        c.sigma_8_lowz = 0.1
+        c.sigma_8_lowz = 0.0001
         c.z_low = 0.02
         return c
 
@@ -754,10 +754,10 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
     #exit(0)
     #print likelihood(starting_point)
     #exit(0)
-    # if pool is not None:
-    #     if not pool.is_master():
-    #         pool.wait()
-    #         sys.exit(0)
+    if pool is not None:
+        if not pool.is_master():
+            pool.wait()
+            sys.exit(0)
 
 
     sampler = emcee.EnsembleSampler(nwalker, ndim, likelihood,threads=nthreads,pool=pool)
