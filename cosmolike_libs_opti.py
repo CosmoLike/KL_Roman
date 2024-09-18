@@ -744,7 +744,7 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
         std += InputNuisanceParamsGRS().fiducial_sigma().convert_to_vector_filter(varied_parameters)
         likelihood = LikelihoodFunctionWrapper(varied_parameters)
 
-    p0 = emcee.utils.sample_ball(starting_point, std, size=nwalker)
+    p0 = emcee.utils.sample_ball(starting_point, std/10000, size=nwalker)
 
     ndim = len(starting_point)
     print "ndim = ", ndim
