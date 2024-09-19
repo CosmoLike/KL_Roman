@@ -572,7 +572,7 @@ double log_multi_like(
     printf("Q1 Q2 Q3 = %e %e %e\n", Q1, Q2, Q3);
     printf("IA params = %e %e %e %e\n************\n", nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
   }
-  printf("loglike = %.2f, logprior = %.2f\n", -0.5*chisqr, log_L_prior);
+  printf("loglike = %.2f, logprior = %.2f, s8 = %.4f, s8l = %.4f\n", -0.5*chisqr, log_L_prior, S8, sigma_8_lowz);
   return -0.5*chisqr+log_L_prior;
 }
 

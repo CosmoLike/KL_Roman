@@ -65,6 +65,7 @@ if NPCs_used>0:
     samp_bary = True
 else:
     samp_bary = False
+print "NPCs used = %d", NPCs_used
 #cosmo_model = "LCDM_split"
 cosmo_model = "s8split_only"
 runmode = "halofit_split"
