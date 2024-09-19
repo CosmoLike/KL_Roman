@@ -561,35 +561,40 @@ int test_LSST_WL(int iYear, char* probe, char* bary_sce)
 }
 
 int main(int argc, char** argv)
-{	// ./test_cosmic_shear DESI2/LSST/RomanPIT id_sample id_baryon 
+{	// ./test_cosmic_shear DESI2/LSST/RomanPIT id_sample (id_ellmax) id_baryon 
 	char probe[500]="shear_shear";
 	char bary_scenarios[12][500]={"dmo", "mb2", "illustris", "eagle", "HzAGN", 
 		"TNG100", "cowls_AGN", "cowls_AGN_T8p5", "cowls_AGN_T8p7", 
 		"BAHAMAS", "BAHAMAS_T7p6", "BAHAMAS_T8p0"};
-	/*int i = atoi(argv[2]);
-	int k = atoi(argv[3]);
 	if(strcmp(argv[1], "DESI2")==0){
+    int i = atoi(argv[2]);
+    int k = atoi(argv[3]);
 		assert(i<6);assert(k<12);
 		// test DESI2-KL
 		test_DESI2_KL(i, 0, probe, bary_scenarios[k]);
 	}
 	else if (strcmp(argv[1], "LSST"){
-		assert(i<2);assert(k<12);
+		int i = atoi(argv[2]);
+    int k = atoi(argv[3]);
+    assert(i<2);assert(k<12);
 		// test LSST cosmic shear
 		test_LSST_WL(i, probe, bary_scenarios[k]);
 	}
   else if ((strcmp(argv[1], "RomanPIT")){
+    int i = atoi(argv[2]);
+    int j = atoi(argv[3])
+    int k = atoi(argv[4]);
     // id_sample here means ell_max; n_eff doesn't matter
-    assert(i<4);assert(k<12);
+    assert(i<5);assert(j<4);assert(k<12);
     // test Roman PIT cosmic shear
-    test_RomanPIT_WL(i, probe, bary_scenarios[k]);
-  }*/
-  for (int i=0; i<5; i++){
+    test_RomanPIT_WL(i, j, probe, bary_scenarios[k]);
+  }
+  /*for (int i=0; i<5; i++){
     for (int j=0; j<4; j++){
       //for (int k=0; k<12; k++){
         test_RomanPIT_WL(i, j, probe, bary_scenarios[0]);
       //}
     }
-  }
+  }*/
 	return 0;
 }
