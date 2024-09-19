@@ -41,7 +41,7 @@ Q1_priors = { # use Illustris Q1 value for the std. of the Q1 prior
 ell_max = ellmax_list[args.i_ellmax]
 neff = neff_list[args.i_depth]
 Q1_std = Q1_priors["%d%d"%(args.i_depth, args.i_ellmax)]
-#print "ell max = %.0f; neff = %.0f; Q1 std = %.1f"%(ell_max, neff, Q1_std)
+print "ell max = %.0f; neff = %.0f; Q1 std = %.1f"%(ell_max, neff, Q1_std)
 
 #########################################################
 dirname = "/home/u17/jiachuanxu/CosmoLike/KL_WFIRST"
@@ -96,11 +96,11 @@ sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(),
 
 ### test likelihood evaluation bias
 if samp_bary:
-    parval = [0.831, 0.831, 0.0]
+    parval = [0.851, 0.831, 0.2]
 else:
-    parval = [0.831, 0.831]
+    parval = [0.851, 0.831]
 test_logpost = test_likelihood(sample_params, parval)
 print "test likelihood:", test_logpost
 
 ### run mcmc chains
-sample_main(sample_params,args.nsteps,args.nwalkers,1,chain_file+"_%d"%args.nsteps, blind=False, pool=MPIPool())
+#sample_main(sample_params,args.nsteps,args.nwalkers,1,chain_file+"_%d"%args.nsteps, blind=False, pool=MPIPool())
