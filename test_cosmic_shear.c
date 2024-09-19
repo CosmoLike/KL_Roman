@@ -581,6 +581,7 @@ int main(int argc, char** argv)
 		test_LSST_WL(i, probe, bary_scenarios[k]);
 	}
   else if (strcmp(argv[1], "RomanPIT")){
+    printf("Calculate dv for RomanPIT!\n");
     int i = atoi(argv[2]);
     int j = atoi(argv[3]);
     int k = atoi(argv[4]);
