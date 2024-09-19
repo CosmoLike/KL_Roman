@@ -46,7 +46,7 @@
 #include "../cosmolike_core/theory/init_baryon.c"
 
 #define _WRITE_NZ_TOMO_ 1
-#define _WRITE_DATA_VECTOR_ 0
+#define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
 #define _COMPUTE_LIKELIHOOD_ 1
 #define _VERBOSE_ 0 

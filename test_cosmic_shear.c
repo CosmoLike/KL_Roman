@@ -49,7 +49,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   char strat[20];
   char invcov_fn[500], dv_fn[500], PCs_fn[500];
   sprintf(invcov_fn, "/xdisk/timeifler/jiachuanxu/RomanPIT/invcov/Roman_WL_%d%d_ssss_invcov_Ncl15_Ntomo10", i_depth, i_ellmax);
-  sprintf(dv_fn, "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_dmo", i_depth, i_ellmax);
+  sprintf(dv_fn, "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_%s", i_depth, i_ellmax, bary_sce);
   sprintf(PCs_fn, "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_9sim.pca", i_depth, i_ellmax);
   sprintf(strat, "Roman_WL_%d%d", i_depth, i_ellmax);
   /* here, do your time-consuming job */
@@ -121,7 +121,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   #if _COMPUTE_LIKELIHOOD_ == 1
   init_data_inv_bary(invcov_fn, dv_fn, PCs_fn);
   begin = clock();
-  for(int ii=0; ii<10; ii++)
+  for(int ii=0; ii<1; ii++)
   loglike=log_multi_like(
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,
@@ -582,7 +582,7 @@ int main(int argc, char** argv)
 	}
   else if (strcmp(argv[1], "RomanPIT")){
     int i = atoi(argv[2]);
-    int j = atoi(argv[3])
+    int j = atoi(argv[3]);
     int k = atoi(argv[4]);
     // id_sample here means ell_max; n_eff doesn't matter
     assert(i<5);assert(j<4);assert(k<12);
