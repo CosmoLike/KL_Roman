@@ -566,21 +566,21 @@ int main(int argc, char** argv)
 	char bary_scenarios[12][500]={"dmo", "mb2", "illustris", "eagle", "HzAGN", 
 		"TNG100", "cowls_AGN", "cowls_AGN_T8p5", "cowls_AGN_T8p7", 
 		"BAHAMAS", "BAHAMAS_T7p6", "BAHAMAS_T8p0"};
-	if(strcmp(argv[1], "DESI2")==0){
+	if (strcmp(argv[1], "DESI2")==0){
     int i = atoi(argv[2]);
     int k = atoi(argv[3]);
 		assert(i<6);assert(k<12);
 		// test DESI2-KL
 		test_DESI2_KL(i, 0, probe, bary_scenarios[k]);
 	}
-	else if (strcmp(argv[1], "LSST"){
+	else if (strcmp(argv[1], "LSST")){
 		int i = atoi(argv[2]);
     int k = atoi(argv[3]);
     assert(i<2);assert(k<12);
 		// test LSST cosmic shear
 		test_LSST_WL(i, probe, bary_scenarios[k]);
 	}
-  else if ((strcmp(argv[1], "RomanPIT")){
+  else if (strcmp(argv[1], "RomanPIT")){
     int i = atoi(argv[2]);
     int j = atoi(argv[3])
     int k = atoi(argv[4]);
