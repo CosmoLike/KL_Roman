@@ -506,6 +506,7 @@ double log_multi_like(
     log_L -= pow((nuisance.beta_ia - prior.beta_ia[0])/prior.beta_ia[1],2.0);
     log_L -= pow((nuisance.eta_ia - prior.eta_ia[0])/prior.eta_ia[1],2.0);
     log_L -= pow((nuisance.eta_ia_highz - prior.eta_ia_highz[0])/prior.eta_ia_highz[1],2.0);
+    if(_VERBOSE_==1) printf("log_prior IA = %f", log_L);
     log_L_prior+=0.5*log_L;
   }
   if(like.baryons==1){
@@ -513,6 +514,7 @@ double log_multi_like(
     log_L -= pow((Q1 - prior.bary_Q1[0])/prior.bary_Q1[1],2.0);
     log_L -= pow((Q2 - prior.bary_Q2[0])/prior.bary_Q2[1],2.0);
     log_L -= pow((Q3 - prior.bary_Q3[0])/prior.bary_Q3[1],2.0);
+    if(_VERBOSE_==1) printf("log_prior baryon = %f", log_L);
     log_L_prior+=0.5*log_L;
   }
   if(like.Planck15_BAO_H070p6_JLA_w0wa==1){
@@ -520,7 +522,7 @@ double log_multi_like(
   }
   if(_VERBOSE_==1){
     printf("%d %d %d %d\n",like.BAO,like.wlphotoz,like.clphotoz,like.shearcalib);
-    printf("logl %le %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz(),log_L_clusterMobs());
+    printf("log_prior: %le %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz(),log_L_clusterMobs());
   }
   int start=0;  
   
@@ -563,7 +565,13 @@ double log_multi_like(
     printf("error: chisqr = %le\n",chisqr);
     //exit(EXIT_FAILURE);
   }
-  if(_VERBOSE_==1) printf("************\nchisq - %le\nlog_L_prior - %le\n Q1 Q2 Q3 = %e %e %e\n IA params = %e %e %e %e\n************\n", -0.5*chisqr, log_L_prior, Q1, Q2, Q3, nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
+  if(_VERBOSE_==1) {
+    printf("************\n");
+    printf("log_like = %le\n", -0.5*chisqr);
+    printf("log_prior = %le\n", log_L_prior);
+    printf("Q1 Q2 Q3 = %e %e %e\n", Q1, Q2, Q3);
+    printf("IA params = %e %e %e %e\n************\n", nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
+  }
   return -0.5*chisqr+log_L_prior;
 }
 

@@ -84,7 +84,7 @@ initpriors_IA_bary("photo_opti","shear_opti","none",external_probe,
 initsurvey(strat)
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
 #initclusters()
-initia("NLA_HF","GAMA")
+initia("none","GAMA")
 initprobes("shear_shear")
 initdatainvbary(cov_file, data_file, bary_file)
 
