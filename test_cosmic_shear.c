@@ -27,7 +27,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   // 4 sets of ell max
   int N_ellmax = 4;
   double ellmax_list[4] = {1000.,2000.,3000.,4000.};
-
+  int Nell_list[4] = {15, 15, 15, 15};
   double delta_z_src = 0.01;
   double delta_z_lens = 0.01;
 
@@ -39,7 +39,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   int Ntomo_lens = 10;
   double Rmin_bias = 21.0; // not used 
   // 15 ell bins in Fourier space, from 20 to 3000
-  int Nell = 15;
+  int Nell = Nell_list[i_ellmax];
   double ell_min = 20.0;
   double ell_max = ellmax_list[i_ellmax];
   double ell_max_shear = ellmax_list[i_ellmax];
@@ -49,7 +49,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   char strat[20];
   char invcov_fn[500], dv_fn[500], PCs_fn[500];
   sprintf(invcov_fn, "/xdisk/timeifler/jiachuanxu/RomanPIT/invcov/Roman_WL_%d%d_ssss_invcov_Ncl15_Ntomo10", i_depth, i_ellmax);
-  sprintf(dv_fn, "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_dmo", i_depth, i_ellmax);
+  sprintf(dv_fn, "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_%s", i_depth, i_ellmax, bary_sce);
   sprintf(PCs_fn, "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_9sim.pca", i_depth, i_ellmax);
   sprintf(strat, "Roman_WL_%d%d", i_depth, i_ellmax);
   /* here, do your time-consuming job */
@@ -121,7 +121,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   #if _COMPUTE_LIKELIHOOD_ == 1
   init_data_inv_bary(invcov_fn, dv_fn, PCs_fn);
   begin = clock();
-  for(int ii=0; ii<10; ii++)
+  for(int ii=0; ii<1; ii++)
   loglike=log_multi_like(
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     0.3156,0.831,0.9645,-1.,0.,0.0491685,0.6727,0.,0.,

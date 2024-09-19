@@ -46,7 +46,7 @@
 #include "../cosmolike_core/theory/init_baryon.c"
 
 #define _WRITE_NZ_TOMO_ 1
-#define _WRITE_DATA_VECTOR_ 0
+#define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
 #define _COMPUTE_LIKELIHOOD_ 1
 #define _VERBOSE_ 0 
@@ -572,6 +572,7 @@ double log_multi_like(
     printf("Q1 Q2 Q3 = %e %e %e\n", Q1, Q2, Q3);
     printf("IA params = %e %e %e %e\n************\n", nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
   }
+  printf("loglike = %.2f, logprior = %.2f, s8 = %.4f, s8l = %.4f\n", -0.5*chisqr, log_L_prior, S8, sigma_8_lowz);
   return -0.5*chisqr+log_L_prior;
 }
 
@@ -644,7 +645,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   for (i=0;i<like.Ndata; i++){
     //a = pred[i]+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i);
     a = pred[i];
-    fprintf(F,"%d %le\n",i,a);
+    fprintf(F,"%d %.17e\n",i,a);
     //printf("%d %le\n",i,pred[i]);
   }
   fclose(F);

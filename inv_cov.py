@@ -240,8 +240,8 @@ r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',
 		  	# 	tickx[i] = 0.5*(ticks[i]+ticks[i+1])
 		  	# 	plt.plot([ticks[i]-0.5,ticks[i]-0.5],[-.5,ndata-0.5],linestyle ='-',color = 'k')
 		  	# 	plt.plot([-.5,ndata-0.5],[ticks[i]-0.5,ticks[i]-0.5],linestyle ='-',color = 'k')
-
-			plt.subplot(1, 1, 1, figsize=(10,10))
+			fig = plt.figure(figsize=(10,10))
+			plt.subplot(1, 1, 1)
 			ax = plt.gca()
 			# im = ax.imshow(np.log10(cov[:,:]), interpolation="nearest",vmin=-25, vmax=-10)
 			im = ax.imshow(cor, interpolation='nearest', origin='lower', vmin=-1, vmax=1,
