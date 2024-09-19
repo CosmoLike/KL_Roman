@@ -152,7 +152,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
     0.0, 0.0, 0.0,
     // sigma8 split at low-z
     0.831, 1.0);
-  printf("%le\n",loglike);
+  printf("loglike = %le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
   end = clock();
@@ -586,9 +586,9 @@ int main(int argc, char** argv)
   }*/
   for (int i=0; i<5; i++){
     for (int j=0; j<4; j++){
-      for (int k=0; k<12; k++){
-        test_RomanPIT_WL(i, j, probe, bary_scenarios[k]);
-      }
+      //for (int k=0; k<12; k++){
+        test_RomanPIT_WL(i, j, probe, bary_scenarios[0]);
+      //}
     }
   }
 	return 0;
