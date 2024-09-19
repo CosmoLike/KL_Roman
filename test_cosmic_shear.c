@@ -581,8 +581,9 @@ int main(int argc, char** argv)
 		test_LSST_WL(i, probe, bary_scenarios[k]);
 	}
   else if (strcmp(argv[1], "RomanPIT")){
+    printf("Calculate dv for RomanPIT!\n");
     int i = atoi(argv[2]);
-    int j = atoi(argv[3])
+    int j = atoi(argv[3]);
     int k = atoi(argv[4]);
     // id_sample here means ell_max; n_eff doesn't matter
     assert(i<5);assert(j<4);assert(k<12);
