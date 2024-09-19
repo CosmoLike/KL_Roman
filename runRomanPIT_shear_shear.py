@@ -58,7 +58,6 @@ data_vector_file = "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_dmo"%(args.i_d
 invcovmat_file = "invcov/Roman_WL_%d%d_ssss_invcov_Ncl15_Ntomo10"%(args.i_depth, args.i_ellmax)
 baryon_PCS_file = "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_9sim.pca"%(args.i_depth, args.i_ellmax)
 #chain_output_file = "chains/LSST_Y1_ss_Ncl%d_Ntomo%d"
-chain_output_file = "chains/Roman_WL_%d%d_zlow1_ss_Ncl15_Ntomo10"%(args.i_depth, args.i_ellmax)
 external_probe = "none"
 NPCs_used = args.baryPCA
 if NPCs_used>0:
@@ -66,6 +65,8 @@ if NPCs_used>0:
 else:
     samp_bary = False
 print "NPCs used = %d", NPCs_used
+chain_output_file = "chains/Roman_WL_%d%d_zlow1_ss_Ncl15_Ntomo10_PC%d"%(args.i_depth, args.i_ellmax, args.baryPCA)
+
 #cosmo_model = "LCDM_split"
 cosmo_model = "s8split_only"
 runmode = "halofit_split"
@@ -93,7 +94,13 @@ sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(),
     MG=False, NPCs=NPCs_used, cosmology=cosmo_model, source_photo_z=False, 
     shear_calibration=False, IA=False)
 
-test_logpost = test_likelihood(sample_params, [0.831, 0.831])
-print "test likelihood: %.2f", test_logpost
+### test likelihood evaluation bias
+if samp_bary:
+    parval = [0.831, 0.831, 0.0]
+else:
+    parval = [0.831, 0.831]
+test_logpost = test_likelihood(sample_params, parval)
+print "test likelihood:", test_logpost
 
-#sample_main(sample_params,args.nsteps,args.nwalkers,1,chain_file+"_%d"%args.nsteps, blind=False, pool=MPIPool())
+### run mcmc chains
+sample_main(sample_params,args.nsteps,args.nwalkers,1,chain_file+"_%d"%args.nsteps, blind=False, pool=MPIPool())

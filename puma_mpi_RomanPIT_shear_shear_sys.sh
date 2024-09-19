@@ -4,7 +4,7 @@
 
 ### 1. puma
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=8
+#SBATCH --ntasks-per-node=80
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
