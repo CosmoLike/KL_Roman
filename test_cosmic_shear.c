@@ -573,14 +573,14 @@ int main(int argc, char** argv)
 		// test DESI2-KL
 		test_DESI2_KL(i, 0, probe, bary_scenarios[k]);
 	}
-	else if (strcmp(argv[1], "LSST")){
+	else if (strcmp(argv[1], "LSST")==0){
 		int i = atoi(argv[2]);
     int k = atoi(argv[3]);
     assert(i<2);assert(k<12);
 		// test LSST cosmic shear
 		test_LSST_WL(i, probe, bary_scenarios[k]);
 	}
-  else if (strcmp(argv[1], "RomanPIT")){
+  else if (strcmp(argv[1], "RomanPIT")==0){
     printf("Calculate dv for RomanPIT!\n");
     int i = atoi(argv[2]);
     int j = atoi(argv[3]);
