@@ -49,7 +49,7 @@
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
 #define _COMPUTE_LIKELIHOOD_ 0
-#define _VERBOSE_ 1
+#define _VERBOSE_ 0
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
 double C_cgl_tomo_sys(double ell_Cluster,int zl,int nN, int zs);
@@ -572,6 +572,7 @@ double log_multi_like(
     printf("Q1 Q2 Q3 = %e %e %e\n", Q1, Q2, Q3);
     printf("IA params = %e %e %e %e\n************\n", nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
   }
+  printf("loglike = %.2f, logprior = %.2f\n", -0.5*chisqr, log_L_prior);
   return -0.5*chisqr+log_L_prior;
 }
 
