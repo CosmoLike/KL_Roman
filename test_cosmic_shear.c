@@ -27,7 +27,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   // 4 sets of ell max
   int N_ellmax = 4;
   double ellmax_list[4] = {1000.,2000.,3000.,4000.};
-
+  int Nell_list[4] = {15, 15, 15, 15};
   double delta_z_src = 0.01;
   double delta_z_lens = 0.01;
 
@@ -39,7 +39,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   int Ntomo_lens = 10;
   double Rmin_bias = 21.0; // not used 
   // 15 ell bins in Fourier space, from 20 to 3000
-  int Nell = 15;
+  int Nell = Nell_list[i_ellmax];
   double ell_min = 20.0;
   double ell_max = ellmax_list[i_ellmax];
   double ell_max_shear = 3000.0;

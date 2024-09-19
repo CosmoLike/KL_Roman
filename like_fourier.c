@@ -645,7 +645,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   for (i=0;i<like.Ndata; i++){
     //a = pred[i]+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i);
     a = pred[i];
-    fprintf(F,"%d %le\n",i,a);
+    fprintf(F,"%d %.17e\n",i,a);
     //printf("%d %le\n",i,pred[i]);
   }
   fclose(F);
