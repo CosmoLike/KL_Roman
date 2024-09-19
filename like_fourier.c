@@ -46,10 +46,10 @@
 #include "../cosmolike_core/theory/init_baryon.c"
 
 #define _WRITE_NZ_TOMO_ 1
-#define _WRITE_DATA_VECTOR_ 1
+#define _WRITE_DATA_VECTOR_ 0
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 0
-#define _VERBOSE_ 0
+#define _COMPUTE_LIKELIHOOD_ 1
+#define _VERBOSE_ 0 
 
 double C_shear_tomo_sys(double ell,int z1,int z2);
 double C_cgl_tomo_sys(double ell_Cluster,int zl,int nN, int zs);
@@ -522,7 +522,7 @@ double log_multi_like(
   }
   if(_VERBOSE_==1){
     printf("%d %d %d %d\n",like.BAO,like.wlphotoz,like.clphotoz,like.shearcalib);
-    printf("log_prior: %le %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz(),log_L_clusterMobs());
+    printf("log_prior: %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz());
   }
   int start=0;  
   
