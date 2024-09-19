@@ -92,4 +92,7 @@ sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(),
     MG=False, NPCs=NPCs_used, cosmology=cosmo_model, source_photo_z=False, 
     shear_calibration=False, IA=False)
 
-sample_main(sample_params,args.nsteps,args.nwalkers,1,chain_file+"_%d"%args.nsteps, blind=False, pool=MPIPool())
+test_logpost = test_likelihood(sample_params. [0.831, 0.831])
+print "test likelihood: %.2f", test_logpost
+
+#sample_main(sample_params,args.nsteps,args.nwalkers,1,chain_file+"_%d"%args.nsteps, blind=False, pool=MPIPool())
