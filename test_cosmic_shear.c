@@ -42,7 +42,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   int Nell = 15;
   double ell_min = 20.0;
   double ell_max = ellmax_list[i_ellmax];
-  double ell_max_shear = 3000.0;
+  double ell_max_shear = ellmax_list[i_ellmax];
   // Now count how many scenarios
   int N_scenarios = N_depth * N_ellmax;
 
