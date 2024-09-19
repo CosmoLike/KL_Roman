@@ -49,9 +49,8 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   char strat[20];
   char invcov_fn[500], dv_fn[500], PCs_fn[500];
   sprintf(invcov_fn, "/xdisk/timeifler/jiachuanxu/RomanPIT/invcov/Roman_WL_%d%d_ssss_invcov_Ncl15_Ntomo10", i_depth, i_ellmax);
-  sprintf(dv_fn, "datav/RomanPIT_%d%d_shear_shear_Ntomo4_Ncl15_dmo", i_depth, i_ellmax);
-  sprintf(PCs_fn, "datav/RmanPIT_%d%d_shear_shear_Ntomo4_Ncl15_9sim.pca", i_depth, i_ellmax);
-
+  sprintf(dv_fn, "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_dmo", i_depth, i_ellmax);
+  sprintf(PCs_fn, "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_9sim.pca", i_depth, i_ellmax);
   sprintf(strat, "Roman_WL_%d%d", i_depth, i_ellmax);
   /* here, do your time-consuming job */
 
@@ -152,7 +151,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
     // Q1, Q2, Q3
     0.0, 0.0, 0.0,
     // sigma8 split at low-z
-    0.831, 0.15);
+    0.831, 1.0);
   printf("%le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
