@@ -103,4 +103,4 @@ test_logpost = test_likelihood(sample_params, parval)
 print "test likelihood:", test_logpost
 
 ### run mcmc chains
-#sample_main(sample_params,args.nsteps,args.nwalkers,1,chain_file+"_%d"%args.nsteps, blind=False, pool=MPIPool())
+sample_main(sample_params,args.nsteps,args.nwalkers,1,chain_file+"_%d"%args.nsteps, blind=False, pool=MPIPool())
