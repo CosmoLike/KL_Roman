@@ -65,7 +65,7 @@ if NPCs_used>0:
 else:
     samp_bary = False
 print "NPCs used = %d", NPCs_used
-chain_output_file = "chains/Roman_WL_%d%d_zlow1_ss_Ncl15_Ntomo10_PC%d"%(args.i_depth, args.i_ellmax, args.baryPCA)
+chain_output_file = "chains/Roman_WL_%d%d_zlow1_ss_Ncl15_Ntomo10_PC%d_wOm"%(args.i_depth, args.i_ellmax, args.baryPCA)
 
 #cosmo_model = "LCDM_split"
 cosmo_model = "s8split_only"
@@ -93,12 +93,13 @@ initdatainvbary(cov_file, data_file, bary_file)
 sample_params = sample_cosmology_shear_nuisance(get_N_tomo_shear(), 
     MG=False, NPCs=NPCs_used, cosmology=cosmo_model, source_photo_z=False, 
     shear_calibration=False, IA=False)
+sample_params = ['omega_m', ] + sample_params 
 
 ### test likelihood evaluation bias
 if samp_bary:
-    parval = [0.831, 0.831, 0.0]
+    parval = [0.3156, 0.831, 0.831, 0.0]
 else:
-    parval = [0.831, 0.831]
+    parval = [0.3156, 0.831, 0.831]
 test_logpost = test_likelihood(sample_params, parval)
 print "test likelihood:", test_logpost
 
