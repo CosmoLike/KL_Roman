@@ -17,12 +17,12 @@ nz_lens_file = "zdistris/lens_LSSTY1"
 data_vector_file = "datav/LSST_Y1_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/LSST_Y1_ssss_invcov_Ncl%d_Ntomo%d"
 baryon_PCS_file = "datav/LSST_Y1_shear_shear_Ntomo%d_Ncl%d_9sim.pca"
-#chain_output_file = "chains/LSST_Y1_ss_Ncl%d_Ntomo%d"
-chain_output_file = "chains/LSST_Y1_cos_s8split_only_zlow015_ss_Ncl%d_Ntomo%d"
+chain_output_file = "chains/LSST_Y1_cos_ss_Ncl%d_Ntomo%d"
+#chain_output_file = "chains/LSST_Y1_cos_s8split_only_zlow015_ss_Ncl%d_Ntomo%d"
 external_probe = "none"
 NPCs_used = 0
-#cosmo_model = "LCDM_split"
-cosmo_model = "s8split_only"
+cosmo_model = "LCDM"
+#cosmo_model = "s8split_only"
 runmode = "halofit_split"
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_file)
