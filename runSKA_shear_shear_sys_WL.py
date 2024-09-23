@@ -45,7 +45,7 @@ chain_output_file = "chains/%s_LCDM_ss_Ncl%d_Ntomo%d"
 external_prior = "none"   
 
 ## mcmc setting
-nsteps = 3000
+nsteps = 1000
 nwalkers = 400
 nthreads = 1
 

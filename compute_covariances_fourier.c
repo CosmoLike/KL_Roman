@@ -46,7 +46,7 @@
 #include "../cosmolike_core/theory/covariances_cluster.c"
 #include "init_WFIRST_forecasts.c"
 
-#define _WRITE_NZ_TOMO_ 1
+#define _WRITE_NZ_TOMO_ 0
 
 double cov_G_shear_shear_tomo_one(double l, double delta_l, int z1, int z2, int z3, int z4);
 void run_cov_N_N (char *OUTFILE, char *PATH, int nzc1, int nzc2,int start);

@@ -3,14 +3,14 @@
 #SBATCH --output=/xdisk/timeifler/yhhuang/log/cnSKA_WL-%A_%a.out
 #SBATCH --error=log/cnSKA_WL-%A_%a.err
 #SBATCH --nodes=1
-#SBATCH --array=1-12
+#SBATCH --array=1-18
 #SBATCH --ntasks-per-node=80
 #SBATCH --ntasks-per-socket=40
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
 #SBATCH --account=timeifler
-#SBATCH --time=48:00:00
+#SBATCH --time=72:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=yhhuang@arizona.edu
 

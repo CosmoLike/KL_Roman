@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 0
+#define _COMPUTE_LIKELIHOOD_ 1
 #define _VERBOSE_ 0 
 
 #define _photoz_limit_ 20.0     // set to a large number if not using
@@ -911,7 +911,7 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
     // lens galaxy photo-z bias[0-9] + std
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
     // additive shear calibration bias[0-9]
@@ -952,7 +952,7 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
     // 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
     // lens galaxy photo-z bias[0-9] + std
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
