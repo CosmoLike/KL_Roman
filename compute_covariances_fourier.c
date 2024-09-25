@@ -71,17 +71,17 @@ void run_cov_shear_shear_one(char *OUTFILE, char *PATH, double *ell, double *del
 double cov_G_shear_shear_tomo_one(double l, double delta_l, int z1, int z2, int z3, int z4){
   double C13, C14, C23, C24, N13 =0, N14=0, N23=0, N24=0;
   double fsky = survey.area/41253.0;
-  /* one component power spectra */
+  /* one component cosmic variance */
   C13 = 0.25*C_shear_tomo_nointerp(l,z1,z3);C24 = 0.25*C_shear_tomo_nointerp(l,z2,z4);
   C14 = 0.25*C_shear_tomo_nointerp(l,z1,z4);C23 = 0.25*C_shear_tomo_nointerp(l,z2,z3);
 
-  /* this is one component shot noise*/
-  if (z1 == z3){N13= pow(survey.sigma_e,2.0)/(2.0*nsource(z1)*survey.n_gal_conversion_factor);}
-  if (z1 == z4){N14= pow(survey.sigma_e,2.0)/(2.0*nsource(z1)*survey.n_gal_conversion_factor);}
-  if (z2 == z3){N23= pow(survey.sigma_e,2.0)/(2.0*nsource(z2)*survey.n_gal_conversion_factor);}
-  if (z2 == z4){N24=pow(survey.sigma_e,2.0)/(2.0*nsource(z2)*survey.n_gal_conversion_factor);}
+  /* tone component shot noise */
+  if (z1 == z3){N13 = pow(survey.sigma_e,2.0)/(4.0*nsource(z1)*survey.n_gal_conversion_factor);}
+  if (z1 == z4){N14 = pow(survey.sigma_e,2.0)/(4.0*nsource(z1)*survey.n_gal_conversion_factor);}
+  if (z2 == z3){N23 = pow(survey.sigma_e,2.0)/(4.0*nsource(z2)*survey.n_gal_conversion_factor);}
+  if (z2 == z4){N24 = pow(survey.sigma_e,2.0)/(4.0*nsource(z2)*survey.n_gal_conversion_factor);}
   
-  return (C13*C24+ C13*N24+N13*C24 + C14*C23+C14*N23+N14*C23+N13*N24+N14*N23)/((2.*l+1.)*delta_l*fsky);
+  return (C13*C24 + C13*N24 + N13*C24 + C14*C23+ C14*N23+ N14*C23 + N13*N24 + N14*N23)/((2.*l+1.)*delta_l*fsky);
 }
 
 void run_cov_N_N (char *OUTFILE, char *PATH, int nzc1, int nzc2,int start)
@@ -595,20 +595,20 @@ int main(int argc, char** argv)
   // Roman HLIS (5000 deg2) assumes 20 bins from ell=30 to 4000
   int N_scenarios_area = 1;
   double survey_area[1] = {30000.0};
-  char survey_names[1][100] = {"SKA_WL"}; // DSA_allsky, SKA_WL, etc
+  char survey_names[1][100] = {"SKA_KL"}; // DSA_allsky, SKA_WL, etc
 
   // IA model
-  char ia_model[100] = "NLA_HF";          // NLA_HF (WL) or none (KL)
+  char ia_model[100] = "none";          // NLA_HF (WL) or none (KL)
 
   // 1 if single component
-  int one = 0;
+  int one = 1;
   
   // Six sets of target selection criteria, each with different n(z)
   int N_scenarios_selection = 1;
   // Start with 4 source tomo bins 
   //int Ntomo_source[6] = {4, 4, 4, 4, 4, 4};
   int Ntomo_source[1] = {4};
-  char dndz[1][100] = {"zdistris/zdistri_trecs_WL"};
+  char dndz[1][100] = {"zdistris/zdistri_trecs_KL"};
   printf("%d target selection scenarios\n", N_scenarios_selection);
 
   // Six shape noise scenarios
@@ -680,7 +680,7 @@ int main(int argc, char** argv)
     sprintf(_shearm_prior, "shear_%s", survey_names[i_selection]);
     init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
       // IA_flag, A, beta, eta, etaZ
-      true, 3.0, 1.2, 3.8, 2.0, 
+      false, 3.0, 1.2, 3.8, 2.0, 
       // bary_flag, Q1, Q2, Q3
       false, 16, 1.9, 0.7);
     init_survey(_surveyname);
