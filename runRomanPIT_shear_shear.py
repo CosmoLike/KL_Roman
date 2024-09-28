@@ -41,7 +41,7 @@ Q1_priors = { # use Illustris Q1 value for the std. of the Q1 prior
 ell_max = ellmax_list[args.i_ellmax]
 neff = neff_list[args.i_depth]
 Q1_std = Q1_priors["%d%d"%(args.i_depth, args.i_ellmax)]
-#print "ell max = %.0f; neff = %.0f; Q1 std = %.1f"%(ell_max, neff, Q1_std)
+print "ell max = %.0f; neff = %.0f; Q1 std = %.1f"%(ell_max, neff, Q1_std)
 
 #########################################################
 dirname = "/home/u17/jiachuanxu/CosmoLike/KL_WFIRST"

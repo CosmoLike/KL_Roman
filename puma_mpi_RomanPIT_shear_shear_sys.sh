@@ -45,31 +45,31 @@ MPIEXEC="/opt/ohpc/pub/mpi/mpich-gnu8-ohpc/3.3.1/bin/mpiexec"
 #export MPI_DSM_DISTRIBUTE
 date
 
-# hit = 0
-# for i in $(seq 0 4)
-# do
-# 	for j in $(seq 0 3)
-# 	do
-# 		for k in $(seq 0 1)
-# 		do
-# 			if [ ${hit} -eq ${SLURM_ARRAY_TASK_ID} ]; then
-# 				mpiexec -n ${MPI_NPROCESS} python runRomanPIT_shear_shear.py ${i} ${j} ${k}
-# 			hit = $(( ${hit} + 1 ))
-# 		done
-# 	done
-# done
-
 hit=0
 for i in $(seq 0 4)
 do
-	for k in $(seq 0 1)
+	for j in $(seq 0 3)
 	do
-		#hit = $(( ${hit} + 1 ))
-		((hit++))
-		if [ "$hit" -eq "$SLURM_ARRAY_TASK_ID" ]; then
-			${MPIEXEC} -n ${SLURM_NTASKS} python runRomanPIT_shear_shear.py ${i} 2 ${k}
-		fi
-	done
-done
+		for k in $(seq 0 1)
+		do
+			((hit++))
+			if [ "${hit}" -eq "${SLURM_ARRAY_TASK_ID}" ]; then
+				${MPIEXEC} -n ${SLURM_NTASKS} python runRomanPIT_shear_shear.py ${i} ${j} ${k}
+			fi
+ 		done
+ 	done
+ done
+
+#hit=0
+#for i in $(seq 0 4)
+#do
+#	for k in $(seq 0 1)
+#	do
+#		((hit++))
+#		if [ "$hit" -eq "$SLURM_ARRAY_TASK_ID" ]; then
+#			${MPIEXEC} -n ${SLURM_NTASKS} python runRomanPIT_shear_shear.py ${i} 2 ${k}
+#		fi
+#	done
+#done
 
 date

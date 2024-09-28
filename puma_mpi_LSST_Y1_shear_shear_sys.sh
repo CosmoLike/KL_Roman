@@ -1,11 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=LSST1cn
-#SBATCH --output=LSST_Y1-%A_%a.out
+#SBATCH --output=/xdisk/timeifler/jiachuanxu/job_logs/LSST_Y1-%A_%a.out
 
 ### 1. puma
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=80
-#SBATCH --ntasks-per-socket=40
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
@@ -24,7 +23,6 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jiachuanxu@arizona.edu
 
-MPI_NPROCESS=400
 echo "SLURM_ARRAY_TASK_ID = ${SLURM_ARRAY_TASK_ID}"
 
 module load gsl
@@ -39,9 +37,9 @@ echo Directory is `pwd`
 echo Slurm job NAME is $SLURM_JOB_NAME
 echo Slurm job ID is $SLURM_JOBID
 cd $SLURM_SUBMIT_DIR
-conda activate python2
+conda activate python2_ext
+MPIEXEC="/opt/ohpc/pub/mpi/mpich-gnu8-ohpc/3.3.1/bin/mpiexec"
 
-export MPI_DSM_DISTRIBUTE
 date
-/usr/bin/time mpiexec -n ${MPI_NPROCESS} python runLSST_shear_shear_sys_Y1.py
+${MPIEXEC} -n ${SLURM_NTASKS} python runLSST_shear_shear_sys_Y1.py
 date
