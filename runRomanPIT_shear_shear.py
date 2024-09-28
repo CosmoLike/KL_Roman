@@ -62,8 +62,10 @@ external_probe = "none"
 NPCs_used = args.baryPCA
 if NPCs_used>0:
     samp_bary = True
+    invcovmat_file = invcovmat_file.replace("invcov", "invcov_barymarg")
 else:
     samp_bary = False
+    invcovmat_file = invcovmat_file.replace("invcov", "invcov_barymarg")
 print "NPCs used = %d", NPCs_used
 chain_output_file = "chains/Roman_WL_%d%d_zlow1_ss_Ncl15_Ntomo10_PC%d_wOm"%(args.i_depth, args.i_ellmax, args.baryPCA)
 
