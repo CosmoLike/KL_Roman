@@ -1485,7 +1485,7 @@ int run_Roman_PIT(int argc, char**argv)
   assert(i_area<N_area);
   assert(i_ellmax<N_ellmax);
   printf("Max hit index: %d\n",_shear_cov_blocks_* N_depth*N_area*N_ellmax);
-  if(i_ellmax!=3){printf("Skip ellmax = %d\n", i_ellmaxf); return 0;}
+  if(i_ellmax!=3){printf("Skip ellmax = %d\n", i_ellmax); return 0;}
 
   // ~ equal dlogell setting would be [12, 14, 15, 16], all approximated as 15
   int Nell = 15;
@@ -1499,8 +1499,9 @@ int run_Roman_PIT(int argc, char**argv)
 
   fprintf("i_depth = %d, i_area = %d, i_ellmax = %d\n", i_depth, i_area, i_ellmax);
   fprintf("Source dndz file: %s\n", dndz[i_depth]);
-  fprintf("Area: %.0f sq deg\n", area_list[i_area]);
-  fprintf("ell_max: %.0f\n", ell_max);
+  fprintf("Area: %f sq deg\n", survey.area);
+  fprintf("ell_max: %f\n", ell_max);
+  fprintf("n_src: %f\n", survey.n_gal);
   sprintf(survey_names, "Roman_WL_%d%d%d", i_depth, i_area, i_ellmax);
 
   // initialization
