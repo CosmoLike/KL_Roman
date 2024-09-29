@@ -1475,7 +1475,7 @@ int run_Roman_PIT(int argc, char**argv)
   double ell_max_list[4] = {1000.0, 2000.0, 3000.0, 4000.0};
 
   // There layers of choices: n_eff+dndz, area, ell_max
-  int choice_id = (int) (hit/_shear_cov_blocks_);
+  int choice_id = (int) ((hit-1)/_shear_cov_blocks_);
   int i_depth = (int) (choice_id/(N_area*N_ellmax));
   choice_id -= i_depth * (N_area*N_ellmax);
   int i_area = (int) (choice_id/N_ellmax);
