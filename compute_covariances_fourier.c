@@ -9,7 +9,7 @@
 #include <string.h>
 
 #include <fftw3.h>
-#define __COV_BREAK_UP__ 0
+#define __COV_BREAK_UP__ 1
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_sf_erf.h>
 #include <gsl/gsl_integration.h>
@@ -523,14 +523,14 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
     for (nl2 = 0; nl2 < like.Ncl; nl2 ++){
       #if __COV_BREAK_UP__==0
       c_ng = 0.; c_g = 0.;
-      // if (ell[nl1] < like.lmax_shear && ell[nl2] < like.lmax_shear){
-      //   c_ng = cov_NG_shear_shear_tomo(ell[nl1],ell[nl2],z1,z2,z3,z4);
-      // }
+      if (ell[nl1] < like.lmax_shear && ell[nl2] < like.lmax_shear){
+        c_ng = cov_NG_shear_shear_tomo(ell[nl1],ell[nl2],z1,z2,z3,z4);
+      }
       if (nl1 == nl2){
         c_g =  cov_G_shear_shear_tomo(ell[nl1],dell[nl1],z1,z2,z3,z4);
         if (ell[nl1] > like.lmax_shear && n1!=n2){c_g = 0.;}
         
-      }         
+      }
       fprintf(F1,"%d %d %e %e %d %d %d %d %e %e\n",like.Ncl*n1+nl1,like.Ncl*(n2)+nl2,ell[nl1],ell[nl2],z1,z2,z3,z4,c_g,c_ng);
       #elif __COV_BREAK_UP__==1
       c_ng = 0.;
@@ -541,7 +541,6 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
       if (nl1 == nl2){
         cov_G_shear_shear_tomo_break_up(ell[nl1],dell[nl1],z1,z2,z3,z4,res);
         if (ell[nl1] > like.lmax_shear && n1!=n2){res[0]=0.;res[1]=0.0;res[2]=0.0;}
-        
       }         
       fprintf(F1,"%d %d %e %e %d %d %d %d %e %e %e %e\n",like.Ncl*n1+nl1,like.Ncl*(n2)+nl2,ell[nl1],ell[nl2],z1,z2,z3,z4,res[0],res[1],res[2],c_ng);
       #endif
@@ -1451,16 +1450,21 @@ int run_LSST(int argc, char**argv)
 int run_Roman_PIT(int argc, char**argv)
 {
   /* Forecast for Roman PIT Survey Strategy */
+  // Setting Scenarios (survey area, source density, ell max)
+  // As a comparison, LSST (12300 deg2) assumes 15 bins from ell=20 to 3000
   int i,l,m,n,o,s,p,nl1,t,k;
   char OUTFILE[400],filename[400];
-  // Setting Scenarios (survey area, source density, lens density)
-  // As a comparison, LSST (12300 deg2) assumes 15 bins from ell=20 to 3000
-  // Area is fixed to 1000 deg2 and FoM scale linearly with survey area
   char survey_names[100];
-  sprintf(survey_names, "Roman");
-  // 5 sets of survey depth, each with different n(z)?
-  int N_scenarios_depth = 5;
-  int Ntomo_source[5] = {10, 10, 10, 10, 10};
+  Ntable.N_a=20;
+
+  // decide configuration based on hit index
+  int Ntomo_source = 10;
+  int _shear_Nps_ = (int) (Ntomo_source*(Ntomo_source+1)/2);
+  int _shear_cov_blocks_ = (int) (_shear_Nps_*(_shear_Nps_+1)/2);
+  int hit = atoi(argv[1]);
+  int N_depth = 5;
+  int N_area = 5;
+  int N_ellmax = 4;
   char dndz[5][100] = {
      "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff20",
      "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff25", 
@@ -1468,114 +1472,101 @@ int run_Roman_PIT(int argc, char**argv)
      "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff35",
      "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff40",
   };
-  printf("%d survey depth scenarios\n", N_scenarios_depth);
-  // 4 ell-max scenarios
-  int N_scenarios_ellmax = 4;
-  // ~ equal dlogell setting would be [12, 14, 15, 16], all approximated as 15
-  int Nell_list[4] = {15, 15, 15, 15};
-  double ell_min_list[4] = {20.0, 20.0, 20.0, 20.0};
   double ell_max_list[4] = {1000.0, 2000.0, 3000.0, 4000.0};
-  double ell_max_shear = 4000.0; // Cluster lensing
-  printf("%d shape noise scenarios\n", N_scenarios_ellmax);
-  // Now count how many scenarios
-  int N_scenarios = N_scenarios_depth * N_scenarios_ellmax;
 
+  // There layers of choices: n_eff+dndz, area, ell_max
+  int choice_id = (int) (hit/_shear_cov_blocks_);
+  int i_depth = (int) (choice_id/(N_area*N_ellmax));
+  choice_id -= i_depth * (N_area*N_ellmax);
+  int i_area = (int) (choice_id/N_ellmax);
+  choice_id -= i_area * N_ellmax;
+  int i_ellmax = choice_id;
+  assert(i_depth<N_depth);
+  assert(i_area<N_area);
+  assert(i_ellmax<N_ellmax);
+  printf("Max hit index: %d\n",_shear_cov_blocks_* N_depth*N_area*N_ellmax);
+  if(i_ellmax!=3){printf("Skip ellmax = %d\n", i_ellmaxf); return 0;}
+
+  // ~ equal dlogell setting would be [12, 14, 15, 16], all approximated as 15
+  int Nell = 15;
+  double ell_min = 20.0;
+  double ell_max = ell_max_list[i_ellmax];
+  double ell_max_shear = 4000.0; // Cluster lensing
   // Lens galaxies not used, set to arbitrary values
   float lens_density = 66.0;
   int Ntomo_lens = 10;
   double Rmin_bias = 21.0; // not used 
 
-  int hit=atoi(argv[1]);
-  Ntable.N_a=20;
+  fprintf("i_depth = %d, i_area = %d, i_ellmax = %d\n", i_depth, i_area, i_ellmax);
+  fprintf("Source dndz file: %s\n", dndz[i_depth]);
+  fprintf("Area: %.0f sq deg\n", area_list[i_area]);
+  fprintf("ell_max: %.0f\n", ell_max);
+  sprintf(survey_names, "Roman_WL_%d%d%d", i_depth, i_area, i_ellmax);
 
-  k=1;
+  // initialization
+  double logdl=(log(ell_max)-log(ell_min))/Nell;
+  double *ell, *dell, *ell_Cluster, *dell_Cluster;
+  ell=create_double_vector(0,Nell-1);
+  dell=create_double_vector(0,Nell-1);
+  ell_Cluster=create_double_vector(0,Cluster.lbin-1);
+  dell_Cluster=create_double_vector(0,Cluster.lbin-1);
+  int j=0;
+  printf("Ell array:\n");
+  for(i=0;i<Nell;i++){
+    ell[i]=exp(log(ell_min)+(i+0.5)*logdl);
+    dell[i]=exp(log(ell_min)+(i+1)*logdl)-exp(log(ell_min)+(i*logdl));
+    if(ell[i]<ell_max_shear) printf("%le\n",ell[i]);
+    if(ell[i]>ell_max_shear){
+      ell_Cluster[j]=ell[i];
+      dell_Cluster[j]=dell[i];
+      printf("%le %le\n",ell[i],ell_Cluster[j]);
+      j++;
+    }
+  }
 
-  for(t=0;t<N_scenarios;t++){
-    // parsing covariance settings
-    int temp = t;
-    int i_depth = temp/N_scenarios_ellmax;
-    temp -= i_depth * N_scenarios_ellmax;
-    int i_ellmax = temp;
-    temp -= i_ellmax;
-    assert(temp==0);
-    printf("Depth case %d and ellmax case %d\n", i_depth+1, i_ellmax+1);
+  init_cosmo_runmode("halofit");
+  init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, Ntomo_source, Ntomo_lens);
+  init_priors_IA_bary("photo_opti", "shear_opti","none","none",
+    false, 3.0, 1.2, 3.8, 2.0, false, 16, 1.9, 0.7);
+  init_survey(survey_names);
+  // init source and lens n(z) and photo-z 
+  init_galaxies(dndz[i_depth], "zdistris/lens_LSSTY1", "gaussian", "gaussian", "SN10");
+  
+  init_IA("none", "GAMA");// KL assumes no IA; WL assumes NLA_HF
+  printf("test\n");
+  init_probes("shear_shear");
+  sprintf(covparams.outdir, "/xdisk/timeifler/jiachuanxu/RomanPIT/covpara_ng/");
 
-    //set ell-bins for cosmic shear
-    int Nell = Nell_list[i_ellmax];
-    double ell_min = ell_min_list[i_ellmax];
-    double ell_max = ell_max_list[i_ellmax];
-    double logdl=(log(ell_max)-log(ell_min))/Nell;
-    double *ell, *dell, *ell_Cluster, *dell_Cluster;
-    ell=create_double_vector(0,Nell-1);
-    dell=create_double_vector(0,Nell-1);
-    ell_Cluster=create_double_vector(0,Cluster.lbin-1);
-    dell_Cluster=create_double_vector(0,Cluster.lbin-1);
-    int j=0;
-    printf("Ell array:\n");
-    for(i=0;i<Nell;i++){
-      ell[i]=exp(log(ell_min)+(i+0.5)*logdl);
-      dell[i]=exp(log(ell_min)+(i+1)*logdl)-exp(log(ell_min)+(i*logdl));
-      if(ell[i]<ell_max_shear) printf("%le\n",ell[i]);
-      if(ell[i]>ell_max_shear){
-        ell_Cluster[j]=ell[i];
-        dell_Cluster[j]=dell[i];
-        printf("%le %le\n",ell[i],ell_Cluster[j]);
-        j++;
-      }
-    } 
+  printf("----------------------------------\n");  
+  printf("area: %.2f n_source: %.2f n_lens: %.2f\n",
+    survey.area, survey.n_gal, survey.n_lens);
+  printf("----------------------------------\n");
 
-    //RUN MODE setup
-    init_cosmo_runmode("halofit");
-    init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, 
-    Ntomo_source[i_depth], Ntomo_lens);
-    char _surveyname[20];
-    sprintf(_surveyname, "Roman_WL_%d%d", i_depth, i_ellmax);
-    // photo-z set up
-    char _photoz_prior[100];
-    char _shearm_prior[100];
-    sprintf(_photoz_prior, "photo_opti");
-    sprintf(_shearm_prior, "shear_opti");
-    init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
-      false, 3.0, 1.2, 3.8, 2.0, false, 16, 1.9, 0.7);
-    init_survey(_surveyname);
-    // init source and lens n(z) and photo-z 
-    init_galaxies(dndz[i_depth], "zdistris/lens_LSSTY1", "gaussian", "gaussian", "SN10");
-    
-    init_IA("NLA_HF", "GAMA");// KL assumes no IA; WL assumes NLA_HF
-    printf("test\n");
-    init_probes("shear_shear");
-    sprintf(covparams.outdir, 
-      "/xdisk/timeifler/jiachuanxu/RomanPIT/covpara/");
-
-    printf("----------------------------------\n");  
-    printf("area: %.2f n_source: %.2f n_lens: %.2f\n",
-      survey.area, survey.n_gal, survey.n_lens);
-    printf("----------------------------------\n");
-    /******************************* START ************************************/
-    /********************** cosmic shear - cosmic shear  **********************/
-    if(like.shear_shear==1){
-      sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
-      for (l=0; l<tomo.shear_Npowerspectra; l++){
-        for (m=l;m<tomo.shear_Npowerspectra; m++){
-          if(k==hit){
-            printf("catch k=%d\n", hit); 
-            sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
-            if (fopen(filename, "r") != NULL){
-              printf("File %s already exist! Forced not to overwrite!\n",
-                      filename);
-              exit(1);
-            }
-            else {
-              run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
-              printf("Exit normally!\n");return 0;
-            }
+  k = choice_id * _shear_cov_blocks_ + 1;
+  /******************************* START ************************************/
+  /********************** cosmic shear - cosmic shear  **********************/
+  if(like.shear_shear==1){
+    sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+    for (l=0; l<tomo.shear_Npowerspectra; l++){
+      for (m=l;m<tomo.shear_Npowerspectra; m++){
+        if(k==hit){
+          printf("catch k=%d\n", hit); 
+          sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+          if (fopen(filename, "r") != NULL){
+            printf("File %s already exist! Forced not to overwrite!\n",
+                    filename);
+            exit(1);
           }
-          k=k+1;
+          else {
+            run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+            printf("Exit normally!\n");return 0;
+          }
         }
+        k=k+1;
       }
     }
-    /******************************** END *************************************/
   }
+  /******************************** END *************************************/
   printf("number of cov blocks for parallelization: %d\n",k-1); 
   printf("-----------------\n");
   printf("PROGRAM EXECUTED\n");

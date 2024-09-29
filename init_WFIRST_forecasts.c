@@ -1405,23 +1405,27 @@ void set_survey_parameters_to_DESI2_KL(char *surveyname)
 
 void set_survey_parameters_to_Roman_WL_PIT(char *surveyname)
 {
-  // example surveyname: Roman_WL_00
+  // example surveyname: Roman_WL_000
   double source_density[5] = {20.0, 25.0, 30.0, 35.0, 40.0};
+  double area_list[5] = {1000.0, 4000.0, 7000.0, 10000.0, 13000.0};
   double shape_noise_rms = 0.37;
 
   char _i_depth[2];
+  char _i_area[2];
   char _i_ellmax[2];
   strncpy(_i_depth, surveyname+9, 1);
-  strncpy(_i_ellmax, surveyname+10, 1);
+  strncpy(_i_area, surveyname+10, 1);
+  strncpy(_i_ellmax, surveyname+11, 1);
   int i_depth = atoi(_i_depth);
+  int i_area = atoi(_i_area);
   int i_ellmax = atoi(_i_ellmax);
-  printf("Setting depth %d and ellmax %d\n", i_depth, i_ellmax);
-  survey.area   = 1000.;
-  survey.n_gal   = source_density[i_depth];
-  survey.sigma_e   = shape_noise_rms;
+  survey.area = area_list[i_area];
+  survey.n_gal = source_density[i_depth];
+  survey.sigma_e = shape_noise_rms;
   survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
   survey.n_gal_conversion_factor=1.0/constants.arcmin/constants.arcmin;
   survey.m_lim=28;
+  printf("Setting: Depth %d Area %d ellmax %d\n", i_depth, i_area, i_ellmax);
   sprintf(survey.Kcorrect_File,"../zdistris/k+e.dat");
   sprintf(survey.name,surveyname);
 }
