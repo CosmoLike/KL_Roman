@@ -1497,11 +1497,11 @@ int run_Roman_PIT(int argc, char**argv)
   int Ntomo_lens = 10;
   double Rmin_bias = 21.0; // not used 
 
-  fprintf("i_depth = %d, i_area = %d, i_ellmax = %d\n", i_depth, i_area, i_ellmax);
-  fprintf("Source dndz file: %s\n", dndz[i_depth]);
-  fprintf("Area: %f sq deg\n", survey.area);
-  fprintf("ell_max: %f\n", ell_max);
-  fprintf("n_src: %f\n", survey.n_gal);
+  printf("i_depth = %d, i_area = %d, i_ellmax = %d\n", i_depth, i_area, i_ellmax);
+  printf("Source dndz file: %s\n", dndz[i_depth]);
+  printf("Area: %f sq deg\n", survey.area);
+  printf("ell_max: %f\n", ell_max);
+  printf("n_src: %f\n", survey.n_gal);
   sprintf(survey_names, "Roman_WL_%d%d%d", i_depth, i_area, i_ellmax);
 
   // initialization
