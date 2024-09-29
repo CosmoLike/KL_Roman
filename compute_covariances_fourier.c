@@ -1498,10 +1498,6 @@ int run_Roman_PIT(int argc, char**argv)
   double Rmin_bias = 21.0; // not used 
 
   printf("i_depth = %d, i_area = %d, i_ellmax = %d\n", i_depth, i_area, i_ellmax);
-  printf("Source dndz file: %s\n", dndz[i_depth]);
-  printf("Area: %f sq deg\n", survey.area);
-  printf("ell_max: %f\n", ell_max);
-  printf("n_src: %f\n", survey.n_gal);
   sprintf(survey_names, "Roman_WL_%d%d%d", i_depth, i_area, i_ellmax);
 
   // initialization
@@ -1539,8 +1535,9 @@ int run_Roman_PIT(int argc, char**argv)
   sprintf(covparams.outdir, "/xdisk/timeifler/jiachuanxu/RomanPIT/covpara_ng/");
 
   printf("----------------------------------\n");  
-  printf("area: %.2f n_source: %.2f n_lens: %.2f\n",
-    survey.area, survey.n_gal, survey.n_lens);
+  printf("area: %.2f n_source: %.2f n_lens: %.2f ell_max: %.2f\n",
+    survey.area, survey.n_gal, survey.n_lens, ell_max);
+  printf("Source dndz file: %s\n", dndz[i_depth]);
   printf("----------------------------------\n");
 
   k = choice_id * _shear_cov_blocks_ + 1;
