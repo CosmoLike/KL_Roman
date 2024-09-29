@@ -1481,7 +1481,7 @@ int run_Roman_PIT(int argc, char**argv)
   int i_area = (int) (choice_id/N_ellmax);
   choice_id -= i_area * N_ellmax;
   int i_ellmax = choice_id;
-  if((i_depth>=N_depth) || (i_area>=N_area) || (i_ellmax>=N_ellmax)){return 0};
+  if((i_depth>=N_depth) || (i_area>=N_area) || (i_ellmax>=N_ellmax)){return 0;}
   printf("Max hit index: %d\n",_shear_cov_blocks_* N_depth*N_area*N_ellmax);
   if(i_ellmax!=3){printf("Skip ellmax = %d\n", i_ellmax); return 0;}
 
