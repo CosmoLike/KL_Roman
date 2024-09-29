@@ -35,12 +35,12 @@ chain_file = os.path.join(outdirname, chain_output_file%(Ncl, Ntomo_src))
 initcosmo(runmode)
 initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
 initpriors_IA_bary("photo_LSST_Y1","shear_LSST_Y1","none",external_probe,
-    True, 3.0,1.2,3.8,2.0,
-    True, 40.0,10.0,0.8)
+    False, 3.0,1.2,3.8,2.0,
+    False, 40.0,10.0,0.8)
 initsurvey(strat)
 initgalaxies(file_source_z,file_lens_z,"gaussian","gaussian","SN10")
 #initclusters()
-initia("NLA_HF","GAMA")
+initia("none","GAMA")
 initprobes("shear_shear")
 initdatainvbary(cov_file, data_file, bary_file)
 

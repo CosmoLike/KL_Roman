@@ -80,7 +80,6 @@ elif args.baryPCA==2:
     chain_output_file = "Roman_WL_%d%d_zlow1_ss_Ncl15_Ntomo10_margbary_5std_s8sl"%(args.i_depth, args.i_ellmax)
     print "Baryonic effects marginalized! (5xstd)"
 
-
 #cosmo_model = "LCDM_split"
 cosmo_model = "s8split_only"
 runmode = "halofit_split"

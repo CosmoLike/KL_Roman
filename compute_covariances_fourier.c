@@ -1475,7 +1475,7 @@ int run_Roman_PIT(int argc, char**argv)
   int Nell_list[4] = {15, 15, 15, 15};
   double ell_min_list[4] = {20.0, 20.0, 20.0, 20.0};
   double ell_max_list[4] = {1000.0, 2000.0, 3000.0, 4000.0};
-  double ell_max_shear = 3000.0; // Cluster lensing
+  double ell_max_shear = 4000.0; // Cluster lensing
   printf("%d shape noise scenarios\n", N_scenarios_ellmax);
   // Now count how many scenarios
   int N_scenarios = N_scenarios_depth * N_scenarios_ellmax;
