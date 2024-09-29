@@ -1476,11 +1476,12 @@ int run_Roman_PIT(int argc, char**argv)
 
   // There layers of choices: n_eff+dndz, area, ell_max
   int choice_id = (int) ((hit-1)/_shear_cov_blocks_);
-  int i_depth = (int) (choice_id/(N_area*N_ellmax));
-  choice_id -= i_depth * (N_area*N_ellmax);
-  int i_area = (int) (choice_id/N_ellmax);
-  choice_id -= i_area * N_ellmax;
-  int i_ellmax = choice_id;
+  int tmp = choice_id;
+  int i_depth = (int) (tmp/(N_area*N_ellmax));
+  tmp -= i_depth * (N_area*N_ellmax);
+  int i_area = (int) (tmp/N_ellmax);
+  tmp -= i_area * N_ellmax;
+  int i_ellmax = tmp;
   if((i_depth>=N_depth) || (i_area>=N_area) || (i_ellmax>=N_ellmax)){return 0;}
   printf("Max hit index: %d\n",_shear_cov_blocks_* N_depth*N_area*N_ellmax);
   if(i_ellmax!=3){printf("Skip ellmax = %d\n", i_ellmax); return 0;}
@@ -1555,6 +1556,7 @@ int run_Roman_PIT(int argc, char**argv)
           }
           else {
             run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+            printf("Write covariance to %s\n", filename);
             printf("Exit normally!\n");return 0;
           }
         }
