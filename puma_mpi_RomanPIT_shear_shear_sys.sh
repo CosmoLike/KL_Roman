@@ -9,7 +9,7 @@
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
 #SBATCH --account=timeifler
-#SBATCH --time=96:00:00
+#SBATCH --time=12:00:00
 
 ### 2. ocelote
 ###SBATCH --nodes=10
@@ -48,16 +48,16 @@ date
 hit=0
 for i in $(seq 0 4)
 do
-	for j in $(seq 0 3)
-	do
-		for k in $(seq 0 1)
+#	for j in $(seq 0 3)
+#	do
+		for k in $(seq 0 2)
 		do
 			((hit++))
 			if [ "${hit}" -eq "${SLURM_ARRAY_TASK_ID}" ]; then
-				${MPIEXEC} -n ${SLURM_NTASKS} python runRomanPIT_shear_shear.py ${i} ${j} ${k}
+				${MPIEXEC} -n ${SLURM_NTASKS} python runRomanPIT_shear_shear.py ${i} 3 ${k} -nsteps=2000
 			fi
  		done
- 	done
+# 	done
  done
 
 #hit=0

@@ -546,21 +546,27 @@ double log_multi_like(
     set_data_cgl(ell_Cluster,pred, start);
   }
   chisqr=0.0;
+  //double chisqr_test=0.0;
+  //double a_test;
   for (i=0; i<like.Ndata; i++){
     for (j=0; j<like.Ndata; j++){
       if(like.baryons==1){
         a=(pred[i]-data_read(1,i)+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i)) * \
         invcov_read(1,i,j)*(pred[j]-data_read(1,j)+Q1*bary_read(1,0,j)+Q2*bary_read(1,1,j)+Q3*bary_read(1,2,j) );
+        //a_test = (Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i)) * invcov_read(1,i,j) * (Q1*bary_read(1,0,j)+Q2*bary_read(1,1,j)+Q3*bary_read(1,2,j));
       }
       else{
         a=(pred[i]-data_read(1,i)) * invcov_read(1,i,j) * (pred[j]-data_read(1,j));
+        //a_test = 0.0;
       }
       chisqr=chisqr+a;
+      //chisqr_test=chisqr_test+a_test;
     }
     // if (fabs(data_read(1,i)) < 1.e-25){
     //    printf("%d %le %le %le\n",i,data_read(1,i),pred[i],invcov_read(1,i,i));
     // }
   }
+  //printf("Debug: Q1=%.2f, Q2=%.2f, Q3=%.2f, dchi2_deff=%.2e, PC1=%le\n", Q1, Q2, Q3, chisqr_test/Q1/Q1, bary_read(1,0,14));
   if (chisqr<0.0){
     printf("error: chisqr = %le\n",chisqr);
     //exit(EXIT_FAILURE);
