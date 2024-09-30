@@ -1466,11 +1466,16 @@ int run_Roman_PIT(int argc, char**argv)
   int N_area = 5;
   int N_ellmax = 4;
   char dndz[5][100] = {
-     "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff20",
+     /*"zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff20",
      "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff25", 
      "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff30", 
      "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff35",
-     "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff40",
+     "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff40",*/
+     "zdistris/n_eff20.nz",
+     "zdistris/n_eff25.nz",
+     "zdistris/n_eff30.nz",
+     "zdistris/n_eff35.nz",
+     "zdistris/n_eff40.nz",
   };
   double ell_max_list[4] = {1000.0, 2000.0, 3000.0, 4000.0};
 
@@ -1543,7 +1548,7 @@ int run_Roman_PIT(int argc, char**argv)
   /******************************* START ************************************/
   /********************** cosmic shear - cosmic shear  **********************/
   if(like.shear_shear==1){
-    sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d",survey.name,like.Ncl,tomo.shear_Nbin);
+    sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d_Haley_dndz",survey.name,like.Ncl,tomo.shear_Nbin);
     for (l=0; l<tomo.shear_Npowerspectra; l++){
       for (m=l;m<tomo.shear_Npowerspectra; m++){
         if(k==hit){
