@@ -1455,7 +1455,7 @@ int run_Roman_PIT(int argc, char**argv)
   int i,l,m,n,o,s,p,nl1,t,k;
   char OUTFILE[400],filename[400];
   char survey_names[100];
-  Ntable.N_a=20;
+  //Ntable.N_a=20;
 
   // decide configuration based on hit index
   int Ntomo_source = 10;
@@ -1484,7 +1484,7 @@ int run_Roman_PIT(int argc, char**argv)
   int i_ellmax = tmp;
   if((i_depth>=N_depth) || (i_area>=N_area) || (i_ellmax>=N_ellmax)){return 0;}
   printf("Max hit index: %d\n",_shear_cov_blocks_* N_depth*N_area*N_ellmax);
-  if(i_ellmax!=3){printf("Skip ellmax = %d\n", i_ellmax); return 0;}
+  //if(i_ellmax!=3){printf("Skip ellmax = %d\n", i_ellmax); return 0;}
 
   // ~ equal dlogell setting would be [12, 14, 15, 16], all approximated as 15
   int Nell = 15;
