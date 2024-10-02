@@ -18,11 +18,16 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   // 5 sets of survey depth results in different src density [/arcmin2]
   int N_depth = 5;
   char dndz[5][100] = {
-     "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff20",
-     "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff25", 
-     "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff30", 
-     "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff35",
-     "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff40",
+     // "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff20",
+     // "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff25", 
+     // "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff30", 
+     // "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff35",
+     // "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff40",
+     "zdistris/n_eff20.nz",
+     "zdistris/n_eff25.nz",
+     "zdistris/n_eff30.nz",
+     "zdistris/n_eff35.nz",
+     "zdistris/n_eff40.nz",
   };
   // 4 sets of ell max
   int N_ellmax = 4;
@@ -43,15 +48,13 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   double ell_min = 20.0;
   double ell_max = ellmax_list[i_ellmax];
   double ell_max_shear = ellmax_list[i_ellmax];
-  // Now count how many scenarios
-  int N_scenarios = N_depth * N_ellmax;
 
   char strat[20];
   char invcov_fn[500], dv_fn[500], PCs_fn[500];
   sprintf(invcov_fn, "/xdisk/timeifler/jiachuanxu/RomanPIT/invcov/Roman_WL_%d%d_ssss_invcov_Ncl15_Ntomo10", i_depth, i_ellmax);
   sprintf(dv_fn, "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_%s", i_depth, i_ellmax, bary_sce);
   sprintf(PCs_fn, "datav/Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_9sim.pca", i_depth, i_ellmax);
-  sprintf(strat, "Roman_WL_%d%d", i_depth, i_ellmax);
+  sprintf(strat, "Roman_WL_%d0%d", i_depth, i_ellmax);
   /* here, do your time-consuming job */
 
   init_cosmo_runmode("halofit_split");
@@ -74,7 +77,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
     FILE *tomo_zdist;
     char tomo_zdist_fname[500];
     sprintf(tomo_zdist_fname, 
-      "zdistris/tomo_zdist_src_%s", strat);
+      "zdistris/tomo_zdist_src_%s_Haley_dndz", strat);
     tomo_zdist = fopen(tomo_zdist_fname, "w");
     if(tomo_zdist!=NULL){
       fprintf(tomo_zdist, "# tomo_id\tshear_zmin\tshear_zmax\n");
@@ -582,20 +585,13 @@ int main(int argc, char** argv)
 	}
   else if (strcmp(argv[1], "RomanPIT")==0){
     printf("Calculate dv for RomanPIT!\n");
-    int i = atoi(argv[2]);
-    int j = atoi(argv[3]);
-    int k = atoi(argv[4]);
+    int i = atoi(argv[2]); // n_eff (dndz)
+    int j = atoi(argv[3]); // ell_max
+    int k = atoi(argv[4]); // baryons
     // id_sample here means ell_max; n_eff doesn't matter
     assert(i<5);assert(j<4);assert(k<12);
     // test Roman PIT cosmic shear
     test_RomanPIT_WL(i, j, probe, bary_scenarios[k]);
   }
-  /*for (int i=0; i<5; i++){
-    for (int j=0; j<4; j++){
-      //for (int k=0; k<12; k++){
-        test_RomanPIT_WL(i, j, probe, bary_scenarios[0]);
-      //}
-    }
-  }*/
 	return 0;
 }
