@@ -1465,6 +1465,7 @@ int run_Roman_PIT(int argc, char**argv)
   int N_depth = 5;
   int N_area = 5;
   int N_ellmax = 4;
+  double neff_list[5] = {20.0, 25.0, 30.0, 35.0, 40.0};
   char dndz[5][100] = {
      /*"zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff20",
      "zdistris/zdistri_WFIRST_LSST_lensing_fine_bin_norm_neff25", 
@@ -1492,6 +1493,7 @@ int run_Roman_PIT(int argc, char**argv)
   //if(i_ellmax!=3){printf("Skip ellmax = %d\n", i_ellmax); return 0;}
 
   // ~ equal dlogell setting would be [12, 14, 15, 16], all approximated as 15
+  double neff = neff_list[i_depth];
   int Nell = 15;
   double ell_min = 20.0;
   double ell_max = ell_max_list[i_ellmax];
@@ -1543,6 +1545,12 @@ int run_Roman_PIT(int argc, char**argv)
     survey.area, survey.n_gal, survey.n_lens, ell_max);
   printf("Source dndz file: %s\n", dndz[i_depth]);
   printf("----------------------------------\n");
+  for (int i_src=0; i_src<Ntomo_source; i_src++){
+    printf("n_source(%d) = %f\n", i_src+1, nsource(i_src));
+    if(abs(( nsource(i_src) - (neff/(1.0*Ntomo_source))))  > 0.2){
+      printf("Bin %d n_source accuracy not enough!\n", i_src);exit(1);
+    }
+  }
 
   k = choice_id * _shear_cov_blocks_ + 1;
   /******************************* START ************************************/

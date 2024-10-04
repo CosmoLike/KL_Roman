@@ -1388,8 +1388,8 @@ void set_survey_parameters_to_DESI2_KL(char *surveyname)
 
   char _iSelect[2];
   char _iSN[2];
-  strncpy(_iSelect, surveyname+9, 1);
-  strncpy(_iSN, surveyname+10, 1);
+  strncpy(_iSelect, surveyname+9, 1);_iSelect[1]='\0';
+  strncpy(_iSN, surveyname+10, 1);_iSN[1]='\0';
   int iSelect = atoi(_iSelect);
   int iSN = atoi(_iSN);
   printf("Setting target selection %d and shape noise %d\n", iSelect, iSN);
@@ -1413,9 +1413,9 @@ void set_survey_parameters_to_Roman_WL_PIT(char *surveyname)
   char _i_depth[2];
   char _i_area[2];
   char _i_ellmax[2];
-  strncpy(_i_depth, surveyname+9, 1);
-  strncpy(_i_area, surveyname+10, 1);
-  strncpy(_i_ellmax, surveyname+11, 1);
+  strncpy(_i_depth, surveyname+9, 1);_i_depth[1]='\0';
+  strncpy(_i_area, surveyname+10, 1);_i_area[1]='\0';
+  strncpy(_i_ellmax, surveyname+11, 1);_i_ellmax[1]='\0';
   int i_depth = atoi(_i_depth);
   int i_area = atoi(_i_area);
   int i_ellmax = atoi(_i_ellmax);

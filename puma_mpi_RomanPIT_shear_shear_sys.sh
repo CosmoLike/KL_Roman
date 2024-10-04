@@ -46,19 +46,22 @@ MPIEXEC="/opt/ohpc/pub/mpi/mpich-gnu8-ohpc/3.3.1/bin/mpiexec"
 date
 
 hit=0
+### n_eff
 for i in $(seq 0 4)
 do
-#	for j in $(seq 0 3)
-#	do
-		for k in $(seq 0 2)
+	### area
+	for j in $(seq 0 4)
+	do
+		### baryon
+		for k in $(seq 0 1)
 		do
 			((hit++))
 			if [ "${hit}" -eq "${SLURM_ARRAY_TASK_ID}" ]; then
-				${MPIEXEC} -n ${SLURM_NTASKS} python runRomanPIT_shear_shear.py ${i} 3 ${k} -nsteps=2000
+				${MPIEXEC} -n ${SLURM_NTASKS} python runRomanPIT_shear_shear.py ${i} ${j} 3 ${k} -nsteps=5000
 			fi
- 		done
-# 	done
- done
+		done
+	done
+done
 
 #hit=0
 #for i in $(seq 0 4)
