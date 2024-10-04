@@ -520,6 +520,9 @@ double log_multi_like(
   if(like.Planck15_BAO_H070p6_JLA_w0wa==1){
     log_L_prior += log_L_PlanckBAOJLA_w0wa();
   }
+  if(like.BAO==1){
+    log_L_prior += log_L_better_DESI_BAO();
+  }
   if(_VERBOSE_==1){
     printf("%d %d %d %d\n",like.BAO,like.wlphotoz,like.clphotoz,like.shearcalib);
     printf("log_prior: %le %le %le\n",log_L_shear_calib(),log_L_wlphotoz(),log_L_clphotoz());

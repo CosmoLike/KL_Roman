@@ -578,6 +578,8 @@ def sample_cosmology_shear_nuisance_IA_bary(tomo_N_shear,MG = False, NPCs=3, DE=
 def sample_cosmology_shear_nuisance(tomo_N_shear, MG=False, NPCs=0, cosmology='LCDM', source_photo_z=True, shear_calibration=True, IA=True):
     if(cosmology=='LCDM'):
         varied_parameters = sample_LCDM_only(MG)
+    elif(cosmology=="OmS8"):
+        varied_parameters = ["omega_m", "sigma_8"]
     elif(cosmology=='wCDM'):
         varied_parameters = sample_LCDM_only(MG)
         varied_parameters.append("w0")

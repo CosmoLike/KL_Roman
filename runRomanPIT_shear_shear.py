@@ -65,10 +65,10 @@ nz_src_file = "n_eff%.0f.nz"%(neff)
 nz_lens_file = "lens_LSSTY1"
 # data_vector_file = "Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_dmo"%(args.i_depth, args.i_ellmax)
 data_vector_file = "Roman_WL_%d0%d_shear_shear_Ntomo10_Ncl15_Haley_dndz_dmo"%(args.i_depth, args.i_ellmax)
-invcovmat_file = "Roman_WL_%d%d%d_ssss_invcov_Ncl15_Ntomo10_Haley_dndz"%(args.i_depth, args.i_area, args.i_ellmax)
+invcovmat_file = "Roman_WL_%d%d%d_ssss_invcov_Ncl15_Ntomo10_Haley_dndz_v2"%(args.i_depth, args.i_area, args.i_ellmax)
 baryon_PCS_file = "Roman_WL_%d%d_shear_shear_Ntomo10_Ncl15_9sim.pca"%(args.i_depth, args.i_ellmax)
 #chain_output_file = "chains/LSST_Y1_ss_Ncl%d_Ntomo%d"
-external_probe = "none"
+external_probe = "better_DESI_BAO"
 #NPCs_used = args.baryPCA
 if args.baryPCA==1:
     samp_bary = True
@@ -76,11 +76,11 @@ if args.baryPCA==1:
     # invcovmat_file = invcovmat_file.replace("invcov", "invcov_barymarg_2std")
     invcovmat_file = invcovmat_file.replace("invcov_Ncl15", 
         "invcov_barymarg_illustris_Ncl15")
-    chain_output_file = "Roman_WL_%d%d%d_ss_Ncl15_Ntomo10_barymarg_illustris_Haley_dndz"%(args.i_depth, args.i_area, args.i_ellmax)
+    chain_output_file = "Roman_WL_%d%d%d_ss_Ncl15_Ntomo10_barymarg_illustris_Haley_dndz_v2"%(args.i_depth, args.i_area, args.i_ellmax)
     print "Baryonic effects marginalized! (illustris)"
 elif args.baryPCA==0:
     samp_bary = False
-    chain_output_file = "Roman_WL_%d%d%d_ss_Ncl15_Ntomo10_fixbary_Haley_dndz"%(args.i_depth, args.i_area, args.i_ellmax)
+    chain_output_file = "Roman_WL_%d%d%d_ss_Ncl15_Ntomo10_fixbary_Haley_dndz_v2"%(args.i_depth, args.i_area, args.i_ellmax)
     print "No baryonic effects marginalized!"
 # elif args.baryPCA==2:
 #     samp_bary = True
@@ -91,7 +91,7 @@ elif args.baryPCA==0:
 
 #cosmo_model = "LCDM_split"
 #cosmo_model = "s8split_only"
-cosmo_model = "LCDM"
+cosmo_model = "OmS8"
 #runmode = "halofit_split"
 runmode = "halofit"
 ############################################################

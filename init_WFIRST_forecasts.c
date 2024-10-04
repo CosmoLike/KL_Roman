@@ -62,6 +62,7 @@ void init_IA(char *model,char *lumfct);
 void set_galaxies_DES_Y1();
 
 double log_L_PlanckBAOJLA_w0wa();
+double log_L_better_DESI_BAO();
 
 int count_rows(char* filename,const char delimiter){
   FILE *file = fopen (filename, "r" );
@@ -350,8 +351,11 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
   // else if(strcmp(Prior4,"Planck18_w0")==0){
   //   like.Planck18_w0=1;          
   // } 
+  else if(strcmp(Prior4,"better_DESI_BAO")==0){
+    like.BAO=1;          
+  } 
   else {
-    printf("Error from like_fourier.c: Prior4 can only be Planck, Planck15_BAO_w0wa, Planck15_BAO_H070p6_JLA_w0wa, Planck18_BAO_Riess18_Pantheon_w0wa, Planck18_BAO_w0wa, or Planck18_w0."); //CH: no real error handling.
+    printf("Warning from like_fourier.c: Prior4 can only be Planck, Planck15_BAO_w0wa, Planck15_BAO_H070p6_JLA_w0wa, Planck18_BAO_Riess18_Pantheon_w0wa, Planck18_BAO_w0wa, Planck18_w0, or better_DESI_BAO"); //CH: no real error handling.
   }
   if(IA_flag){
     // Initializing IA priors
@@ -1584,6 +1588,16 @@ double log_L_PlanckBAOJLA_w0wa()
   param_diff[6] = cosmology.h0-prior.h0;
   
   log_L = -0.5*do_matrix_mult_invcov(n_param,table, param_diff);
+
+  return log_L;
+}
+
+double log_L_better_DESI_BAO()
+{
+  double log_L = 0.;
+  double param_diff = cosmology.Omega_m-prior.Omega_m; 
+    
+  log_L = -0.5*(param_diff/0.01)*(param_diff/0.01);
 
   return log_L;
 }
