@@ -44,6 +44,7 @@ photoz_flag = False     # enable different sigma_photoz senario
 nsteps = 5000
 nwalkers = 400
 nthreads = 1
+save = True         # save state 
 
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files)
@@ -70,5 +71,6 @@ sample_params=sample_LCDM_only()
 # sample_params= sample_cosmology_only()
 
 # The `sample_main` function is being called with several parameters:
-sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d"%(nsteps), blind=False, pool=MPIPool(), KL=KL_FLAG, one=one, photoz_flag=photoz_flag)
+sample_main(sample_params, nsteps, nwalkers, nthreads, chain_file+"_%d"%(nsteps), 
+        blind=False, pool=MPIPool(), KL=KL_FLAG, one=one, photoz_flag=photoz_flag, save=save)
 
