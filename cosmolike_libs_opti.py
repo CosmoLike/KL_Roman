@@ -579,7 +579,7 @@ class LikelihoodFunctionWrapper(object):
         #inp.print_struct()
         #inpgrs.print_struct()
         #print   
-        like = lib.log_like_wrapper(icp, inp, inpgrs, self.one, self.photoz_flag) 
+        like = lib.log_like_wrapper(icp, inp, inpgrs, self.one, self.photoz_flag)
         
         #print "like before" , like
         if like < -1.0e+14:
