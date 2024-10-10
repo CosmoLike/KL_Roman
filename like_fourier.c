@@ -648,7 +648,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_Haley_dndz_%s",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);} 
+  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_Haley_dndz_%s%s",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce, details);} 
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){
