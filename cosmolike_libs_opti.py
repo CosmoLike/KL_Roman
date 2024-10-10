@@ -580,9 +580,13 @@ def sample_cosmology_shear_nuisance(tomo_N_shear, MG=False, NPCs=0, cosmology='L
         varied_parameters = sample_LCDM_only(MG)
     elif(cosmology=="OmS8"):
         varied_parameters = ["omega_m", "sigma_8"]
+    elif(cosmology=='sigma_8'):
+        varied_parameters = ['sigma_8']
     elif(cosmology=='wCDM'):
         varied_parameters = sample_LCDM_only(MG)
         varied_parameters.append("w0")
+    elif(cosmology=="w0wa"):
+        varied_parameters = ['w0', 'wa']
     elif(cosmology=='w0waCDM'):
         varied_parameters = sample_cosmology_only(MG)
     elif(cosmology=='LCDM_split'):

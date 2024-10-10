@@ -76,11 +76,11 @@ if args.baryPCA==1:
     # invcovmat_file = invcovmat_file.replace("invcov", "invcov_barymarg_2std")
     invcovmat_file = invcovmat_file.replace("invcov_Ncl15", 
         "invcov_barymarg_illustris_Ncl15")
-    chain_output_file = "Roman_WL_%d%d%d_ss_Ncl15_Ntomo10_barymarg_illustris_Haley_dndz_v2"%(args.i_depth, args.i_area, args.i_ellmax)
+    chain_output_file = "Roman_WL_%d%d%d_ss_Ncl15_Ntomo10_barymarg_illustris_Haley_dndz_v2_sigma8"%(args.i_depth, args.i_area, args.i_ellmax)
     print "Baryonic effects marginalized! (illustris)"
 elif args.baryPCA==0:
     samp_bary = False
-    chain_output_file = "Roman_WL_%d%d%d_ss_Ncl15_Ntomo10_fixbary_Haley_dndz_v2"%(args.i_depth, args.i_area, args.i_ellmax)
+    chain_output_file = "Roman_WL_%d%d%d_ss_Ncl15_Ntomo10_fixbary_Haley_dndz_v2_sigma8"%(args.i_depth, args.i_area, args.i_ellmax)
     print "No baryonic effects marginalized!"
 # elif args.baryPCA==2:
 #     samp_bary = True
@@ -91,7 +91,9 @@ elif args.baryPCA==0:
 
 #cosmo_model = "LCDM_split"
 #cosmo_model = "s8split_only"
-cosmo_model = "OmS8"
+#cosmo_model = "OmS8"
+#cosmo_model = "w0wa"
+cosmo_model = "sigma_8"
 #runmode = "halofit_split"
 runmode = "halofit"
 ############################################################

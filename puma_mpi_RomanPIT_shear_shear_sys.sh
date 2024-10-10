@@ -57,7 +57,7 @@ do
 		do
 			((hit++))
 			if [ "${hit}" -eq "${SLURM_ARRAY_TASK_ID}" ]; then
-				${MPIEXEC} -n ${SLURM_NTASKS} python runRomanPIT_shear_shear.py ${i} ${j} 3 ${k} -nsteps=5000
+				${MPIEXEC} -n ${SLURM_NTASKS} python runRomanPIT_shear_shear.py ${i} ${j} 3 ${k} -nsteps=1500
 			fi
 		done
 	done
