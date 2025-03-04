@@ -10,6 +10,7 @@ like_fourier.so.dSYM/
 
 chains/
 datav/
+log/
 
 *.pyc
 
@@ -19,3 +20,6 @@ compute_covariances_fourier
 
 .vscode
 *.err
+test-puma.sh
+test.*
+mpi_test.py
