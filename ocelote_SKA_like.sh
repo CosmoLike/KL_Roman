@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #SBATCH --job-name=likeSKA
-#SBATCH --output=log/likeSKA-%A_%a.out
-#SBATCH --error=log/likeSKA-%A_%a.err
+#SBATCH --output=log/likeSKA-%A.out
+#SBATCH --error=log/likeSKA-%A.err
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
@@ -13,9 +13,13 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=yhhuang@arizona.edu
 
+if [ "$#" -ne 1 ]; then
+    echo "Error: Need to pass the parameter file name" >&2
+    exit 1
+fi
+
 module load gsl
-module swap openmpi3 mpich/3.3.1
 WORKDIR=/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST
 cd ${WORKDIR}
 
-./like_fourier 0 0 shear_shear dmo
+./like_fourier shear_shear dmo $1

@@ -48,7 +48,7 @@
 #define _WRITE_NZ_TOMO_ 0
 #define _WRITE_DATA_VECTOR_ 1
 #define _COMPUTE_DATAVECTOR_ 1
-#define _COMPUTE_LIKELIHOOD_ 1
+#define _COMPUTE_LIKELIHOOD_ 0
 #define _VERBOSE_ 0 
 
 #define _photoz_limit_ 20.0     // set to a large number if not using
@@ -69,6 +69,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
 double log_multi_like(double OMM, double S8, double NS, double W0,double WA, double OMB, double H0, double MGSigma, double MGmu, double B1, double B2, double B3, double B4,double B5, double B6, double B7, double B8, double B9, double B10, double SP1, double SP2, double SP3, double SP4, double SP5, double SP6, double SP7, double SP8, double SP9, double SP10, double SPS1, double CP1, double CP2, double CP3, double CP4, double CP5, double CP6, double CP7, double CP8, double CP9, double CP10, double CPS1, double M1, double M2, double M3, double M4, double M5, double M6, double M7, double M8, double M9, double M10, double A_ia, double beta_ia, double eta_ia, double eta_ia_highz, double LF_alpha, double LF_P, double LF_Q, double LF_red_alpha, double LF_red_P, double LF_red_Q,double mass_obs_norm, double mass_obs_slope, double mass_z_slope, double mass_obs_scatter_norm, double mass_obs_scatter_mass_slope, double mass_obs_scatter_z_slope, double GRSB1, double GRSB2, double GRSB3, double GRSB4, double GRSB5, double GRSB6, double GRSB7, double SIGMAP1, double SIGMAP2, double SIGMAP3, double SIGMAP4, double SIGMAP5, double SIGMAP6, double SIGMAP7,double SIGMAZ, double PSHOT, double KSTAR, double Q1, double Q2, double Q3, int one, int photoz_flag);
 void write_vector_wrapper(char *details, char *bary_sce, input_cosmo_params ic, input_nuisance_params in, int one, int photoz_flag);
 double log_like_wrapper(input_cosmo_params ic, input_nuisance_params in, input_nuisance_params_grs ingr, int one, int photoz_flag);
+void ini_file(char *fname, char *survey_name, double *survey_area, double *survey_ngal, char *dndz, char *ia_model, int *ia_flag, int *one, int *Ntomo_source, int *Nell, double *ell_min, double *ell_max, double *ell_max_shear, char *DATAV_prefix, char*INVCOV_prefix, double *photoz_bias_std);
 
 int get_N_tomo_shear(void);
 int get_N_tomo_clustering(void);
@@ -708,10 +709,10 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   }
   else {
     if (one == 1) {
-      sprintf(filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OneComp",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);
+      sprintf(filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OneComp",details,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);
     }
     else {
-      sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);
+      sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s",details,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);
     }
   }
   // else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s_Om40",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce);}
@@ -793,68 +794,136 @@ void save_zdistr_lenses(int zl){
   }
 }
 
+void ini_file(char *fname, char *survey_name, double *survey_area, double *survey_ngal, char *dndz, 
+  char *ia_model, int *ia_flag, int *one,
+  int *Ntomo_source, int *Nell, double *ell_min, double *ell_max, double *ell_max_shear, 
+  char *DATAV_prefix, char*INVCOV_prefix, double *photoz_bias_std)
+{
+  char line[256];
+  int iline = 0;
+
+  printf("Parameter file %s\n", fname);
+  FILE *input = fopen(fname, "r");
+  if (!input){
+    fprintf(stderr, "Error: %s not found\n", fname);
+    exit(1);
+  }
+  while(fgets(line, 256, input) != NULL)
+  {
+    char key[128], val[128];
+    iline ++;
+    if (line[0] == '#') continue;
+
+    sscanf(line, "%128s : %128s", key, val);
+    if (strcmp(key, "survey_name")==0)
+    {
+      sprintf(survey_name, "%s", val);
+    }
+    else if (strcmp(key, "survey_area")==0)
+    {
+      *survey_area = atof(val);
+    }
+    else if (strcmp(key, "survey_ngal")==0)
+    {
+      *survey_ngal = atof(val);
+    }
+    else if (strcmp(key, "dndz")==0)
+    {
+      sprintf(dndz, "%s", val);
+    }
+    else if (strcmp(key, "ia_model")==0)
+    {
+      sprintf(ia_model, "%s", val);
+    }
+    else if (strcmp(key, "ia_flag")==0)
+    {
+      *ia_flag = atoi(val);
+    }
+    else if (strcmp(key, "one")==0)
+    {
+      *one = atoi(val);
+    }
+    else if (strcmp(key, "Ntomo_source")==0)
+    {
+      *Ntomo_source = atoi(val);
+    }
+    else if (strcmp(key, "Nell")==0)
+    {
+      *Nell = atoi(val);
+    }
+    else if (strcmp(key, "ell_min")==0)
+    {
+      *ell_min = atof(val);
+    }
+    else if (strcmp(key, "ell_max")==0)
+    {
+      *ell_max = atof(val);
+    }
+    else if (strcmp(key, "ell_max_shear")==0)
+    {
+      *ell_max_shear = atof(val);
+    }
+    else if (strcmp(key, "DATAV_FILE_prefix")==0)
+    {
+      sprintf(DATAV_prefix, "%s", val);
+    }
+    else if (strcmp(key, "INVCOV_FILE_prefix")==0)
+    {
+      sprintf(INVCOV_prefix, "%s", val);
+    }
+    else if (strcmp(key, "photoz_bias_std")==0)
+    {
+      *photoz_bias_std = atof(val);
+    }
+  }
+  fclose(input);
+}
+
 int main(int argc, char** argv)
 {
-  /* Usage: ./like_fourier [i_selection] [i_SN] ["shear_shear"] ["dmo"/"mb2"/...]
-    - i_selection: index of the target selection scenarios, [0, 5]
-    - i_SN: index of the shape noise scenarios, [0, 5]
+  /* Usage: ./like_fourier ["shear_shear"] ["dmo"/"mb2"/...] ["param.ini"]
     - "shear_shear": flag for the likelihood to run
     - "dmo"/"mb2"/...: baryon contamination scenario to used
+    - "param.ini": parameter file
   */
   clock_t begin, end;
   double time_spent, loglike=0.0, init=0.0;
   int i;
   char incov_filename[300], datav_filename[300];
-
-  // 6 sets of target selections results in different src density [/arcmin2]
-  //double source_density[6] = {0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740};
-  //int N_scenarios_selection = sizeof(source_density)/sizeof(double);
-  int N_scenarios_selection = 1;
-  // char dndz[6][100] = {
-  //   "zdistris/zdistri_DESI2_KL_LS_DR9_sample1_v2",
-  //   "zdistris/zdistri_DESI2_KL_LS_DR9_sample2_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Any_sample1_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Any_sample2_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample1_v2",
-  //   "zdistris/zdistri_DESI2_KL_BGS_Bright_sample2_v2",
-  // };
-  char survey_names[1][100] = {"SKA_KL"};       // DSA_allsky, SKA_WL, etc.
-  char ia_model[100] = "none";                  // IA model: NLA_HF (WL) or none (KL)
-  int one = 1;                                  // enable sigal componenet
-  int photoz_flag = 0;                          // enable two photoz uncertainties
-  char dndz[1][100] = {"zdistris/zdistri_trecs_KL"};  // redshift distribution
-  int Ntomo_source = 4;
-  printf("%d target selection scenarios\n", N_scenarios_selection);
-  // 6 sets of shape noise, used to refer to covariance matrix only
-  // detailed settings are stored in `set_survey_parameters_to_DESI2_KL()`
-  int N_scenarios_shape_noise = 1;
-  //printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
+  char survey_name[100], ia_model[100], dndz[100];
+  char datav_prefix[100], invcov_prefix[100];
+  double survey_area, survey_ngal;
+  int ia_flag;
+  int one;
+  int photoz_flag = 0;   // enable two photoz uncertainties
+  int Ntomo_source, Nell;
+  double ell_min, ell_max, ell_max_shear;
+  double photoz_bias_std;
+  
   // Lens galaxies not used, set to random value
   double lens_density = 66.0;
-  // Lens galaxies not used, set to random value
   int Ntomo_lens = 4;
   double Rmin_bias = 21.0; // not used 
-  // 15 ell bins in Fourier space, from 20 to 3000
-  int Nell = 15;
-  double ell_min = 20.0;
-  double ell_max = 3000.0;
-  double ell_max_shear = 3000.0;
-  // Now count how many scenarios
-  int N_scenarios = N_scenarios_selection * N_scenarios_shape_noise;
 
-  int i_Selection = atoi(argv[1]);
-  // int i_SN = atoi(argv[2]);
-  char strat[20];
-  //sprintf(strat, "DESI2_KL_%d%d", i_Selection, i_SN);
-  sprintf(strat, survey_names[i_Selection]);
+  if (argc != 4){
+    fprintf(stderr,"Usage: %s [probe] [baryon] [param.ini]\n", argv[0]);
+    return 1;
+  }
+
+  // read parameter file
+  ini_file(argv[3], survey_name, &survey_area, &survey_ngal, dndz, 
+    ia_model, &ia_flag, &one, 
+    &Ntomo_source, &Nell, &ell_min, &ell_max, &ell_max_shear,
+    datav_prefix, invcov_prefix, &photoz_bias_std
+  );
+
   /* here, do your time-consuming job */
-
   init_cosmo_runmode("halofit");
   // baryon effects initialization
   // This one is used for applying baryon effects from specific simulation
   // Available choices:
   // "dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",...
-  init_bary(argv[4]);
+  init_bary(argv[1]);
   // This one is used for applying PCs reduced from a range of simulations
   // sprintf(like.BARY_FILE,"%s","datav/WFIRST_shear_shear_opti_Ntomo10_Ncl20_sigmae0.37_ia");
   // init = bary_read(0,1,1);
@@ -864,18 +933,20 @@ int main(int argc, char** argv)
   // init_priors_KL("spec_DESI2","shear_KL_DESI2","none","none");
   char _photoz_prior[100];
   char _shearm_prior[100];
-  sprintf(_photoz_prior, "spec_%s", strat);
-  sprintf(_shearm_prior, "shear_%s", strat);
-  init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
+  sprintf(_photoz_prior, "spec_%s", survey_name);
+  sprintf(_shearm_prior, "shear_%s", survey_name);
+  init_priors_IA_bary(_photoz_prior, _shearm_prior, "none", "none",
     // IA_flag, A, beta, eta, etaZ
-    false, 3.0, 1.2, 3.8, 2.0,
+    ia_flag, 3.0, 1.2, 3.8, 2.0,
     // bary_flag, Q1, Q2, Q3 
     false, 16, 1.9, 0.7);
-  init_survey(strat);
+  init_survey(survey_name);
+  survey.n_gal = survey_ngal;
+  survey.area = survey_area;
 
   // customize shape noise here
   // survey.sigma_e = shape_noise_rms[i_SN];
-  init_galaxies(dndz[i_Selection], 
+  init_galaxies(dndz, 
       "zdistris/lens_LSSTY1", 
       "gaussian", "gaussian", "SN10"); // the last arg is lens sample
   
@@ -897,23 +968,22 @@ int main(int argc, char** argv)
 
   init_clusters();
   init_IA(ia_model, "GAMA");    // KL assumes no IA (none); WL assumes NLA_HF
-  init_probes(argv[3]);
+  init_probes(argv[1]);
   /* compute fiducial data vector */
   // u95: w0 = -1.249 wa = 0.59; l95: w0 = -0.289 wa = -2.21
   // NOTE: different target selections have different data vectors
   #if _COMPUTE_DATAVECTOR_ == 1
   printf("like.IA = %d\n", like.IA);
   printf("like.baryons = %d\n", like.baryons);
-  compute_data_vector(argv[1],
+  compute_data_vector(datav_prefix,
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     0.3156,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
-    // 0.4,0.831,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0, photoz_bias_std,
     // lens galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0, photoz_bias_std,
     // additive shear calibration bias[0-9]
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
     // IA: A_ia, beta_ia, eta_ia, eta_ia_highz
@@ -923,7 +993,7 @@ int main(int argc, char** argv)
     // clus: mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm
     3.207,0.993,0.0,0.456,
     // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope, baryon scenario
-    0.0, 0.0, argv[4], 
+    0.0, 0.0, argv[2], 
     // one component
     one,
     // photo-z limit
@@ -933,12 +1003,12 @@ int main(int argc, char** argv)
   #if _COMPUTE_LIKELIHOOD_ == 1
 
   if (one==1) {
-    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d_OneComp", survey_names[0], Nell, Ntomo_source);
-    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OneComp", survey_names[0], argv[3], Ntomo_source, Nell, argv[4]);
+    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d_OneComp", invcov_prefix, Nell, Ntomo_source);
+    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s_OneComp", datav_prefix, argv[1], Ntomo_source, Nell, argv[2]);
   }
   else {
-    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d", survey_names[0], Nell, Ntomo_source);
-    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s", survey_names[0], argv[3], Ntomo_source, Nell, argv[4]);
+    sprintf(incov_filename, "/home/u15/yhhuang/cosmology/dsa/invcov/%s_ssss_invcov_Ncl%d_Ntomo%d", datav_prefix, Nell, Ntomo_source);
+    sprintf(datav_filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s", datav_prefix, argv[1], Ntomo_source, Nell, argv[2]);
   }
   init_data_inv(incov_filename, datav_filename);
   // init_data_inv_bary("/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/LSST_Y1_ssss_invcov_Ncl15_Ntomo10",
@@ -952,10 +1022,10 @@ int main(int argc, char** argv)
     // galaxy bias: b[0-9]
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,
     // source galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0, photoz_bias_std,
     // 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05,
     // lens galaxy photo-z bias[0-9] + std
-    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0005,
+    0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0, photoz_bias_std,
     // 0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.03,
     // additive shear calibration bias[0-9]
     0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,

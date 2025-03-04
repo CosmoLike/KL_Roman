@@ -8,6 +8,25 @@ import matplotlib.image as mpimg
 from numpy import linalg as LA
 import numpy as np
 
+def parse_ini_file(fname):
+    
+    params = {}
+    with open(fname, "r") as f:
+        for line in f:
+            line = line.strip()
+            
+            if not line or line.startswith("#"):
+                continue
+            if ":" in line:
+                key, value = map(str.strip, line.split(":", 1))
+                try:
+                    params[key] = int(value)
+                except ValueError:
+                    try:
+                        params[key] = float(value)
+                    except ValueError:
+                        params[key] = value
+    return params
 
 # covariance matrix
 # DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
@@ -16,32 +35,32 @@ import numpy as np
 # infile_fmt = "LSST_Y%d_ssss_cov_Ncl15_Ntomo10"
 # outfile_fmt = "LSST_Y%d_ssss_invcov_Ncl15_Ntomo10"
 DATA_DIR = '../../dsa/'
-'''
-### DSA-2000
-infile_fmt = "DSA_allsky_ssss_cov_Ncl15_Ntomo1_OneComp"
-outfile_fmt = "DSA_allsky_ssss_invcov_Ncl15_Ntomo1_OneComp"
-Ncl = 15
-Area_list = [30000]
-N_area = 1
-N_selection = 1
-N_tomo_list = [1]
-Nsrc_list = np.array([0.0459])*3600
-N_shape_noise = 1
-SN_list = [0.05]
-'''
+
+if len(sys.argv) == 2:
+	params = parse_ini_file(sys.argv[1])
+else:
+	print("Use: python %s [param.ini]"%sys.argv[0])
+	
 ### SKA
-# infile_fmt = "SKA_WL_ssss_cov_Ncl15_Ntomo4"
-# outfile_fmt = "SKA_WL_ssss_invcov_Ncl15_Ntomo4"
-infile_fmt = "SKA_KL_ssss_cov_Ncl15_Ntomo4_OneComp"
-outfile_fmt = "SKA_KL_ssss_invcov_Ncl15_Ntomo4_OneComp"
-Ncl = 15
-Area_list = [30000]
+if (params['one'] == 0):
+	infile_fmt = "%s_ssss_cov_Ncl15_Ntomo4"%params.get('INVCOV_FILE_prefix')
+	outfile_fmt = "%s_ssss_invcov_Ncl15_Ntomo4"%params.get('INVCOV_FILE_prefix')
+else:
+	infile_fmt = "%s_ssss_cov_Ncl15_Ntomo4_OneComp"%params.get('INVCOV_FILE_prefix')
+	outfile_fmt = "%s_ssss_invcov_Ncl15_Ntomo4_OneComp"%params.get('INVCOV_FILE_prefix')
+Ncl = params.get('Nell')
+Area_list = [params.get('survey_area')]
 N_area = 1
 N_selection = 1
-N_tomo_list = [4]
-Nsrc_list = np.array([0.15])*3600
+N_tomo_list = [params.get('Ntomo_source')]
+Nsrc_list = np.array([params.get('survey_ngal')])*3600
+#Nsrc_list = np.array([0.2987])*3600
 N_shape_noise = 1
-SN_list = [0.05]		# shape noise: 0.3 (WL) or 0.05 (KL)
+
+if params.get('survey_name').split("_")[1] == "WL":
+	SN_list = [0.3]
+else:
+	SN_list = [0.05]		# shape noise: 0.3 (WL) or 0.05 (KL)
 plot_corrmat = True
 
 for iArea in range(N_area):

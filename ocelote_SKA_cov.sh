@@ -14,14 +14,19 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=yhhuang@arizona.edu
 
+if [ "$#" -ne 1 ]; then
+    echo "Error: Need to pass the parameter file name" >&2
+    exit 1
+fi
+
 module load gsl
-module swap openmpi3 mpich/3.3.1
 WORKDIR=/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST
 cd ${WORKDIR}
+
 for (( c=0; c<4; c++ ))
 do
 	hit=$(( ${SLURM_ARRAY_TASK_ID} + c * 770 ))
-	./compute_covariances_fourier ${hit}
+	./compute_covariances_fourier ${hit} $1
 done
 
 
