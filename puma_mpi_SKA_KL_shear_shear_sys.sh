@@ -1,11 +1,10 @@
 #!/bin/bash 
 #SBATCH --job-name=SKA_KL_cn
-#SBATCH --output=/xdisk/timeifler/yhhuang/log/cnSKA_KL-%A_%a.out
-#SBATCH --error=log/cnSKA_KL-%A_%a.err
+#SBATCH --output=/xdisk/timeifler/yhhuang/log/cnSKA_KL-%A.out
+#SBATCH --error=log/cnSKA_KL-%A.err
 #SBATCH --nodes=1
-#SBATCH --array=1-12
+#SBATCH --ntasks=80
 #SBATCH --ntasks-per-node=80
-#SBATCH --ntasks-per-socket=40
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
@@ -18,7 +17,7 @@ echo "SLURM_ARRAY_TASK_ID = ${SLURM_ARRAY_TASK_ID}"
 
 module load anaconda
 module load gsl
-module swap openmpi3 mpich/3.3.1
+module load openmpi5
 conda init bash
 source ~/.bashrc
 
@@ -28,9 +27,10 @@ echo Directory is `pwd`
 echo Slurm job NAME is $SLURM_JOB_NAME
 echo Slurm job ID is $SLURM_JOBID
 cd $SLURM_SUBMIT_DIR
-conda activate forecast
+conda activate forecast-puma
 
 export MPI_DSM_DISTRIBUTE
 date
-/usr/bin/time mpiexec -n 400 python runSKA_shear_shear_sys_KL.py
+#/usr/bin/time mpiexec -n 80 python runSKA_shear_shear_sys_KL.py
+mpirun --mca pml ob1 --mca btl tcp,self -n 80 python runSKA_shear_shear_sys_KL.py
 date

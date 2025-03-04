@@ -1,11 +1,9 @@
 #!/bin/bash 
 #SBATCH --job-name=SKA_WL_cn
-#SBATCH --output=/xdisk/timeifler/yhhuang/log/cnSKA_WL-%A_%a.out
-#SBATCH --error=log/cnSKA_WL-%A_%a.err
+#SBATCH --error=log/cnSKA_WL-%A.err
 #SBATCH --nodes=1
-#SBATCH --array=1-18
+#SBATCH --ntasks=80
 #SBATCH --ntasks-per-node=80
-#SBATCH --ntasks-per-socket=40
 #SBATCH --cpus-per-task=1
 #SBATCH --partition=high_priority
 #SBATCH --qos=user_qos_timeifler
@@ -14,16 +12,12 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=yhhuang@arizona.edu
 
-# iSELECT=$(( (${SLURM_ARRAY_TASK_ID}-1) / 6 ))
-# iSN=$(( (${SLURM_ARRAY_TASK_ID}-1) - ( ${iSELECT} * 6 ) ))
 
 echo "SLURM_ARRAY_TASK_ID = ${SLURM_ARRAY_TASK_ID}"
-# echo "Target Selection Scenario = ${iSELECT}"
-# echo "Shape Noise Scenario = ${iSN}"
 
 module load anaconda
 module load gsl
-module swap openmpi3 mpich/3.3.1
+module load openmpi5
 conda init bash
 source ~/.bashrc
 
@@ -33,10 +27,15 @@ echo Directory is `pwd`
 echo Slurm job NAME is $SLURM_JOB_NAME
 echo Slurm job ID is $SLURM_JOBID
 cd $SLURM_SUBMIT_DIR
-conda activate forecast
+conda activate forecast-puma
 
 export MPI_DSM_DISTRIBUTE
+export OPENBLAS_NUM_THREADS=1
+export OMP_NUM_THREADS=1
+export LD_LIBRARY_PATH=/opt/ohpc/pub/libs/gnu8/gsl/2.6/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
+
 date
-#/usr/bin/time mpiexec -n 560 python runWFIRST_shear_shear_sys_opti.py
-/usr/bin/time mpiexec -n 400 python runSKA_shear_shear_sys_WL.py #${iSELECT} ${iSN}
+mpirun --mca pml ob1 --mca btl tcp,self python runSKA_shear_shear_sys_WL.py
+#mpiexec -n 20 --mca btl ^ofi --mca pml ^ucx python runSKA_shear_shear_sys_WL.py
 date
