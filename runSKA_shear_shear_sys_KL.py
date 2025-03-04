@@ -3,6 +3,27 @@ sys.path.append('/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST')
 
 from cosmolike_libs_opti import * 
 from schwimmbad import MPIPool
+
+def parse_ini_file(fname):
+    
+    params = {}
+    with open(fname, "r") as f:
+        for line in f:
+            line = line.strip()
+            
+            if not line or line.startswith("#"):
+                continue
+            if ":" in line:
+                key, value = map(str.strip, line.split(":", 1))
+                try:
+                    params[key] = int(value)
+                except ValueError:
+                    try:
+                        params[key] = float(value)
+                    except ValueError:
+                        params[key] = value
+    return params
+
 # from argparse import ArgumentParser
 
 # parser = ArgumentParser()
@@ -15,11 +36,13 @@ from schwimmbad import MPIPool
 #########################################################
 dirname = "/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST"
 outdirname = "/home/u15/yhhuang/cosmology/dsa"
+params = parse_ini_file("params_KL.ini")
 Ntomo_src, Ntomo_lens = 4, 4
 Ncl = 15
 ell_min, ell_max, ell_max_shear = 20.0, 3000.0, 3000.0
 Rmin_bias = 21.0
 strat = "SKA_KL"
+prefix = params.get("DATAV_FILE_prefix")
 
 ## external prior, e.g. "Planck15_BAO_H070p6_JLA_w0wa"
 ## default is "none"
@@ -27,12 +50,12 @@ external_prior = "none"
 
 #sigmae_list = np.array([0.02, 0.04, 0.06, 0.10, 0.20, 0.30])*np.sqrt(2)
 #Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])
-nz_src_files = "zdistris/zdistri_trecs_KL"
+nz_src_files = params.get("dndz")
 nz_lens_file = "zdistris/lens_LSSTY1"
-data_vector_file = "datav/SKA_KL_shear_shear_Ntomo%d_Ncl%d_dmo_OneComp"
-invcovmat_file = "invcov/SKA_KL_ssss_invcov_Ncl%d_Ntomo%d_OneComp"
-# chain_output_file = "chains/SKA_KL_OmS8_ss_Ncl%d_Ntomo%d_OneComp"
-chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d_OneComp"
+data_vector_file = "datav/%s_shear_shear_Ntomo%d_Ncl%d_dmo_OneComp"
+invcovmat_file = "invcov/%s_ssss_invcov_Ncl%d_Ntomo%d_OneComp"
+chain_output_file = "chains/%s_OmS8_ss_Ncl%d_Ntomo%d_OneComp"
+# chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d_OneComp"
 
 ## flag
 DE_FLAG = False
@@ -41,7 +64,7 @@ one = True              # one component
 photoz_flag = False     # enable different sigma_photoz senario
 
 ## mcmc setting
-nsteps = 5000
+nsteps = 3000
 nwalkers = 400
 nthreads = 1
 save = True         # save state 
@@ -49,9 +72,9 @@ save = True         # save state
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files)
 file_lens_z = os.path.join(dirname, nz_lens_file)
-data_file = os.path.join(dirname, data_vector_file%(Ntomo_src, Ncl))
-cov_file = os.path.join(outdirname, invcovmat_file%(Ncl, Ntomo_src))
-chain_file = os.path.join(outdirname, chain_output_file%(Ncl, Ntomo_src))
+data_file = os.path.join(dirname, data_vector_file%(prefix, Ntomo_src, Ncl))
+cov_file = os.path.join(outdirname, invcovmat_file%(prefix, Ncl, Ntomo_src))
+chain_file = os.path.join(outdirname, chain_output_file%(prefix, Ncl, Ntomo_src))
 
 initcosmo("halofit")
 initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
@@ -66,8 +89,8 @@ initprobes("shear_shear")
 initdatainv(cov_file ,data_file)
 
 # only sample two parameters
-# sample_params = ['omega_m','sigma_8']
-sample_params=sample_LCDM_only()
+sample_params = ['omega_m','sigma_8']
+# sample_params=sample_LCDM_only()
 # sample_params= sample_cosmology_only()
 
 # The `sample_main` function is being called with several parameters:

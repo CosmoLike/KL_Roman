@@ -13,13 +13,36 @@ from schwimmbad import MPIPool
 #                     help='Index of shape noise scheme')
 # args = parser.parse_args()
 #########################################################
+
+def parse_ini_file(fname):
+    
+    params = {}
+    with open(fname, "r") as f:
+        for line in f:
+            line = line.strip()
+            
+            if not line or line.startswith("#"):
+                continue
+            if ":" in line:
+                key, value = map(str.strip, line.split(":", 1))
+                try:
+                    params[key] = int(value)
+                except ValueError:
+                    try:
+                        params[key] = float(value)
+                    except ValueError:
+                        params[key] = value
+    return params
+
 dirname = "/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST"
 outdirname = "/home/u15/yhhuang/cosmology/dsa"
+params = parse_ini_file("params_WL.ini")
 Ntomo_src, Ntomo_lens = 4, 4
 Ncl = 15
 ell_min, ell_max, ell_max_shear = 20.0, 3000.0, 3000.0
 Rmin_bias = 21.0
 strat = "SKA_WL" 
+prefix = params.get("DATAV_FILE_prefix")
 
 ## flag
 DE_FLAG = False     # dynamical dark energy
@@ -28,17 +51,17 @@ one = False         # one component
 photoz_flag = False # enable different sigma_photoz senario
 
 ## sample parameters
-# sample_params = ['omega_m','sigma_8']
+sample_params = ['omega_m','sigma_8']
 # sample_params = sample_cosmology_only()
-sample_params = sample_LCDM_only()
+# sample_params = sample_LCDM_only()
 
 ## directory and file names
-nz_src_files = "zdistris/zdistri_trecs_WL"
+nz_src_files = params.get("dndz")
 nz_lens_file = "zdistris/lens_LSSTY1"
 data_vector_file = "datav/%s_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/%s_ssss_invcov_Ncl%d_Ntomo%d"
-# chain_output_file = "chains/%s_OmS8_ss_Ncl%d_Ntomo%d"
-chain_output_file = "chains/%s_LCDM_ss_Ncl%d_Ntomo%d"
+chain_output_file = "chains/%s_OmS8_ss_Ncl%d_Ntomo%d"
+# chain_output_file = "chains/%s_LCDM_ss_Ncl%d_Ntomo%d"
 
 ## external prior, e.g. "Planck15_BAO_H070p6_JLA_w0wa"
 ## default is "none"
@@ -52,9 +75,9 @@ nthreads = 1
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files)
 file_lens_z = os.path.join(dirname, nz_lens_file)
-data_file = os.path.join(dirname, data_vector_file%(strat, Ntomo_src, Ncl))
-cov_file = os.path.join(outdirname, invcovmat_file%(strat, Ncl, Ntomo_src))
-chain_file = os.path.join(outdirname, chain_output_file%(strat, Ncl, Ntomo_src))
+data_file = os.path.join(dirname, data_vector_file%(prefix, Ntomo_src, Ncl))
+cov_file = os.path.join(outdirname, invcovmat_file%(prefix, Ncl, Ntomo_src))
+chain_file = os.path.join(outdirname, chain_output_file%(prefix, Ncl, Ntomo_src))
 
 initcosmo("halofit")
 initbins(Ncl,ell_min,ell_max,ell_max_shear,Rmin_bias,Ntomo_src,Ntomo_lens)
