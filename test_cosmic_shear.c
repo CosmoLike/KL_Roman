@@ -97,7 +97,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   printf("like.IA = %d\n", like.IA);
   printf("like.baryons = %d\n", like.baryons);
   double fid_sigma8 = 0.831;
-  double fig_omegam = 0.3156;
+  double fid_omegam = 0.3156;
   compute_data_vector("",
     // cosmology+MG: Om, sigma_8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     fid_omegam,fid_sigma8,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
