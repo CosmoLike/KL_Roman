@@ -48,20 +48,25 @@ prefix = params.get("DATAV_FILE_prefix")
 ## default is "none"
 external_prior = "none"    
 
-#sigmae_list = np.array([0.02, 0.04, 0.06, 0.10, 0.20, 0.30])*np.sqrt(2)
-#Nsrc_list = np.array([0.4761, 0.1629, 0.1553, 0.0881, 0.1006, 0.0740])
-nz_src_files = params.get("dndz")
-nz_lens_file = "zdistris/lens_LSSTY1"
-data_vector_file = "datav/%s_shear_shear_Ntomo%d_Ncl%d_dmo_OneComp"
-invcovmat_file = "invcov/%s_ssss_invcov_Ncl%d_Ntomo%d_OneComp"
-chain_output_file = "chains/%s_OmS8_ss_Ncl%d_Ntomo%d_OneComp"
-# chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d_OneComp"
-
 ## flag
 DE_FLAG = False
-KL_FLAG = True         # true if perform KL forecast
-one = True              # one component
+KL_FLAG = True          # true if perform KL forecast
+one = params.get("one") # one component
 photoz_flag = False     # enable different sigma_photoz senario
+
+nz_src_files = params.get("dndz")
+nz_lens_file = "zdistris/lens_LSSTY1"
+
+if one:
+    data_vector_file = "datav/%s_shear_shear_Ntomo%d_Ncl%d_dmo_OneComp"
+    invcovmat_file = "invcov/%s_ssss_invcov_Ncl%d_Ntomo%d_OneComp"
+    chain_output_file = "chains/%s_OmS8_ss_Ncl%d_Ntomo%d_OneComp"
+    # chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d_OneComp"
+else:
+    data_vector_file = "datav/%s_shear_shear_Ntomo%d_Ncl%d_dmo"
+    invcovmat_file = "invcov/%s_ssss_invcov_Ncl%d_Ntomo%d"
+    chain_output_file = "chains/%s_OmS8_ss_Ncl%d_Ntomo%d"
+    # chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d"
 
 ## mcmc setting
 nsteps = 3000
