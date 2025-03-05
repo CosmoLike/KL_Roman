@@ -10,7 +10,8 @@ import numpy as np
 
 Ncl = 15
 #which_survey = "DESI2" # "LSST"
-which_survey = "RomanPIT"
+#which_survey = "RomanPIT"
+which_survey = "Roman_Medium"
 #DATA_DIR = '/xdisk/timeifler/jiachuanxu/DESI2KL/'
 DATA_DIR = "/xdisk/timeifler/jiachuanxu/RomanPIT/"
 
@@ -44,6 +45,24 @@ elif which_survey=="RomanPIT":
 	Nsrc_list = np.array([20, 25, 30, 35, 40])
 	# different ell_max
 	ellmax_list = [1000, 2000, 3000, 4000];N_ellmax = 4
+elif which_survey=="Roman_Wide":
+	infile_fmt = "Roman_Wide_ssss_cov_Ncl15_Ntomo10_Haley_dndz"
+	outfile_fmt = "Roman_Wide_ssss_invcov_Ncl15_Ntomo10_Haley_dndz"
+	Area = 2702.0
+	N_depth = 1
+	N_tomo = 10
+	Nsrc_list = np.array([26.7,])
+	ellmax_list = [4000,]
+	N_ellmax = 1
+elif which_survey=="Roman_Medium":
+	infile_fmt = "Roman_Medium_ssss_cov_Ncl15_Ntomo10_Haley_dndz"
+	outfile_fmt = "Roman_Medium_ssss_invcov_Ncl15_Ntomo10_Haley_dndz"
+	Area = 2415
+	N_depth = 1
+	N_tomo = 10
+	Nsrc_list = np.array([41.3,])
+	ellmax_list = [4000,]
+	N_ellmax = 1
 else:
 	print(f'{which_survey} not supported')
 	exit(1)
@@ -71,6 +90,9 @@ for jSelect in range(N_depth):
 		elif which_survey=="RomanPIT":
 			infile = DATA_DIR+"cov/"+infile_fmt%(jSelect,kSN)
 			outname= DATA_DIR+"invcov/"+outfile_fmt%(jSelect,kSN)
+		elif (which_survey=="Roman_Wide") or (which_survey=="Roman_Medium"):
+			infile = DATA_DIR+"cov/"+infile_fmt
+			outname= DATA_DIR+"invcov/"+outfile_fmt
 
 		if not os.path.exists(infile):
 			print(f'File {infile} does not exist! Continue')
@@ -121,9 +143,9 @@ for jSelect in range(N_depth):
 		### And calculate correlation matrix
 		cor = cov/np.outer(np.diagonal(cov)**0.5, np.diagonal(cov)**0.5)
 		# for i in range(0,ndata):
-		#     for j in range(0,ndata):
-		#     	if (cov[i,i]*cov[j,j] >0):
-		#        		cor[i,j] = cov[i,j]/math.sqrt(cov[i,i]*cov[j,j])
+		#	 for j in range(0,ndata):
+		#	 	if (cov[i,i]*cov[j,j] >0):
+		#			cor[i,j] = cov[i,j]/math.sqrt(cov[i,i]*cov[j,j])
 		a = np.sort(LA.eigvals(cor[:,:]))
 		print("Eigenvalues range of corrmat (%.3e, %.3e)"%(np.min(a), np.max(a)))
 		print("Negative eigenvalues of corrmat:{}".format(a[a<0]))
@@ -185,7 +207,7 @@ for jSelect in range(N_depth):
 		for i in range(0,ndata):
 		  inv[i,i]=inv[i,i]*mask[i]
 		  for j in range(0,ndata):
-		    f.write("%d %d %e\n" %( i,j, inv[i,j]))
+			f.write("%d %d %e\n" %( i,j, inv[i,j]))
 		f.close()
 
 
@@ -260,6 +282,8 @@ r'$C^{\kappa \kappa}\left(\ell,z_{\mathrm{s}_i},z_{\mathrm{s}_j}\right)$',
 				figfilename_fmt = "test_imgs/"+outfile_fmt%(years[jSelect])+".png"
 			elif which_survey=="RomanPIT":
 				figfilename_fmt = "test_imgs/"+outfile_fmt%(jSelect,kSN)+".png"
+			elif (which_survey=="Roman_Wide") or (which_survey=="Roman_Medium"):
+				figfilename_fmt = "test_imgs/"+outfile_fmt+".png"
 			plt.savefig(figfilename_fmt, format="png")
 			#plt.savefig(figfilename_fmt%(year), format="png")
 			plt.close()
