@@ -66,6 +66,7 @@ void run_cov_clustering_ggl(char *OUTFILE, char *PATH, double *ell, double *dell
 void run_cov_clustering(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 void run_cov_ggl(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
+void run_cov_shear_shear_G(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 void run_cov_shear_shear_one(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 void ini_file(char *fname, char *survey_name, double *survey_area, double *survey_ngal, char *dndz, char *ia_model, int *ia_flag, int *one, int *Ntomo_source, int *Nell, double *ell_min, double *ell_max, double *ell_max_shear, char*INVCOV_prefix);
 
@@ -556,6 +557,31 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
   fclose(F1);
 }
 
+void run_cov_shear_shear_G(char *OUTFILE, char *PATH, double *ell, double *dell,int n1, int n2, int start)
+{
+  int z1,z2,z3,z4,nl1,nl2,weight;
+  double c_ng, c_g;
+  FILE *F1;
+  char filename[300];
+  z1 = Z1(n1); z2 = Z2(n1);
+  printf("N_shear = %d\n", n1);
+  z3 = Z1(n2); z4 = Z2(n2);
+  printf("N_shear = %d (%d, %d)\n",n2,z3,z4);
+  sprintf(filename,"%s%s_%d",PATH,OUTFILE,start);
+  F1 =fopen(filename,"w");
+  for (nl1 = 0; nl1 < like.Ncl; nl1 ++){
+    for (nl2 = 0; nl2 < like.Ncl; nl2 ++){
+      c_ng = 0.; c_g = 0.;
+      if (nl1 == nl2){
+        c_g =  cov_G_shear_shear_tomo(ell[nl1],dell[nl1],z1,z2,z3,z4);
+        if (ell[nl1] > like.lmax_shear && n1!=n2){c_g = 0.;} 
+      }         
+      fprintf(F1,"%d %d %e %e %d %d %d %d %e %e\n",like.Ncl*n1+nl1,like.Ncl*(n2)+nl2,ell[nl1],ell[nl2],z1,z2,z3,z4,c_g,c_ng);
+    }
+  }
+  fclose(F1);
+}
+
 void run_cov_shear_shear_one(char *OUTFILE, char *PATH, double *ell, double *dell,int n1, int n2,int start)
 {
   int z1,z2,z3,z4,nl1,nl2,weight;
@@ -800,6 +826,7 @@ int main(int argc, char** argv)
             }
             else {
               run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+              // run_cov_shear_shear_G(OUTFILE,covparams.outdir,ell,dell,l,m,k);
               printf("Exit normally!\n");return 0;
             }
           }
