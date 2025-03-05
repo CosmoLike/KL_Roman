@@ -97,7 +97,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
   printf("like.IA = %d\n", like.IA);
   printf("like.baryons = %d\n", like.baryons);
   double fid_sigma8 = 0.831;
-  double fig_omegam = 0.3156;
+  double fid_omegam = 0.3156;
   compute_data_vector("",
     // cosmology+MG: Om, sigma_8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     fid_omegam,fid_sigma8,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
@@ -123,14 +123,15 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
     fid_sigma8, 1.0);
   // finite difference dv
   char details_FIM_sigma8[4][50] = {
-    "sigma8--", "sigma8-", "sigma8+", "sigma8++",
+    "_sigma8--", "_sigma8-", "_sigma8+", "_sigma8++",
   };
   char details_FIM_omegam[4][50] = {
-    "omegam--", "omegam-", "omegam+", "omegam++"
+    "_omegam--", "_omegam-", "_omegam+", "_omegam++"
   };
   double finite_diff_scale[4] = {-2., -1., 1., 2.};
   double finite_diff_h = 0.0001;
-  for (int ifd=0; ifd++; ifd<4){
+  for (int ifd=0; ifd<4; ifd++){
+    printf("\n\n\n %s \n\n\n", details_FIM_omegam[ifd]);
     compute_data_vector(details_FIM_omegam[ifd],
     fid_omegam+finite_diff_scale[ifd]*finite_diff_h,fid_sigma8,0.9645,-1.0,0.0,0.0491685,0.6727,0.,0.,
     1.3,1.35,1.40,1.45,1.50,1.55,1.60,1.65,1.70,1.75,

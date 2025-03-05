@@ -1586,11 +1586,222 @@ int run_Roman_PIT(int argc, char**argv)
 
 }
 
+int run_Roman_Wide(int argc, char**argv)
+{
+  /* Forecast for Roman Wide Tier Survey */
+  // Survey report: https://asd.gsfc.nasa.gov/roman/comm_forum/forum_17/Core_Community_Survey_Reports-rev03-compressed.pdf
+  int i,l,m,n,o,s,p,nl1,t,k;
+  char OUTFILE[400],filename[400];
+  //Ntable.N_a=20;
+
+  // decide configuration based on hit index
+  int Ntomo_source = 10;
+  int _shear_Nps_ = (int) (Ntomo_source*(Ntomo_source+1)/2);
+  int _shear_cov_blocks_ = (int) (_shear_Nps_*(_shear_Nps_+1)/2);
+  int hit = atoi(argv[1]);
+  double neff = 26.7;
+  char dndz[100] = "zdistris/n_eff25.nz";
+
+  // ~ equal dlogell setting would be [12, 14, 15, 16], all approximated as 15
+  int Nell = 15;
+  double ell_min = 20.0;
+  double ell_max = 4000.0;
+  double ell_max_shear = 4000.0; // Cluster lensing
+  // Lens galaxies not used, set to arbitrary values
+  float lens_density = 66.0;
+  int Ntomo_lens = 10;
+  double Rmin_bias = 21.0; // not used 
+
+  // initialization
+  double logdl=(log(ell_max)-log(ell_min))/Nell;
+  double *ell, *dell, *ell_Cluster, *dell_Cluster;
+  ell=create_double_vector(0,Nell-1);
+  dell=create_double_vector(0,Nell-1);
+  ell_Cluster=create_double_vector(0,Cluster.lbin-1);
+  dell_Cluster=create_double_vector(0,Cluster.lbin-1);
+  int j=0;
+  printf("Ell array:\n");
+  for(i=0;i<Nell;i++){
+    ell[i]=exp(log(ell_min)+(i+0.5)*logdl);
+    dell[i]=exp(log(ell_min)+(i+1)*logdl)-exp(log(ell_min)+(i*logdl));
+    if(ell[i]<ell_max_shear) printf("%le\n",ell[i]);
+    if(ell[i]>ell_max_shear){
+      ell_Cluster[j]=ell[i];
+      dell_Cluster[j]=dell[i];
+      printf("%le %le\n",ell[i],ell_Cluster[j]);
+      j++;
+    }
+  }
+
+  init_cosmo_runmode("halofit");
+  init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, Ntomo_source, Ntomo_lens);
+  init_priors_IA_bary("photo_opti", "shear_opti","none","none",
+    false, 3.0, 1.2, 3.8, 2.0, false, 16, 1.9, 0.7);
+  init_survey("Roman_Wide");
+  // init source and lens n(z) and photo-z 
+  init_galaxies(dndz, "zdistris/lens_LSSTY1", "gaussian", "gaussian", "SN10");
+  
+  init_IA("none", "GAMA");// KL assumes no IA; WL assumes NLA_HF
+  printf("test\n");
+  init_probes("shear_shear");
+  sprintf(covparams.outdir, "/xdisk/timeifler/jiachuanxu/RomanPIT/covpara_ng/");
+
+  printf("----------------------------------\n");  
+  printf("area: %.2f n_source: %.2f n_lens: %.2f ell_max: %.2f\n",
+    survey.area, survey.n_gal, survey.n_lens, ell_max);
+  printf("Source dndz file: %s\n", dndz);
+  printf("----------------------------------\n");
+  for (int i_src=0; i_src<Ntomo_source; i_src++){
+    printf("n_source(%d) = %f\n", i_src+1, nsource(i_src));
+    if(abs(( nsource(i_src) - (neff/(1.0*Ntomo_source))))  > 0.2){
+      printf("Bin %d n_source accuracy not enough!\n", i_src);exit(1);
+    }
+  }
+
+  k = 1;
+  /******************************* START ************************************/
+  /********************** cosmic shear - cosmic shear  **********************/
+  if(like.shear_shear==1){
+    sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d_Haley_dndz",survey.name,like.Ncl,tomo.shear_Nbin);
+    for (l=0; l<tomo.shear_Npowerspectra; l++){
+      for (m=l;m<tomo.shear_Npowerspectra; m++){
+        if(k==hit){
+          printf("catch k=%d\n", hit); 
+          sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+          if (fopen(filename, "r") != NULL){
+            printf("File %s already exist! Forced not to overwrite!\n",
+                    filename);
+            exit(1);
+          }
+          else {
+            run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+            printf("Write covariance to %s\n", filename);
+            printf("Exit normally!\n");return 0;
+          }
+        }
+        k=k+1;
+      }
+    }
+  }
+  /******************************** END *************************************/
+  printf("number of cov blocks for parallelization: %d\n",k-1); 
+  printf("-----------------\n");
+  printf("PROGRAM EXECUTED\n");
+  printf("-----------------\n");
+  return 0; 
+
+}
+int run_Roman_Medium(int argc, char**argv)
+{
+  /* Forecast for Roman Medium Tier Survey */
+  // Survey report: https://asd.gsfc.nasa.gov/roman/comm_forum/forum_17/Core_Community_Survey_Reports-rev03-compressed.pdf
+  int i,l,m,n,o,s,p,nl1,t,k;
+  char OUTFILE[400],filename[400];
+  //Ntable.N_a=20;
+
+  // decide configuration based on hit index
+  int Ntomo_source = 10;
+  int _shear_Nps_ = (int) (Ntomo_source*(Ntomo_source+1)/2);
+  int _shear_cov_blocks_ = (int) (_shear_Nps_*(_shear_Nps_+1)/2);
+  int hit = atoi(argv[1]);
+  double neff = 41.3;
+  char dndz[100] = "zdistris/n_eff40.nz";
+
+  // ~ equal dlogell setting would be [12, 14, 15, 16], all approximated as 15
+  int Nell = 15;
+  double ell_min = 20.0;
+  double ell_max = 4000.0;
+  double ell_max_shear = 4000.0; // Cluster lensing
+  // Lens galaxies not used, set to arbitrary values
+  float lens_density = 66.0;
+  int Ntomo_lens = 10;
+  double Rmin_bias = 21.0; // not used 
+
+  // initialization
+  double logdl=(log(ell_max)-log(ell_min))/Nell;
+  double *ell, *dell, *ell_Cluster, *dell_Cluster;
+  ell=create_double_vector(0,Nell-1);
+  dell=create_double_vector(0,Nell-1);
+  ell_Cluster=create_double_vector(0,Cluster.lbin-1);
+  dell_Cluster=create_double_vector(0,Cluster.lbin-1);
+  int j=0;
+  printf("Ell array:\n");
+  for(i=0;i<Nell;i++){
+    ell[i]=exp(log(ell_min)+(i+0.5)*logdl);
+    dell[i]=exp(log(ell_min)+(i+1)*logdl)-exp(log(ell_min)+(i*logdl));
+    if(ell[i]<ell_max_shear) printf("%le\n",ell[i]);
+    if(ell[i]>ell_max_shear){
+      ell_Cluster[j]=ell[i];
+      dell_Cluster[j]=dell[i];
+      printf("%le %le\n",ell[i],ell_Cluster[j]);
+      j++;
+    }
+  }
+
+  init_cosmo_runmode("halofit");
+  init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, Ntomo_source, Ntomo_lens);
+  init_priors_IA_bary("photo_opti", "shear_opti","none","none",
+    false, 3.0, 1.2, 3.8, 2.0, false, 16, 1.9, 0.7);
+  init_survey("Roman_Medium");
+  // init source and lens n(z) and photo-z 
+  init_galaxies(dndz, "zdistris/lens_LSSTY1", "gaussian", "gaussian", "SN10");
+  
+  init_IA("none", "GAMA");// KL assumes no IA; WL assumes NLA_HF
+  printf("test\n");
+  init_probes("shear_shear");
+  sprintf(covparams.outdir, "/xdisk/timeifler/jiachuanxu/RomanPIT/covpara_ng/");
+
+  printf("----------------------------------\n");  
+  printf("area: %.2f n_source: %.2f n_lens: %.2f ell_max: %.2f\n",
+    survey.area, survey.n_gal, survey.n_lens, ell_max);
+  printf("Source dndz file: %s\n", dndz);
+  printf("----------------------------------\n");
+  for (int i_src=0; i_src<Ntomo_source; i_src++){
+    printf("n_source(%d) = %f\n", i_src+1, nsource(i_src));
+    if(abs(( nsource(i_src) - (neff/(1.0*Ntomo_source))))  > 0.2){
+      printf("Bin %d n_source accuracy not enough!\n", i_src);exit(1);
+    }
+  }
+
+  k = 1;
+  /******************************* START ************************************/
+  /********************** cosmic shear - cosmic shear  **********************/
+  if(like.shear_shear==1){
+    sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d_Haley_dndz",survey.name,like.Ncl,tomo.shear_Nbin);
+    for (l=0; l<tomo.shear_Npowerspectra; l++){
+      for (m=l;m<tomo.shear_Npowerspectra; m++){
+        if(k==hit){
+          printf("catch k=%d\n", hit); 
+          sprintf(filename,"%s%s_%d",covparams.outdir,OUTFILE,k);
+          if (fopen(filename, "r") != NULL){
+            printf("File %s already exist! Forced not to overwrite!\n",
+                    filename);
+            exit(1);
+          }
+          else {
+            run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
+            printf("Write covariance to %s\n", filename);
+            printf("Exit normally!\n");return 0;
+          }
+        }
+        k=k+1;
+      }
+    }
+  }
+  /******************************** END *************************************/
+  printf("number of cov blocks for parallelization: %d\n",k-1); 
+  printf("-----------------\n");
+  printf("PROGRAM EXECUTED\n");
+  printf("-----------------\n");
+  return 0; 
+
+}
 
 int main(int argc, char** argv)
 {
   //return run_DESI2(argc, argv);
   //return run_LSST(argc, argv);
-  return run_Roman_PIT(argc, argv);
+  //return run_Roman_PIT(argc, argv);
+  return run_Roman_Medium(argc, argv);
 }
 

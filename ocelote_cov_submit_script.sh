@@ -1,13 +1,17 @@
 #!/bin/bash
 
 #SBATCH --job-name=covPIT
-#SBATCH --output=/xdisk/timeifler/jiachuanxu/job_logs/covRomanPIT-%A_%a.out
-#SBATCH --array=1-50
+#SBATCH --output=/xdisk/timeifler/jiachuanxu/job_logs/covRomanWide-%A.out
+#SBATCH --array=1-770
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --partition=high_priority
-#SBATCH --qos=user_qos_timeifler
+
+###SBATCH --partition=high_priority
+###SBATCH --qos=user_qos_timeifler
+#SBATCH --partition=standard
+#SBATCH --qos=qual_qos_timeifler
+
 #SBATCH --account=timeifler
 #SBATCH --time=5:00:00
 #SBATCH --mail-type=ALL
@@ -24,9 +28,9 @@ WORKDIR=/home/u17/jiachuanxu/CosmoLike/KL_WFIRST
 
 cd ${WORKDIR}
 
-for (( c=0; c<3080; c++ ))
+for (( c=0; c<770; c++ ))
 do
-	hit=$(( ${SLURM_ARRAY_TASK_ID} + c * 50))
+	hit=$(( ${SLURM_ARRAY_TASK_ID} + c * 2))
 	./compute_covariances_fourier ${hit}
 done
 
