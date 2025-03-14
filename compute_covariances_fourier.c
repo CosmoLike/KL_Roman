@@ -47,7 +47,7 @@
 #include "init_WFIRST_forecasts.c"
 
 #define _WRITE_NZ_TOMO_ 0
-
+void save_cov_shear_shear_by_part(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2, int start);
 double cov_G_shear_shear_tomo_one(double l, double delta_l, int z1, int z2, int z3, int z4);
 void run_cov_N_N (char *OUTFILE, char *PATH, int nzc1, int nzc2,int start);
 void run_cov_cgl_N (char *OUTFILE, char *PATH, double *ell_Cluster, double *dell_Cluster,int N1, int nzc2, int start);
@@ -611,6 +611,53 @@ void run_cov_shear_shear_one(char *OUTFILE, char *PATH, double *ell, double *del
   fclose(F1);
 }
 
+void save_cov_shear_shear_by_part(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2, int start)
+{
+  int z1, z2, z3, z4, nl1, nl2, weight;
+  double c_v, c_m, c_n;
+  double C13, C14, C23, C24, N13, N14, N23, N24;
+  double fsky = survey.area / 41253.0;
+  FILE *F1;
+  char filename[300];
+  z1 = Z1(n1); z2 = Z2(n1);
+  printf("N_shear = %d\n", n1);
+  z3 = Z1(n2); z4 = Z2(n2);
+  printf("N_shear = %d (%d, %d)\n",n2,z3,z4);
+  sprintf(filename,"%s%s_%d",PATH,OUTFILE,start);
+  F1 = fopen(filename,"w");
+  for (nl1 = 0; nl1 < like.Ncl; nl1++){
+    for (nl2 = 0; nl2 < like.Ncl; nl2++){
+      c_v = 0.; c_m = 0.; c_n = 0.;
+      if (nl1 == nl2){
+        N13 = 0.; N14 = 0.; N24 = 0.; N23 = 0.;
+        C13 = C_shear_tomo_nointerp(ell[nl1], z1, z3);
+        C14 = C_shear_tomo_nointerp(ell[nl1], z1, z4);
+        C23 = C_shear_tomo_nointerp(ell[nl1], z2, z3);
+        C24 = C_shear_tomo_nointerp(ell[nl1], z2, z4);
+        if (z1 == z3){
+          N13 = pow(survey.sigma_e, 2.0) / (2.0 * nsource(z1) * survey.n_gal_conversion_factor);
+        }
+        if (z1 == z4){
+          N14 = pow(survey.sigma_e, 2.0) / (2.0 * nsource(z1) * survey.n_gal_conversion_factor);
+        }
+        if (z2 == z3){
+          N23 = pow(survey.sigma_e, 2.0) / (2.0 * nsource(z2) * survey.n_gal_conversion_factor);
+        }
+        if (z2 == z4){
+          N24 = pow(survey.sigma_e, 2.0) / (2.0 * nsource(z2) * survey.n_gal_conversion_factor);
+        }
+
+        c_v = (C13*C24 + C23*C14) / ((2.*ell[nl1]+1.) * dell[nl1] * fsky);
+        c_n = (N13*N24 + N23*N14) / ((2.*ell[nl1]+1.) * dell[nl1] * fsky);
+        c_m = (C13*N24 + N13*C24 + C14*N23 + N14*C23) / ((2.*ell[nl1]+1.) * dell[nl1] * fsky);
+      }
+      fprintf(F1, "%d %d %e %e %d %d %d %d %e %e %e\n", like.Ncl*n1+nl1, like.Ncl*n2+nl2, ell[nl1], ell[nl2], z1, z2, z3, z4, c_v, c_m, c_n);
+      
+    }
+  }
+  fclose(F1);
+}
+
 void ini_file(char *fname, char *survey_name, double *survey_area, double *survey_ngal, char *dndz, 
   char *ia_model, int *ia_flag, int *one,
   int *Ntomo_source, int *Nell, double *ell_min, double *ell_max, double *ell_max_shear, char*INVCOV_prefix)
@@ -814,6 +861,7 @@ int main(int argc, char** argv)
     // normal case
     else {
       sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d",invcov_prefix,like.Ncl,tomo.shear_Nbin);
+      // sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d_by_part",invcov_prefix,like.Ncl,tomo.shear_Nbin); // if want to output covariance by part
       for (l=0; l<tomo.shear_Npowerspectra; l++){
         for (m=l;m<tomo.shear_Npowerspectra; m++){
           if(k==hit){
@@ -825,6 +873,7 @@ int main(int argc, char** argv)
               exit(1);
             }
             else {
+              // save_cov_shear_shear_by_part(OUTFILE, covparams.outdir, ell, dell, l, m, k);
               run_cov_shear_shear(OUTFILE,covparams.outdir,ell,dell,l,m,k);
               // run_cov_shear_shear_G(OUTFILE,covparams.outdir,ell,dell,l,m,k);
               printf("Exit normally!\n");return 0;
