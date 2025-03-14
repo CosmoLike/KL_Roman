@@ -30,6 +30,8 @@ cd $SLURM_SUBMIT_DIR
 conda activate forecast-puma
 
 export MPI_DSM_DISTRIBUTE
+export LD_LIBRARY_PATH=/opt/ohpc/pub/libs/gnu8/gsl/2.6/lib/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
 date
 #/usr/bin/time mpiexec -n 80 python runSKA_shear_shear_sys_KL.py
 mpirun --mca pml ob1 --mca btl tcp,self -n 80 python runSKA_shear_shear_sys_KL.py
