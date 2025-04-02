@@ -60,19 +60,19 @@ nz_lens_file = "zdistris/lens_LSSTY1"
 if one:
     data_vector_file = "datav/%s_shear_shear_Ntomo%d_Ncl%d_dmo_OneComp"
     invcovmat_file = "invcov/%s_ssss_invcov_Ncl%d_Ntomo%d_OneComp"
-    chain_output_file = "chains/%s_OmS8_ss_Ncl%d_Ntomo%d_OneComp"
-    # chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d_OneComp"
+    # chain_output_file = "chains/%s_OmS8_ss_Ncl%d_Ntomo%d_OneComp"
+    chain_output_file = "chains/%s_LCDM_ss_Ncl%d_Ntomo%d_OneComp"
 else:
     data_vector_file = "datav/%s_shear_shear_Ntomo%d_Ncl%d_dmo"
     invcovmat_file = "invcov/%s_ssss_invcov_Ncl%d_Ntomo%d"
     chain_output_file = "chains/%s_OmS8_ss_Ncl%d_Ntomo%d"
-    # chain_output_file = "chains/SKA_KL_LCDM_ss_Ncl%d_Ntomo%d"
+    # chain_output_file = "chains/%s_LCDM_ss_Ncl%d_Ntomo%d"
 
 ## mcmc setting
-nsteps = 3000
+nsteps = 5000
 nwalkers = 400
 nthreads = 1
-save = True         # save state 
+save = False         # save state 
 
 ############################################################
 file_source_z = os.path.join(dirname, nz_src_files)
