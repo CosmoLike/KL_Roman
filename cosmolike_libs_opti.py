@@ -870,4 +870,3 @@ def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blin
     #         f.write('%s %e\n' % (p_text,loglike))
     #     f.flush()
     # f.close()
-

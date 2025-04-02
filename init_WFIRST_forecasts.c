@@ -1681,7 +1681,7 @@ void set_survey_parameters_to_SKA_WL()
 {
   survey.area   = 30000.0;
   // survey.n_gal  = 10;       // Harrison et al. 2016, Table 1
-  survey.n_gal = 9.382;         // T-RECS + SKA2
+  survey.n_gal = 9.38;         // T-RECS + SKA2
   // survey.sigma_e  = 0.42;   // shape noise in quadrature (0.3 per component)
   survey.sigma_e  = 0.3;
   survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
@@ -1779,8 +1779,8 @@ void set_shear_priors_SKA_WL()
 void set_survey_parameters_to_SKA_KL()
 {
   survey.area   = 30000.0;
-  // survey.n_gal  = 0.2116;   // realistic calculation
-  survey.n_gal = 0.2927;      // T-RECS + SKA1 
+  survey.n_gal  = 0.2987;   // realistic calculation
+  // survey.n_gal = 0.856;      // T-RECS + SKA1 
   survey.sigma_e  = 0.05;   // per component
   survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
   survey.n_gal_conversion_factor = 1.0/constants.arcmin/constants.arcmin;
