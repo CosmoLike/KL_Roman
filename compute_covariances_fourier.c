@@ -641,6 +641,7 @@ int run_DESI2(int argc, char**argv)
     assert(temp==0);
 
     // only evaluate covariance for specific sample & shape noise
+    // NOTE: scenarios skipped here won't be counted in k or hit number
     if ((i_selection!=5)){
       printf("skip sample %d\n", i_selection+1);
       continue;
