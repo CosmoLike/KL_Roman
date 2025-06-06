@@ -551,6 +551,14 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
 
 int run_DESI2(int argc, char**argv)
 {
+  /* Calculate covariance matrix for DESI2 KL forecast
+    Usage: 
+        ./compute_covariances_fourier ${hit} 
+    In this function, the hit number is decoded in the sequence of 
+    [N_target_selection, N_shape_noise, covariance blocks of spectra pair]
+    Note that for shear-only, there N_spectra = N_src*(N_src+1)/2 power spectra, and N_spectra*(N_spectra+1)/2 covariance blocks of spectra pair.
+    For 4 tomography bins, there are 55 covariance blocks per scenario.
+  */
   int i,l,m,n,o,s,p,nl1,t,k;
   char OUTFILE[400],filename[400];
   // Setting Scenarios (survey area, source density, lens density)
@@ -631,8 +639,9 @@ int run_DESI2(int argc, char**argv)
     int i_shape_noise = temp;
     temp -= i_shape_noise;
     assert(temp==0);
-    // only evaluate covariance for sample 1 and sample 3; shape noise 1--4
-    if ((i_selection!=0) && (i_selection!=2)){
+
+    // only evaluate covariance for specific sample & shape noise
+    if ((i_selection!=5)){
       printf("skip sample %d\n", i_selection+1);
       continue;
     }
@@ -641,6 +650,7 @@ int run_DESI2(int argc, char**argv)
       continue;
     }
     printf("Selection %d and Shape noise %d\n", i_selection+1, i_shape_noise+1);
+    
     //RUN MODE setup
     init_cosmo_runmode("halofit");
     init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, Rmin_bias, 
@@ -654,6 +664,8 @@ int run_DESI2(int argc, char**argv)
     init_priors_IA_bary(_photoz_prior, _shearm_prior,"none","none",
       false, 3.0, 1.2, 3.8, 2.0, false, 16, 1.9, 0.7);
     init_survey(_surveyname);
+    survey.area = 5000.0; // ad hoc update to DESI2 x LSST
+    printf("Update survey area to %f deg2\n", survey.area);
     // init source and lens n(z) and photo-z 
     init_galaxies(dndz[i_selection], 
       "zdistris/lens_LSSTY1", 
@@ -1799,9 +1811,9 @@ int run_Roman_Medium(int argc, char**argv)
 
 int main(int argc, char** argv)
 {
-  //return run_DESI2(argc, argv);
+  return run_DESI2(argc, argv);
   //return run_LSST(argc, argv);
   //return run_Roman_PIT(argc, argv);
-  return run_Roman_Medium(argc, argv);
+  //return run_Roman_Medium(argc, argv);
 }
 
