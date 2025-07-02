@@ -9,7 +9,11 @@ like_fourier.so.dSYM/
 
 *.so
 
+compute_covariances_fourier
+
 chains/
+log/
+datav/
 
 *.pyc
 
