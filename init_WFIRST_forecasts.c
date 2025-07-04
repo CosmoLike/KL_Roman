@@ -665,7 +665,7 @@ void init_lens_sample(char *lensphotoz, char *galsample)
   }
   printf("Lens Sample Redshift Errors set to %s: redshift.clustering_photoz=%d\n",lensphotoz,redshift.clustering_photoz);
   
-  if (strcmp(survey.name,"LSST")==0 || strcmp(survey.name,"WFIRST_KL")==0){
+  if (strcmp(survey.name,"LSST")==0 || strcmp(survey.name,"WFIRST_KL")==0 || strcmp(survey.name,"Roman_KL")==0) {
     if(strcmp(galsample,"SN10")==0){
       set_galaxies_SN10();
     }
