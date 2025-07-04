@@ -740,8 +740,8 @@ void set_galaxies_SN10()
 {
   int k,j,n,i;
   double frac, zi;
-  redshift.clustering_zdistrpar_zmin = 0.25;
-  redshift.clustering_zdistrpar_zmax = 4.0;
+  redshift.clustering_zdistrpar_zmin = 0.6;
+  redshift.clustering_zdistrpar_zmax = 2.5;
   tomo.clustering_Npowerspectra=tomo.clustering_Nbin;
   tomo.clustering_zmin[0] = redshift.clustering_zdistrpar_zmin;
   tomo.clustering_zmax[tomo.clustering_Nbin-1] = redshift.clustering_zdistrpar_zmax;
