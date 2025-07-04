@@ -64,6 +64,11 @@ void run_cov_clustering(char *OUTFILE, char *PATH, double *ell, double *dell, in
 void run_cov_ggl(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 
+void init_from_file(char *filename, char *shear_REDSHIFT_FILE, char *clustering_REDSHIFT_FILE,
+  double *survey_area, double *n_gal, double *n_lens,
+  int *Ntomo_source, int *Ntomo_lens, 
+  int *Ncl, double *lmin, double *lmax, double *lmax_shear, double *Rmin_bias);
+
 
 void run_cov_N_N (char *OUTFILE, char *PATH, int nzc1, int nzc2,int start)
 {
@@ -536,28 +541,87 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
   fclose(F1);
 }
 
+void init_from_file(char *filename, char *shear_REDSHIFT_FILE, char *clustering_REDSHIFT_FILE,
+  double *survey_area, double *n_gal, double *n_lens,
+  int *Ntomo_source, int *Ntomo_lens, 
+  int *Ncl, double *lmin, double *lmax, double *lmax_shear, double *Rmin_bias)
+{
+  char line[256];
+  int iline = 0;
+  
+  printf("Reading parameters from %s\n", filename);
+  FILE *input = fopen(filename, "r");
+  while (fgets(line, 256, input) != NULL){
+    char name[129], val[129];
+    iline ++;
+    if (line[0] == '#') continue; // skip comments
+    
+    sscanf(line, "%128s : %128s", name, val);
+    if (strcmp(name, "shear_REDSHIFT_FILE")==0){
+      sprintf(shear_REDSHIFT_FILE, "%s", val);
+      continue;
+    }
+    else if (strcmp(name, "clustering_REDSHIFT_FILE")==0){
+      sprintf(clustering_REDSHIFT_FILE, "%s", val);
+      continue;
+    }
+    else if (strcmp(name, "survey_area")==0){
+      *survey_area = atof(val);
+      continue;
+    }
+    else if (strcmp(name, "n_gal")==0){
+      *n_gal = atof(val);
+      continue;
+    }
+    else if (strcmp(name, "n_lens")==0){
+      *n_lens = atof(val);
+      continue;
+    }
+    else if (strcmp(name, "Ntomo_source")==0){
+      *Ntomo_source = atoi(val);
+      continue;
+    }
+    else if (strcmp(name, "Ntomo_lens")==0){
+      *Ntomo_lens = atoi(val);
+      continue;
+    }
+    else if (strcmp(name, "Ncl")==0){
+      *Ncl = atoi(val);
+      continue;
+    }
+    else if (strcmp(name, "lmin")==0){
+      *lmin = atof(val);
+      continue;
+    }
+    else if (strcmp(name, "lmax")==0){
+      *lmax = atof(val);
+      continue;
+    }
+    else if (strcmp(name, "lmax_shear")==0){
+      *lmax_shear = atof(val);
+      continue;
+    }
+    else if (strcmp(name, "Rmin_bias")==0){
+      *Rmin_bias = atof(val);
+      continue;
+    }
+    else {
+      printf("Unknown parameter %s in line %d\n", name, iline);
+      continue;
+    }
+  }
+  fclose(input);
+}
+
 
 int main(int argc, char** argv)
 {
   int i,l,m,n,o,s,p,nl1,t,k;
-  char OUTFILE[400],filename[400];
-  
-  double area, n_gal, n_lens;
+  char OUTFILE[400], filename[400], clustering_redshift_file[129], shear_redshift_file[129];
+  double survey_area, n_gal, n_lens;
   int Ncl, Ntomo_source, Ntomo_lens;
   double lmin, lmax, lmax_shear, Rmin_bias;
-  area = 2415.0;
-  n_gal = 4.95;
-  n_lens = 4.95;
-  Ncl = 20;
-  Ntomo_source = 8;
-  Ntomo_lens = 8;
-  lmin = 30.0;
-  lmax = 4000.0;
-  lmax_shear = 4000.0;
-  Rmin_bias = 21.0;
 
-//double scenario_table[1][3]={{1321.0,7.0,.15}};
-  //double scenario_table[1][3]={{2000.0,51.0,0.25}};
   int hit = atoi(argv[1]);
   
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -568,7 +632,11 @@ int main(int argc, char** argv)
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   Ntable.N_a = 20;
 
-  //RUN MODE setup
+  // Read parameters from file
+  init_from_file("params.ini", shear_redshift_file, clustering_redshift_file,
+    &survey_area, &n_gal, &n_lens, &Ntomo_source, &Ntomo_lens, &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
+
+  // RUN MODE setup
   init_cosmo_runmode("halofit");
   init_binning_fourier(Ncl, lmin, lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens);
   init_priors_IA_bary(
@@ -579,7 +647,7 @@ int main(int argc, char** argv)
     false, 16, 1.9, 0.7);
   init_survey("Roman_KL");
   init_galaxies(
-    "zdistris/zdistri_Roman_KL_fine_bin",
+    shear_redshift_file,
     "zdistris/zdistri_Roman_KL_fine_bin", 
     "gaussian", "gaussian", "SN10");
   init_clusters();
@@ -609,7 +677,7 @@ int main(int argc, char** argv)
     }
   } 
 
-  survey.area = area;
+  survey.area = survey_area;
   survey.n_gal = n_gal;
   survey.n_lens = n_lens;
   sprintf(covparams.outdir, "/home/u15/yhhuang/cosmology/CosmoLike/3Dx2D/cov/");
