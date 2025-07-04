@@ -47,6 +47,13 @@ void init_IA(char *model,char *lumfct);
 
 void set_galaxies_DES_Y1();
 
+/* YH: 2025 update */
+void set_survey_parameters_to_Roman_KL();
+void set_survey_parameters_to_Roman_WL();
+void set_wlphotoz_Roman_KL();
+void set_clphotoz_Roman_KL();
+void set_shear_priors_Roman_KL();
+
 int count_rows(char* filename,const char delimiter){
   FILE *file = fopen (filename, "r" );
   char line [1000];
@@ -270,6 +277,10 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
     set_wlphotoz_WFIRST_KL();
     set_clphotoz_WFIRST_KL();
   }
+  if(strcmp(Prior1, "spec_Roman")==0){
+    set_wlphotoz_Roman_KL();
+    set_clphotoz_Roman_KL();
+  }
   // Initializing shear calibration priors
   if(strcmp(Prior2,"shear_opti")==0){
     set_shear_priors_WFIRST_opti();
@@ -279,6 +290,9 @@ void init_priors_IA_bary(char *Prior1, char *Prior2, char *Prior3, char *Prior4,
   }
   if(strcmp(Prior2,"shear_KL")==0){
     set_shear_priors_WFIRST_KL();
+  }
+  if(strcmp(Prior2, "shear_Roman")==0){
+    set_shear_priors_Roman_KL();
   }
   if(strcmp(Prior3,"GRS")==0) like.GRS=1;
   sprintf(like.ext_data,"%s",Prior4);
@@ -455,6 +469,7 @@ void init_survey(char *surveyname)
   if(strcmp(surveyname,"WFIRST")==0) set_survey_parameters_to_WFIRST();
   if(strcmp(surveyname,"WFIRST_WL")==0) set_survey_parameters_to_WFIRST_WL();
   if(strcmp(surveyname,"WFIRST_KL")==0) set_survey_parameters_to_WFIRST_KL();
+  if(strcmp(surveyname,"Roman_KL")==0) set_survey_parameters_to_Roman_KL();
 
   printf("Survey set to %s\n",survey.name);
   printf("Survey area: %le deg^2\n",survey.area);
@@ -650,7 +665,7 @@ void init_lens_sample(char *lensphotoz, char *galsample)
   }
   printf("Lens Sample Redshift Errors set to %s: redshift.clustering_photoz=%d\n",lensphotoz,redshift.clustering_photoz);
   
-  if (strcmp(survey.name,"LSST")==0 || strcmp(survey.name,"WFIRST")==0){
+  if (strcmp(survey.name,"LSST")==0 || strcmp(survey.name,"WFIRST_KL")==0){
     if(strcmp(galsample,"SN10")==0){
       set_galaxies_SN10();
     }
@@ -1200,4 +1215,81 @@ void set_survey_parameters_to_WFIRST_KL()
   survey.m_lim=28.0;
   sprintf(survey.Kcorrect_File,"../zdistris/k+e.dat");
   sprintf(survey.name,"WFIRST_KL");
+}
+
+void set_survey_parameters_to_Roman_WL()
+{
+  survey.area = 2415.;
+  survey.n_gal = 41.3;    // taken from HLWAS recommendation slides
+  survey.sigma_e = 0.37;
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor = 1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim = 28.0;
+  sprintf(survey.Kcorrect_File, "../zdistris/k+e.dat");
+  sprintf(survey.name, "Roman_WL");
+}
+
+void set_survey_parameters_to_Roman_KL()
+{
+  survey.area = 2415.;
+  survey.n_gal = 4.95;    // estimated from COSMOS mock catalog
+  survey.sigma_e = 0.05;
+  survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
+  survey.n_gal_conversion_factor = 1.0/constants.arcmin/constants.arcmin;
+  survey.m_lim = 28.0;
+  sprintf(survey.Kcorrect_File, "../zdistris/k+e.dat");
+  sprintf(survey.name, "Roman_KL");
+}
+void set_wlphotoz_Roman_KL()
+{
+  int i;
+  printf("\n");
+  printf("Source sample: Roman KL spec-z uncertainty initialized\n");
+  for (i=0; i<tomo.shear_Nbin; i++){
+    nuisance.bias_zphot_shear[i] = 0.0;
+    nuisance.sigma_zphot_shear[i] = 0.002; 
+    printf("nuisance.bias_zphot_shear[%d]=%le\n", i, nuisance.bias_zphot_shear[i]);
+    printf("nuisance.sigma_zphot_shear[%d]=%le\n", i, nuisance.sigma_zphot_shear[i]);
+    // center of Gaussian priors
+    prior.bias_zphot_shear[i][0] = nuisance.bias_zphot_shear[i];
+    prior.sigma_zphot_shear[i][0] = nuisance.sigma_zphot_shear[i];
+    // rms width of Gaussian priors
+    prior.bias_zphot_shear[i][1] = 0.0004;
+    prior.sigma_zphot_shear[i][1] = 0.0004;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n", prior.bias_zphot_shear[i][0], prior.bias_zphot_shear[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n", prior.sigma_zphot_shear[i][0], prior.sigma_zphot_shear[i][1]);
+  }
+  like.wlphotoz = 1;
+}
+void set_clphotoz_Roman_KL()
+{
+  int i;
+  printf("\n");
+  printf("Lens sample: Roman KL spec-z uncertainty initialized\n");
+  for (i=0; i<tomo.clustering_Nbin; i++){
+    nuisance.bias_zphot_clustering[i] = 0.0;
+    nuisance.sigma_zphot_clustering[i] = 0.002;
+    printf("nuisance.bias_zphot_clustering[%d]=%le\n", i, nuisance.bias_zphot_clustering[i]);
+    printf("nuisance.sigma_zphot_clustering[%d]=%le\n", i, nuisance.sigma_zphot_clustering[i]);
+    // center of Gaussian priors
+    prior.bias_zphot_clustering[i][0] = nuisance.bias_zphot_clustering[i];
+    prior.sigma_zphot_clustering[i][0] = nuisance.sigma_zphot_clustering[i];
+    // rms width of Gaussian priors
+    prior.bias_zphot_clustering[i][1] = 0.0004;
+    prior.sigma_zphot_clustering[i][1] = 0.0004;
+    printf("Mean (of mean)=%le, Sigma (of mean)=%le\n", prior.bias_zphot_clustering[i][0], prior.bias_zphot_clustering[i][1]);
+    printf("Mean (of sigma)=%le, Sigma (of sigma)=%le\n", prior.sigma_zphot_clustering[i][0], prior.sigma_zphot_clustering[i][1]);
+  }
+  like.clphotoz = 1;
+}
+void set_shear_priors_Roman_KL()
+{
+  int i;
+  printf("Setting Gaussian shear calibration Priors stage 4\n");
+  for (i=0;i<tomo.shear_Nbin; i++){
+    prior.shear_calibration_m[i][0] = 0.0;
+    prior.shear_calibration_m[i][1] = 0.0004;
+    printf("Mean=%le, Sigma=%le\n", prior.shear_calibration_m[i][0], prior.shear_calibration_m[i][1]);
+  }
+  like.shearcalib=1;
 }
