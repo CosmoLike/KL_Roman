@@ -636,7 +636,7 @@ int main(int argc, char** argv)
   init_from_file("params.ini", shear_redshift_file, clustering_redshift_file,
     &survey_area, &n_gal, &n_lens, &Ntomo_source, &Ntomo_lens, &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
 
-  // RUN MODE setup
+  //RUN MODE setup
   init_cosmo_runmode("halofit");
   init_binning_fourier(Ncl, lmin, lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens);
   init_priors_IA_bary(
@@ -648,7 +648,7 @@ int main(int argc, char** argv)
   init_survey("Roman_KL");
   init_galaxies(
     shear_redshift_file,
-    "zdistris/zdistri_Roman_KL_fine_bin", 
+    clustering_redshift_file, 
     "gaussian", "gaussian", "SN10");
   init_clusters();
 
