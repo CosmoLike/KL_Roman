@@ -776,7 +776,8 @@ int main(int argc, char** argv)
     &Ntomo_source, &Ntomo_lens, 
     &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
 /* here, do your time-consuming job */
-
+  
+  begin = clock();
   init_cosmo_runmode("halofit");
   // baryon effects initialization
   // This one is used for applying baryon effects from specific simulation
@@ -822,6 +823,9 @@ int main(int argc, char** argv)
     // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope, baryon scenario
     0.0, 0.0, "dmo"
   );
+  end = clock();
+  time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+  printf("Time spent in compute_data_vector: %f seconds\n", time_spent);
   
 
   /* compute likelihood */
