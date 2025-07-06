@@ -6,6 +6,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+from matplotlib.colors import LogNorm
 from numpy import linalg as LA
 
 def parse_ini_file(fname):
@@ -216,8 +217,8 @@ if plot_corrmat:
 	im = ax.imshow(cor, interpolation='nearest', origin='lower', vmin=-1, vmax=1,
 					cmap='seismic')
 else:
-	im = ax.imshow(np.log10(cov), interpolation='nearest', origin='lower', vmin=-25, vmax=-10,
-					cmap='seismic')
+	im = ax.imshow(cov, interpolation='nearest', origin='lower', cmap='seismic',
+					norm=LogNorm(vmin=1e-23, vmax=1e-10))
 
 	
 	# for i in range(0,5):
