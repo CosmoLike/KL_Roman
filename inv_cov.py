@@ -69,7 +69,7 @@ mask = np.ones(ndata)
 
 # figure format
 plot_corrmat = False	# True for correlation matrix, False for covariance matrix
-fig_title = "$n_\mathrm{src}=$%.0f arcmin$^{-2}$, $\ell_\mathrm{max}$=%.0f"%(Nsrc, ellmax)
+fig_title = "$n_\mathrm{src}=$%.2f arcmin$^{-2}$, $\ell_\mathrm{max}$=%.0f"%(Nsrc, ellmax)
 fig_filename = "../3Dx2D/figure/Roman_KL_3x3pt_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
 fontsize = 10
 
@@ -111,8 +111,7 @@ print("Negative eigenvalues of corrmat:{}".format(a[a<0]))
 
 ############### invert 2pt covariance #################
 a = np.sort(LA.eigvals(cov[0:n2pt,0:n2pt]))
-print("min+max eigenvalues 2pt cov:")
-print(np.min(a), np.max(a))
+print("Eigenvalues range of 2pt cov: (%.3e, %.3e)"%(np.min(a), np.max(a)))
 
 inv = LA.inv(cov[0:n2pt,0:n2pt])
 outfile = DATA_DIR + outfile_fmt%(Ncl, Ntomo)
@@ -218,7 +217,7 @@ if plot_corrmat:
 					cmap='seismic')
 else:
 	im = ax.imshow(cov, interpolation='nearest', origin='lower', cmap='seismic',
-					norm=LogNorm(vmin=1e-23, vmax=1e-10))
+					norm=LogNorm(vmin=1e-25, vmax=2e-10))
 
 	
 	# for i in range(0,5):
