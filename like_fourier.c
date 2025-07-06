@@ -607,7 +607,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
     sprintf(filename,"%s",details);
   }
   else {
-    sprintf(filename, "datav/%s_%s_Ntomo%2d_Ncl%2d_%s", details, like.probes, tomo.shear_Nbin, like.Ncl, bary_sce);
+    sprintf(filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s", details, like.probes, tomo.shear_Nbin, like.Ncl, bary_sce);
   }
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
@@ -766,6 +766,7 @@ int main(int argc, char** argv)
   double time_spent, loglike=0.0, init=0.0;
   int i, mode_like;
   char shear_REDSHIFT_FILE[129], clustering_REDSHIFT_FILE[129];
+  char invcov_file[129], datav_file[129];
   double survey_area, n_gal, n_lens;
   int Ntomo_source, Ntomo_lens, Ncl;
   double lmin, lmax, lmax_shear, Rmin_bias;
@@ -775,6 +776,8 @@ int main(int argc, char** argv)
     &survey_area, &n_gal, &n_lens,
     &Ntomo_source, &Ntomo_lens, 
     &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
+  sprintf(datav_file, "datav/Roman_KL_3x2pt_Ntomo%d_Ncl%d_dmo", Ntomo_source, Ncl);
+  sprintf(invcov_file, "../3Dx2D/invcov/Roman_KL_3x2pt_Ncl%d_Ntomo%d", Ncl, Ntomo_source);
 /* here, do your time-consuming job */
   
   begin = clock();
@@ -800,7 +803,7 @@ int main(int argc, char** argv)
   );
   init_clusters();
   init_IA("none", "GAMA");
-  init_probes("3x2pt");
+  init_probes("3x2pt"); 
 
   /* compute data vector */
   compute_data_vector("Roman_KL",
@@ -831,6 +834,7 @@ int main(int argc, char** argv)
   /* compute likelihood */
   if (mode_like == 1) {
     begin = clock();
+    init_data_inv(invcov_file, datav_file);
     loglike = log_multi_like(
       // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
       0.3156, 0.831, 0.9645, -1.0, 0.0, 0.0491685, 0.6727, 0., 0.,
