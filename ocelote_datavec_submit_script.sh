@@ -15,7 +15,7 @@
 
 module load gsl
 module load openmpi5
-WORKDIR=/home/u15/yhhuang/CosmoLike/KL_WFIRST
+WORKDIR=/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST
 
 cd $WORKDIR
 
