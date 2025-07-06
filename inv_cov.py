@@ -46,7 +46,7 @@ probes_list = ['ssss', 'llll', 'lsls', 'llls', 'lsss', 'llss']
 # and look for the output mentioning number of ggl bins accepted and/or 
 # number of cluster weak lensing bins accepted. 
 # The default numbers below most likely don't correspond to your binning choices.
-nggl 	= 0 						# number of ggl power spectra
+nggl 	= 21 						# number of ggl power spectra
 nlens 	= int(Ntomo) 				# number of lens bins 
 nshear 	= int((Ntomo+1)*Ntomo/2) 	# number of shear tomographic power spectra
 nlenscl = 0 						# number of cluster redshift bins 
