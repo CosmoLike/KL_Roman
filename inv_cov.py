@@ -69,9 +69,23 @@ mask = np.ones(ndata)
 
 # figure format
 plot_corrmat = False	# True for correlation matrix, False for covariance matrix
-fig_title = "$n_\mathrm{src}=$%.2f arcmin$^{-2}$, $\ell_\mathrm{max}$=%.0f"%(Nsrc, ellmax)
-fig_filename = "../3Dx2D/figure/Roman_KL_3x3pt_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
+plot_separate = True 	# True for separate plots, False for combined plot
 fontsize = 10
+
+fig_title = "$n_\mathrm{src}=$%.2f arcmin$^{-2}$, $\ell_\mathrm{max}$=%.0f"%(Nsrc, ellmax)
+if plot_corrmat:
+	fig_filename = "../3Dx2D/figure/Roman_KL_3x3pt_corr_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
+else:
+	fig_filename = "../3Dx2D/figure/Roman_KL_3x3pt_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
+
+if plot_separate:
+	fig_list = [
+		"../3Dx2D/figure/Roman_KL_shear_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo),
+		"../3Dx2D/figure/Roman_KL_ggl_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo),
+		"../3Dx2D/figure/Roman_KL_lens_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
+	]
+	start_list = [0, nshear*ncl, (nshear+nggl)*ncl]
+	end_list = [nshear*ncl, (nshear+nggl)*ncl, n2pt]
 
 cov = np.zeros((ndata, ndata))
 for probe in probes_list:
@@ -219,20 +233,26 @@ else:
 	im = ax.imshow(cov, interpolation='nearest', origin='lower', cmap='seismic',
 					norm=LogNorm(vmin=1e-25, vmax=2e-10))
 
-	
-	# for i in range(0,5):
-	# 	tickx[i] = 0.5*(ticks[i]+ticks[i+1])
-	# 	plt.plot([ticks[i]-0.5,ticks[i]-0.5],[-.5,ndata-0.5],linestyle ='-',color = 'k')
-	# 	plt.plot([-.5,ndata-0.5],[ticks[i]-0.5,ticks[i]-0.5],linestyle ='-',color = 'k')
 ax.set_title(fig_title, fontsize=16)
 plt.xticks(tickx, labels, fontsize=fontsize)
 plt.yticks(tickx-0.5, labels, fontsize=fontsize)
-#plt.tick_params(axis = 'x',length = 0, pad = 15)
-#plt.tick_params(axis = 'y',length = 0, pad = 5)
-
 plt.colorbar(im)
-plt.savefig(fig_filename, format="png")
+plt.savefig(fig_filename, format="png", dpi=150, bbox_inches='tight')
 plt.close()
+
+if plot_separate:
+	print('Plot separate covariance matrices')
+	for i, (fname, start, end) in enumerate(zip(fig_list, start_list, end_list)):
+		fig = plt.figure(figsize=(10,10))
+		ax = plt.gca()
+		im = ax.imshow(cov[start:end, start:end], interpolation='nearest', origin='lower',
+						cmap='seismic', norm=LogNorm(vmin=1e-25, vmax=2e-10))
+		ax.set_title(fig_title, fontsize=16)
+		plt.xlabel(labels[i], fontsize=fontsize)
+		plt.ylabel(labels[i], fontsize=fontsize)
+		plt.colorbar(im)
+		plt.savefig(fname, format="png", dpi=150, bbox_inches='tight')
+		plt.close()
 
 
 
