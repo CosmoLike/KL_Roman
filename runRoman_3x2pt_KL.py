@@ -81,4 +81,5 @@ initdatainv(cov_file, data_file)
 
 sample_params = sample_cosmology_only()
 
-sample_main(sample_params, args.nsteps, args.nwalkers, chain_file+'_%d'%args.nsteps, blind=False, pool=MPIPool())
+sample_main(sample_params, args.nsteps, args.nwalkers, 1, chain_file+'_%d'%args.nsteps, 
+            blind=False, pool=MPIPool(), KL=KL_FLAG)
