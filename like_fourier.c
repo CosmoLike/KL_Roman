@@ -536,7 +536,7 @@ double log_multi_like(
     printf("error: chisqr = %le\n",chisqr);
     //exit(EXIT_FAILURE);
   }
-  printf("************\nchisq - %le\nlog_L_prior - %le\n Q1 Q2 Q3 = %e %e %e\n IA params = %e %e %e %e\n************\n", -0.5*chisqr, log_L_prior, Q1, Q2, Q3, nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
+  printf("************\nchisq = %le\nlog_L_prior = %le\n Q1 Q2 Q3 = %e %e %e\n IA params = %e %e %e %e\n************\n", -0.5*chisqr, log_L_prior, Q1, Q2, Q3, nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
   return -0.5*chisqr+log_L_prior;
 }
 
