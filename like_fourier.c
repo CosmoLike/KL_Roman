@@ -777,7 +777,7 @@ int main(int argc, char** argv)
     &Ntomo_source, &Ntomo_lens, 
     &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
   sprintf(datav_file, "datav/Roman_KL_3x2pt_Ntomo%d_Ncl%d_dmo", Ntomo_source, Ncl);
-  sprintf(invcov_file, "../3Dx2D/invcov/Roman_KL_3x2pt_Ncl%d_Ntomo%d", Ncl, Ntomo_source);
+  sprintf(invcov_file, "../3Dx2D/invcov/Roman_KL_3x2pt_invcov_Ncl%d_Ntomo%d", Ncl, Ntomo_source);
 /* here, do your time-consuming job */
   
   begin = clock();
