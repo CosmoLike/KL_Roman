@@ -1232,7 +1232,7 @@ void set_survey_parameters_to_Roman_WL()
 void set_survey_parameters_to_Roman_KL()
 {
   survey.area = 2415.;
-  survey.n_gal = 4.95;    // estimated from COSMOS mock catalog
+  survey.n_gal = 2.475;    // estimated from COSMOS mock catalog
   survey.sigma_e = 0.05;
   survey.area_conversion_factor = 60.0*60.0*constants.arcmin*constants.arcmin;
   survey.n_gal_conversion_factor = 1.0/constants.arcmin/constants.arcmin;
