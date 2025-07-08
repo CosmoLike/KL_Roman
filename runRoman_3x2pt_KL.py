@@ -45,6 +45,7 @@ external_prior = "none"
 # flag
 DE_FLAG = False
 KL_FLAG = True
+MG_FLAG = False
 
 # read parameters from ini file
 params = parse_ini_file("params.ini")
@@ -79,8 +80,11 @@ initia("none", "GAMA")
 initprobes("3x2pt")
 initdatainv(cov_file, data_file)
 
-# sample_params = sample_cosmology_only()
-sample_params = sample_cosmology_clustering_KL(Ntomo_lens)
+if DE_FLAG:
+    sample_params = sample_cosmology_only(MG=MG_FLAG)
+else:
+    sample_params = sample_LCDM_only(MG=MG_FLAG)
+sample_params += ['bias_%d'%i for i in range(Ntomo_lens)]
 
 sample_main(sample_params, args.nsteps, args.nwalkers, 1, chain_file+'_%d'%args.nsteps, 
             blind=False, pool=MPIPool(), KL=KL_FLAG)
