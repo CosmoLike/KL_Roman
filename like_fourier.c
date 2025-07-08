@@ -757,21 +757,24 @@ void init_from_file(char *filename, char *shear_REDSHIFT_FILE, char *clustering_
   fclose(input);
 }
 
-// like_fourier [mode_flag] 
+// like_fourier [mode_flag] [bary_scenario]
 // if mode_flag is 0, it computes the data vector and saves it to a file
 // if mode_flag is 1, it computes the likelihood and returns it
+// "dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",... set init_bary(), default is dmo
 int main(int argc, char** argv)
 {
   clock_t begin, end;
   double time_spent, loglike=0.0, init=0.0;
-  int i, mode_like;
+  int i;
   char shear_REDSHIFT_FILE[129], clustering_REDSHIFT_FILE[129];
   char invcov_file[129], datav_file[129];
   double survey_area, n_gal, n_lens;
   int Ntomo_source, Ntomo_lens, Ncl;
   double lmin, lmax, lmax_shear, Rmin_bias;
 
-  mode_like = atoi(argv[1]);
+  int mode_like = atoi(argv[1]);
+  const char *bary_scenario = (argc > 2) ? argv[2] : "dmo";
+
   init_from_file("params.ini", shear_REDSHIFT_FILE, clustering_REDSHIFT_FILE,
     &survey_area, &n_gal, &n_lens,
     &Ntomo_source, &Ntomo_lens, 
@@ -784,7 +787,7 @@ int main(int argc, char** argv)
   init_cosmo_runmode("halofit");
   // baryon effects initialization
   // This one is used for applying baryon effects from specific simulation
-  init_bary("dmo"); //"dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",...
+  init_bary(bary_scenario); //"dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",...
   // This one is used for applying PCs reduced from a range of simulations
 
   init_binning_fourier(Ncl, lmin, lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens);
@@ -824,7 +827,7 @@ int main(int argc, char** argv)
     // clus: mass_obs_norm, mass_obs_slope, mass_z_slope, mass_obs_scatter_norm
     3.207, 0.993, 0.0, 0.456,
     // mass_obs_scatter_mass_slope, mass_obs_scatter_z_slope, baryon scenario
-    0.0, 0.0, "dmo"
+    0.0, 0.0, bary_scenario
   );
   end = clock();
   time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
