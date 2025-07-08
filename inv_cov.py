@@ -138,7 +138,7 @@ a = np.sort(LA.eigvals(cov[0:n2pt,0:n2pt]))
 print("Eigenvalues range of 2pt cov: (%.3e, %.3e)"%(np.min(a), np.max(a)))
 
 inv = LA.inv(cov[0:n2pt,0:n2pt])
-outfile = DATA_DIR + outfile_fmt%(Ncl, Ntomo)
+outfile = DATA_DIR + outfile_fmt%(probes, Ncl, Ntomo)
 f = open(outfile, "w")
 for i in range(0,n2pt):
 	inv[i,i]=inv[i,i]*mask[i]
