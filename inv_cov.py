@@ -68,15 +68,15 @@ print(f'Data Vector Size = {ndata}')
 mask = np.ones(ndata)
 
 # figure format
-plot_corrmat = False	# True for correlation matrix, False for covariance matrix
+plot_corrmat = True	# True for correlation matrix, False for covariance matrix
 plot_separate = True 	# True for separate plots, False for combined plot
 fontsize = 10
 
 fig_title = "$n_\mathrm{src}=$%.2f arcmin$^{-2}$, $\ell_\mathrm{max}$=%.0f"%(Nsrc, ellmax)
 if plot_corrmat:
-	fig_filename = "../3Dx2D/figure/Roman_KL_3x3pt_corr_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
+	fig_filename = "../3Dx2D/figure/Roman_KL_3x2pt_corr_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
 else:
-	fig_filename = "../3Dx2D/figure/Roman_KL_3x3pt_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
+	fig_filename = "../3Dx2D/figure/Roman_KL_3x2pt_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
 
 if plot_separate:
 	fig_list = [
