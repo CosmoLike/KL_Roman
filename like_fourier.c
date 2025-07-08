@@ -685,7 +685,7 @@ void save_zdistr_lenses(int zl){
    }
 }
 
-void init_from_file(char *filename, char *shear_REDSHIFT_FILE, char *clustering_REDSHIFT_FILE,
+void init_from_file(char *filename, char *probes, char *shear_REDSHIFT_FILE, char *clustering_REDSHIFT_FILE,
   double *survey_area, double *n_gal, double *n_lens,
   int *Ntomo_source, int *Ntomo_lens, 
   int *Ncl, double *lmin, double *lmax, double *lmax_shear, double *Rmin_bias)
@@ -701,7 +701,11 @@ void init_from_file(char *filename, char *shear_REDSHIFT_FILE, char *clustering_
     if (line[0] == '#') continue; // skip comments
     
     sscanf(line, "%128s : %128s", name, val);
-    if (strcmp(name, "shear_REDSHIFT_FILE")==0){
+    if (strcmp(name, "probes")==0){
+      sprintf(probes, "%s", val);
+      continue;
+    }
+    else if (strcmp(name, "shear_REDSHIFT_FILE")==0){
       sprintf(shear_REDSHIFT_FILE, "%s", val);
       continue;
     }
@@ -766,6 +770,7 @@ int main(int argc, char** argv)
   clock_t begin, end;
   double time_spent, loglike=0.0, init=0.0;
   int i;
+  char probes[129];
   char shear_REDSHIFT_FILE[129], clustering_REDSHIFT_FILE[129];
   char invcov_file[129], datav_file[129];
   double survey_area, n_gal, n_lens;
@@ -775,12 +780,12 @@ int main(int argc, char** argv)
   int mode_like = atoi(argv[1]);
   char *bary_scenario = (argc > 2) ? argv[2] : "dmo";
 
-  init_from_file("params.ini", shear_REDSHIFT_FILE, clustering_REDSHIFT_FILE,
+  init_from_file("params.ini", probes, shear_REDSHIFT_FILE, clustering_REDSHIFT_FILE,
     &survey_area, &n_gal, &n_lens,
     &Ntomo_source, &Ntomo_lens, 
     &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
-  sprintf(datav_file, "datav/Roman_KL_3x2pt_Ntomo%d_Ncl%d_dmo", Ntomo_source, Ncl);
-  sprintf(invcov_file, "../3Dx2D/invcov/Roman_KL_3x2pt_invcov_Ncl%d_Ntomo%d", Ncl, Ntomo_source);
+  sprintf(datav_file, "datav/Roman_KL_%s_Ntomo%d_Ncl%d_%s", probes, Ntomo_source, Ncl, bary_scenario);
+  sprintf(invcov_file, "../3Dx2D/invcov/Roman_KL_%s_invcov_Ncl%d_Ntomo%d", probes, Ncl, Ntomo_source);
 /* here, do your time-consuming job */
   
   begin = clock();
@@ -794,7 +799,7 @@ int main(int argc, char** argv)
   init_priors_IA_bary(
     "spec_Roman", "shear_Roman", "none", "none",
     false, 3.0, 1.2, 3.8, 2.0,
-    false, 16, 1.9, 0.7
+    true, 16, 1.9, 0.7
   );
   // tomo.clustering_Npowerspectra = tomo.clustering_Nbin;
   
@@ -806,7 +811,7 @@ int main(int argc, char** argv)
   );
   init_clusters();
   init_IA("none", "GAMA");
-  init_probes("3x2pt"); 
+  init_probes(probes); 
 
   /* compute data vector */
   compute_data_vector("Roman_KL",

@@ -34,12 +34,22 @@ Area = params.get('survey_area')
 Nsrc = params.get('n_gal')
 ShapeNoise = 0.05
 ellmax = params.get('lmax')
+probes = params.get('probes')
 
 
 infile_fmt = 'cov/Roman_KL_%s_cov_Ncl%d_Ntomo%d'
-outfile_fmt = 'invcov/Roman_KL_3x2pt_invcov_Ncl%d_Ntomo%d'
+outfile_fmt = 'invcov/Roman_KL_%s_invcov_Ncl%d_Ntomo%d'
 DATA_DIR = '../3Dx2D/'
-probes_list = ['ssss', 'llll', 'lsls', 'llls', 'lsss', 'llss']
+
+if probes == '3x2pt':
+	probes_list = ['ssss', 'llll', 'lsls', 'llls', 'lsss', 'llss']
+elif probes == 'ggl_cl':
+	probes_list = ['llll', 'lsls', 'llls']
+elif probes == 'shear_shear':
+	probes_list = ['ssss']
+else:
+	print(f'Unsupported probes: {probes}')
+	exit(-1)
 
 # the numbers below can be computed knowing the data vector settings, 
 # e.g. 10 tomographic source bins results in 55 shear-shear power spectra. 
@@ -69,16 +79,16 @@ mask = np.ones(ndata)
 
 # figure format
 plot_corrmat = True	# True for correlation matrix, False for covariance matrix
-plot_separate = True 	# True for separate plots, False for combined plot
+plot_separate = False 	# True for separate plots, False for combined plot
 fontsize = 10
 
 fig_title = "$n_\mathrm{src}=$%.2f arcmin$^{-2}$, $\ell_\mathrm{max}$=%.0f"%(Nsrc, ellmax)
 if plot_corrmat:
-	fig_filename = "../3Dx2D/figure/Roman_KL_3x2pt_corr_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
+	fig_filename = "../3Dx2D/figure/Roman_KL_%s_corr_Ncl%d_Ntomo%d.png"%(probes, Ncl, Ntomo)
 else:
-	fig_filename = "../3Dx2D/figure/Roman_KL_3x2pt_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo)
+	fig_filename = "../3Dx2D/figure/Roman_KL_%s_cov_Ncl%d_Ntomo%d.png"%(probes, Ncl, Ntomo)
 
-if plot_separate:
+if plot_separate and probes == '3x2pt':
 	fig_list = [
 		"../3Dx2D/figure/Roman_KL_shear_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo),
 		"../3Dx2D/figure/Roman_KL_ggl_cov_Ncl%d_Ntomo%d.png"%(Ncl, Ntomo),
