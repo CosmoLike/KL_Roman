@@ -64,7 +64,7 @@ void run_cov_clustering(char *OUTFILE, char *PATH, double *ell, double *dell, in
 void run_cov_ggl(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell, int n1, int n2,int start);
 
-void init_from_file(char *filename, char *shear_REDSHIFT_FILE, char *clustering_REDSHIFT_FILE,
+void init_from_file(char *filename, char *probes, char *shear_REDSHIFT_FILE, char *clustering_REDSHIFT_FILE,
   double *survey_area, double *n_gal, double *n_lens,
   int *Ntomo_source, int *Ntomo_lens, 
   int *Ncl, double *lmin, double *lmax, double *lmax_shear, double *Rmin_bias);
@@ -541,7 +541,7 @@ void run_cov_shear_shear(char *OUTFILE, char *PATH, double *ell, double *dell,in
   fclose(F1);
 }
 
-void init_from_file(char *filename, char *shear_REDSHIFT_FILE, char *clustering_REDSHIFT_FILE,
+void init_from_file(char *filename, char *probes, char *shear_REDSHIFT_FILE, char *clustering_REDSHIFT_FILE,
   double *survey_area, double *n_gal, double *n_lens,
   int *Ntomo_source, int *Ntomo_lens, 
   int *Ncl, double *lmin, double *lmax, double *lmax_shear, double *Rmin_bias)
@@ -557,7 +557,11 @@ void init_from_file(char *filename, char *shear_REDSHIFT_FILE, char *clustering_
     if (line[0] == '#') continue; // skip comments
     
     sscanf(line, "%128s : %128s", name, val);
-    if (strcmp(name, "shear_REDSHIFT_FILE")==0){
+    if (strcmp(name, "probes")==0){
+      sprintf(probes, "%s", val);
+      continue;
+    }
+    else if (strcmp(name, "shear_REDSHIFT_FILE")==0){
       sprintf(shear_REDSHIFT_FILE, "%s", val);
       continue;
     }
@@ -617,6 +621,7 @@ void init_from_file(char *filename, char *shear_REDSHIFT_FILE, char *clustering_
 int main(int argc, char** argv)
 {
   int i,l,m,n,o,s,p,nl1,t,k;
+  char probes[129];
   char OUTFILE[400], filename[400], clustering_redshift_file[129], shear_redshift_file[129];
   double survey_area, n_gal, n_lens;
   int Ncl, Ntomo_source, Ntomo_lens;
@@ -633,7 +638,7 @@ int main(int argc, char** argv)
   Ntable.N_a = 20;
 
   // Read parameters from file
-  init_from_file("params.ini", shear_redshift_file, clustering_redshift_file,
+  init_from_file("params.ini", probes, shear_redshift_file, clustering_redshift_file,
     &survey_area, &n_gal, &n_lens, &Ntomo_source, &Ntomo_lens, &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
 
   //RUN MODE setup
@@ -654,7 +659,7 @@ int main(int argc, char** argv)
 
   // IA modeling doesn't make any change for covariance computation
   init_IA("none", "GAMA");
-  init_probes("3x2pt");
+  init_probes(probes);
 
   k = 1;
   //set l-bins for shear, ggl, clustering, clusterWL

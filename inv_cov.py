@@ -41,16 +41,6 @@ infile_fmt = 'cov/Roman_KL_%s_cov_Ncl%d_Ntomo%d'
 outfile_fmt = 'invcov/Roman_KL_%s_invcov_Ncl%d_Ntomo%d'
 DATA_DIR = '../3Dx2D/'
 
-if probes == '3x2pt':
-	probes_list = ['ssss', 'llll', 'lsls', 'llls', 'lsss', 'llss']
-elif probes == 'ggl_cl':
-	probes_list = ['llll', 'lsls', 'llls']
-elif probes == 'shear_shear':
-	probes_list = ['ssss']
-else:
-	print(f'Unsupported probes: {probes}')
-	exit(-1)
-
 # the numbers below can be computed knowing the data vector settings, 
 # e.g. 10 tomographic source bins results in 55 shear-shear power spectra. 
 # Or they can be read off when running the covariance code, i.e. type 'compute_covariance_fourier 100000' 
@@ -67,6 +57,19 @@ ngcl 	= 0							# number of cluster-source galaxy power spectra
 nrich 	= 0							# number of richness bins
 
 # set data vector dimensions
+if probes == '3x2pt':
+	probes_list = ['ssss', 'llll', 'lsls', 'llls', 'lsss', 'llss']
+elif probes == 'ggl_cl':
+	probes_list = ['llll', 'lsls', 'llls']
+	nshear = 0
+elif probes == 'shear_shear':
+	probes_list = ['ssss']
+	nlens = 0
+	nggl = 0
+else:
+	print(f'Unsupported probes: {probes}')
+	exit(-1)
+
 ndata 	= int((nshear+nggl+nlens)*ncl + nlenscl*nrich + nrich*ngcl*nclgcl)
 n2pt 	= int((nshear+nggl+nlens)*ncl)
 ncluster = int(nlenscl*nrich)
