@@ -773,7 +773,7 @@ int main(int argc, char** argv)
   double lmin, lmax, lmax_shear, Rmin_bias;
 
   int mode_like = atoi(argv[1]);
-  const char *bary_scenario = (argc > 2) ? argv[2] : "dmo";
+  char *bary_scenario = (argc > 2) ? argv[2] : "dmo";
 
   init_from_file("params.ini", shear_REDSHIFT_FILE, clustering_REDSHIFT_FILE,
     &survey_area, &n_gal, &n_lens,
