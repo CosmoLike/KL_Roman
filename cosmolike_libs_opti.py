@@ -761,6 +761,11 @@ def sample_cosmology_SN_WFIRST():
 
     return varied_parameters
 
+def sample_cosmology_clustering_KL(tomo_N_lens, MG = False):
+    varied_parameters = sample_cosmology_only(MG)
+    varied_parameters += ['bias_%d'%i for i in xrange(tomo_N_lens)]
+    return varied_parameters
+
 def sample_main(varied_parameters, iterations, nwalker, nthreads, filename, blind=False, pool=None, KL=False):
     print varied_parameters
 
