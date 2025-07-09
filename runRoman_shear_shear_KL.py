@@ -35,9 +35,9 @@ dirname = "/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST/"
 outdirname = "/home/u15/yhhuang/cosmology/CosmoLike/3Dx2D/"
 
 # file fmt
-data_vector_file = "datav/Roman_KL_3x2pt_Ntomo%d_Ncl%d_dmo"
-invcovmat_file = "invcov/Roman_KL_3x2pt_invcov_Ncl%d_Ntomo%d"
-chain_output_file = "chains/Roman_KL_3x2pt_Ncl%d_Ntomo%d"
+data_vector_file = "datav/Roman_KL_shear_shear_Ntomo%d_Ncl%d_dmo"
+invcovmat_file = "invcov/Roman_KL_shear_shear_invcov_Ncl%d_Ntomo%d"
+chain_output_file = "chains/Roman_KL_shear_shear_Ncl%d_Ntomo%d"
 
 # external prior
 external_prior = "none"
@@ -48,7 +48,7 @@ KL_FLAG = True
 MG_FLAG = False
 
 # read parameters from ini file
-params = parse_ini_file("params_3x2pt.ini")
+params = parse_ini_file("params_shear_shear.ini")
 Ntomo_src = params.get("Ntomo_source")
 Ntomo_lens = params.get("Ntomo_lens")
 Ncl = params.get("Ncl")
@@ -77,14 +77,13 @@ initsurvey("Roman_KL")
 initgalaxies(file_source_z, file_lens_z, "gaussian", "gaussian", "SN10")
 initclusters()
 initia("none", "GAMA")
-initprobes("3x2pt")
+initprobes("shear_shear")
 initdatainv(cov_file, data_file)
 
 if DE_FLAG:
     sample_params = sample_cosmology_only(MG=MG_FLAG)
 else:
     sample_params = sample_LCDM_only(MG=MG_FLAG)
-sample_params += ['bias_%d'%i for i in range(Ntomo_lens)]
 
 sample_main(sample_params, args.nsteps, args.nwalkers, 1, chain_file+'_%d'%args.nsteps, 
             blind=False, pool=MPIPool(), KL=KL_FLAG)

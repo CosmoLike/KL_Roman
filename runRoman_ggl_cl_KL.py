@@ -35,9 +35,9 @@ dirname = "/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST/"
 outdirname = "/home/u15/yhhuang/cosmology/CosmoLike/3Dx2D/"
 
 # file fmt
-data_vector_file = "datav/Roman_KL_3x2pt_Ntomo%d_Ncl%d_dmo"
-invcovmat_file = "invcov/Roman_KL_3x2pt_invcov_Ncl%d_Ntomo%d"
-chain_output_file = "chains/Roman_KL_3x2pt_Ncl%d_Ntomo%d"
+data_vector_file = "datav/Roman_KL_ggl_cl_Ntomo%d_Ncl%d_dmo"
+invcovmat_file = "invcov/Roman_KL_ggl_cl_invcov_Ncl%d_Ntomo%d"
+chain_output_file = "chains/Roman_KL_ggl_cl_Ncl%d_Ntomo%d"
 
 # external prior
 external_prior = "none"
@@ -48,7 +48,7 @@ KL_FLAG = True
 MG_FLAG = False
 
 # read parameters from ini file
-params = parse_ini_file("params_3x2pt.ini")
+params = parse_ini_file("params_ggl_cl.ini")
 Ntomo_src = params.get("Ntomo_source")
 Ntomo_lens = params.get("Ntomo_lens")
 Ncl = params.get("Ncl")
@@ -77,7 +77,7 @@ initsurvey("Roman_KL")
 initgalaxies(file_source_z, file_lens_z, "gaussian", "gaussian", "SN10")
 initclusters()
 initia("none", "GAMA")
-initprobes("3x2pt")
+initprobes("ggl_cl")
 initdatainv(cov_file, data_file)
 
 if DE_FLAG:
