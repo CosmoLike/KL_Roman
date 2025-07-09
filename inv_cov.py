@@ -57,11 +57,13 @@ ngcl 	= 0							# number of cluster-source galaxy power spectra
 nrich 	= 0							# number of richness bins
 
 # set data vector dimensions
+nbuff = 0
 if probes == '3x2pt':
 	probes_list = ['ssss', 'llll', 'lsls', 'llls', 'lsss', 'llss']
 elif probes == 'ggl_cl':
 	probes_list = ['llll', 'lsls', 'llls']
 	nshear = 0
+	nbuff = int(nshear * ncl)
 elif probes == 'shear_shear':
 	probes_list = ['ssss']
 	nlens = 0
@@ -128,8 +130,12 @@ for probe in probes_list:
 			factor = 1
 		else:
 			factor = mask[bin1] * mask[bin2]
-		cov[bin1, bin2] += cov_g * factor
-		cov[bin2, bin1] += cov_g * factor
+		if nbuff == 0:
+			cov[bin1, bin2] += cov_g * factor
+			cov[bin2, bin1] += cov_g * factor
+		else:
+			cov[bin1-nbuff, bin2-nbuff] += cov_g * factor
+			cov[bin2-nbuff, bin1-nbuff] += cov_g * factor
 # correlation matrix
 cor = cov / np.outer(np.diagonal(cov)**0.5, np.diagonal(cov)**0.5)
 a = np.sort(LA.eigvals(cor[:,:]))
