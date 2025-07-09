@@ -122,6 +122,7 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
     // sigma8 split at low-z
     fid_sigma8, 1.0);
   // finite difference dv
+/*
   char details_FIM_sigma8[4][50] = {
     "_sigma8--", "_sigma8-", "_sigma8+", "_sigma8++",
   };
@@ -157,7 +158,9 @@ int test_RomanPIT_WL(int i_depth, int i_ellmax, char* probe, char* bary_sce)
     bary_sce,
     fid_sigma8+finite_diff_scale[ifd]*finite_diff_h, 1.0);
   }
+*/
   #endif
+
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
   init_data_inv_bary(invcov_fn, dv_fn, PCs_fn);
@@ -261,7 +264,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
   int Ntomo_source = 4;
   // 6 sets of shape noise, used to refer to covariance matrix only
   // detailed settings are stored in `set_survey_parameters_to_DESI2_KL()`
-  int N_scenarios_shape_noise = 6;
+  int N_scenarios_shape_noise = 10;
   // Lens galaxies not used, set to random value
   double lens_density = 66.0;
   // Lens galaxies not used, set to random value
@@ -277,7 +280,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
 
   char strat[20];
   char invcov_fn[500], dv_fn[500], PCs_fn[500];
-  sprintf(invcov_fn, "/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/DESI2_KL_v2_%d%d_ssss_invcov_Ncl15_Ntomo4", i_Selection, i_SN);
+  sprintf(invcov_fn, "/xdisk/timeifler/jiachuanxu/DESI2KL/invcov/DESI2_KL_v3_%d%d_ssss_invcov_Ncl15_Ntomo4", i_Selection, i_SN);
   sprintf(dv_fn, "datav/DESI2_KL_%d%d_shear_shear_Ntomo4_Ncl15_dmo", i_Selection, i_SN);
   sprintf(PCs_fn, "datav/DESI2_KL_%d%d_shear_shear_Ntomo4_Ncl15_9sim.pca", i_Selection, i_SN);
 
@@ -294,7 +297,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
   init_binning_fourier(Nell, ell_min, ell_max, ell_max_shear, 
     Rmin_bias, Ntomo_source, Ntomo_lens);
   init_priors_IA_bary("spec_DESI2","shear_KL_DESI2","none","none",
-    false, 3.0, 1.2, 3.8, 2.0, true, 40.0, 10.0, 0.8);
+    true, 3.0, 1.2, 3.8, 2.0, true, 40.0, 10.0, 0.8);
   init_survey(strat);
   init_galaxies(dndz[i_Selection], "zdistris/lens_LSSTY1", 
       "gaussian", "gaussian", "SN10");// the last arg is lens sample
@@ -315,7 +318,8 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
     fclose(tomo_zdist);
   #endif
 
-  init_IA("none", "GAMA");
+  //init_IA("none", "GAMA");
+  init_IA("NLA_HF", "GAMA");
   init_probes(probe);
   
   /* compute fiducial data vector */
@@ -347,6 +351,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
     // sigma8 split at low-z
     0.831, 0.15);
   #endif
+
   /* compute example likelihood evaluation */
   #if _COMPUTE_LIKELIHOOD_ == 1
   init_data_inv_bary(invcov_fn, dv_fn, PCs_fn);
@@ -382,7 +387,7 @@ int test_DESI2_KL(int i_Selection, int i_SN, char* probe, char* bary_sce)
     0.0, 0.0, 0.0,
     // sigma8 split at low-z
     0.831, 0.15);
-  printf("%le\n",loglike);
+  printf("test likelihood: %le\n",loglike);
   // printf("knonlin %le\n",nonlinear_scale_computation(1.0));
   // printf("knonlin %le\n",nonlinear_scale_computation(0.5));
   end = clock();

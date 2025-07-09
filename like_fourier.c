@@ -572,7 +572,7 @@ double log_multi_like(
   //printf("Debug: Q1=%.2f, Q2=%.2f, Q3=%.2f, dchi2_deff=%.2e, PC1=%le\n", Q1, Q2, Q3, chisqr_test/Q1/Q1, bary_read(1,0,14));
   if (chisqr<0.0){
     printf("error: chisqr = %le\n",chisqr);
-    //exit(EXIT_FAILURE);
+    exit(EXIT_FAILURE);
   }
   if(_VERBOSE_==1) {
     printf("************\n");
@@ -581,7 +581,7 @@ double log_multi_like(
     printf("Q1 Q2 Q3 = %e %e %e\n", Q1, Q2, Q3);
     printf("IA params = %e %e %e %e\n************\n", nuisance.A_ia, nuisance.beta_ia, nuisance.eta_ia, nuisance.eta_ia_highz);
   }
-  printf("loglike = %.2f, logprior = %.2f, s8 = %.4f, s8l = %.4f\n", -0.5*chisqr, log_L_prior, S8, sigma_8_lowz);
+  printf("loglike = %.2f, logprior = %.2f, s8 = %e, s8l = %e\n", -0.5*chisqr, log_L_prior, S8, sigma_8_lowz);
   return -0.5*chisqr+log_L_prior;
 }
 
@@ -648,7 +648,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_Haley_dndz_%s%s",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce, details);} 
+  else {sprintf(filename,"datav/%s_%s_Ntomo%d_Ncl%d_%s%s",survey.name,like.probes,tomo.shear_Nbin,like.Ncl,bary_sce, details);} 
   #if _WRITE_DATA_VECTOR_ == 1
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){

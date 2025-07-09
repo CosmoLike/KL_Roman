@@ -1392,7 +1392,8 @@ void set_survey_parameters_to_DESI2_KL(char *surveyname)
   double source_density[6] = {0.5256, 0.1717, 0.1789, 0.0953, 0.1189, 0.0811};
   //double shape_noise_rms[6] = {0.02*1.4142, 0.04*1.4142, 0.06*1.4142, 
   //                             0.10*1.4142, 0.20*1.4142, 0.30*1.4142};
-  double shape_noise_rms[6] = {0.04, 0.05, 0.06, 0.07, 0.09, 0.11};
+  double shape_noise_rms[10] = {0.005, 0.01, 0.02, 0.03, 0.04, 
+                                 0.05, 0.06, 0.07, 0.09, 0.11};
 
   char _iSelect[2];
   char _iSN[2];

@@ -590,7 +590,7 @@ int run_DESI2(int argc, char**argv)
   // Six shape noise scenarios
   // Note that we do not include correlation between shape noise and target 
   // selection here.
-  int N_scenarios_shape_noise = 6; // 6
+  int N_scenarios_shape_noise = 10; // 6
   printf("%d shape noise scenarios\n", N_scenarios_shape_noise);
   // Lens galaxies not used, set to random value
   float lens_density = 66.0;

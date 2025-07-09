@@ -272,15 +272,15 @@ class InputCosmologyParams(IterableStruct):
     @classmethod
     def fiducial_sigma(cls):
         c = cls()
-        c.omega_m = 0.1 * 1e-4
-        c.sigma_8 = 0.1 * 1e-4
-        c.n_s = 0.05 * 1e-4
-        c.w0 = 0.2 * 1e-4
-        c.wa = 0.2 * 1e-4
-        c.omega_b = 0.01 * 1e-4
-        c.h0 = 0.1 * 1e-4
-        c.MGSigma = 0.1 * 1e-4
-        c.MGmu = 0.2 * 1e-4
+        c.omega_m = 0.001
+        c.sigma_8 = 0.001
+        c.n_s = 0.01
+        c.w0 = 0.01
+        c.wa = 0.01
+        c.omega_b = 0.001
+        c.h0 = 0.01
+        c.MGSigma = 0.01
+        c.MGmu = 0.01
         return c
 
 class InputCosmologyLowzParams(IterableStruct):
@@ -294,14 +294,14 @@ class InputCosmologyLowzParams(IterableStruct):
     def fiducial(cls):
         c = cls()
         c.sigma_8_lowz = 0.831
-        c.z_low = -1.0
+        c.z_low = 0.15
         return c
 
     @classmethod
     def fiducial_sigma(cls):
         c = cls()
-        c.sigma_8_lowz = 0.1 * 1e-4
-        c.z_low = 0.02 * 1e-4
+        c.sigma_8_lowz = 0.001
+        c.z_low = 0.001
         return c
 
 class InputNuisanceParams(IterableStruct):
