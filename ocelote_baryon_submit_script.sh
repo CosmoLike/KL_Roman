@@ -6,14 +6,13 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --partition=high_priority
-#SBATCH --qos=user_qos_timeifler
+#SBATCH --partition=standard
 #SBATCH --account=timeifler
-#SBATCH --time=04:00:00
+#SBATCH --time=01:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=yhhuang@arizona.edu
 
-if [ "$#" -ne ]; then
+if [ "$#" -ne 1 ]; then
     echo "Error: Need to pass the parameter file" >&2
     exit 1
 fi

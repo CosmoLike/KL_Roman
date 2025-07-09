@@ -13,7 +13,7 @@
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=yhhuang@arizona.edu
 
-if [ "$#" -ne ]; then
+if [ "$#" -ne 1 ]; then
     echo "Error: Need to pass the parameter file" >&2
     exit 1
 fi
