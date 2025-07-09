@@ -1,15 +1,11 @@
 
-
-
 like_fourier.dSYM/
-
 like_fourier
-
 like_fourier.so.dSYM/
-
 *.so
 
 compute_covariances_fourier
+compute_covariances_fourier.dSYM/
 
 chains/
 log/
