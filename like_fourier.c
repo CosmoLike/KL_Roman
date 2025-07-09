@@ -761,7 +761,7 @@ void init_from_file(char *filename, char *probes, char *shear_REDSHIFT_FILE, cha
   fclose(input);
 }
 
-// like_fourier [mode_flag] [bary_scenario]
+// like_fourier [ini_file] [mode_flag] [bary_scenario]
 // if mode_flag is 0, it computes the data vector and saves it to a file
 // if mode_flag is 1, it computes the likelihood and returns it
 // "dmo","mb2","illustris","eagle","HzAGN","TNG100","owls_AGN",... set init_bary(), default is dmo
@@ -777,10 +777,11 @@ int main(int argc, char** argv)
   int Ntomo_source, Ntomo_lens, Ncl;
   double lmin, lmax, lmax_shear, Rmin_bias;
 
-  int mode_like = atoi(argv[1]);
-  char *bary_scenario = (argc > 2) ? argv[2] : "dmo";
+  char *ini_file = argv[1];
+  int mode_like = atoi(argv[2]);
+  char *bary_scenario = (argc > 3) ? argv[3] : "dmo";
 
-  init_from_file("params.ini", probes, shear_REDSHIFT_FILE, clustering_REDSHIFT_FILE,
+  init_from_file(ini_file, probes, shear_REDSHIFT_FILE, clustering_REDSHIFT_FILE,
     &survey_area, &n_gal, &n_lens,
     &Ntomo_source, &Ntomo_lens, 
     &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
@@ -799,7 +800,7 @@ int main(int argc, char** argv)
   init_priors_IA_bary(
     "spec_Roman", "shear_Roman", "none", "none",
     false, 3.0, 1.2, 3.8, 2.0,
-    true, 16, 1.9, 0.7
+    false, 16, 1.9, 0.7
   );
   // tomo.clustering_Npowerspectra = tomo.clustering_Nbin;
   
