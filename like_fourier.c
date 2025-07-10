@@ -800,7 +800,7 @@ int main(int argc, char** argv)
   init_priors_IA_bary(
     "spec_Roman", "shear_Roman", "none", "none",
     false, 3.0, 1.2, 3.8, 2.0,
-    false, 16, 1.9, 0.7
+    true, 16, 1.9, 0.7
   );
   // tomo.clustering_Npowerspectra = tomo.clustering_Nbin;
   
@@ -843,7 +843,7 @@ int main(int argc, char** argv)
   /* compute likelihood */
   if (mode_like == 1) {
     begin = clock();
-    init_data_inv(invcov_file, datav_file);
+    init_data_inv_bary(invcov_file, datav_file, "../3Dx2D/data/Roman_KL_3x2pt_pca.txt");
     loglike = log_multi_like(
       // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
       0.3156, 0.831, 0.9645, -1.0, 0.0, 0.0491685, 0.6727, 0., 0.,
