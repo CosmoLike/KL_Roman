@@ -34,5 +34,5 @@ export LD_LIBRARY_PATH=/opt/ohpc/pub/libs/gnu8/gsl/2.6/lib/:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:`pwd`
 
 date
-mpirun --mca pml ob1 --mca btl tcp,self -n 80 python runRoman_shear_shear_KL.py -nsteps=2000 -nwalkers=400
+mpirun --mca pml ob1 --mca btl tcp,self -n 80 python runRoman_shear_shear_KL.py -nsteps=4000 -nwalkers=400
 date
