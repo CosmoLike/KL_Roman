@@ -638,7 +638,7 @@ int main(int argc, char** argv)
   Ntable.N_a = 20;
 
   // Read parameters from file
-  init_from_file("params_3x2pt.ini", probes, shear_redshift_file, clustering_redshift_file,
+  init_from_file("params_cl.ini", probes, shear_redshift_file, clustering_redshift_file,
     &survey_area, &n_gal, &n_lens, &Ntomo_source, &Ntomo_lens, &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
 
   //RUN MODE setup
