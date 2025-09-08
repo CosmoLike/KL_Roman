@@ -37,13 +37,13 @@ outdirname = "/home/u15/yhhuang/cosmology/CosmoLike/3Dx2D/"
 # file fmt
 data_vector_file = "datav/Roman_KL_shear_shear_Ntomo%d_Ncl%d_dmo"
 invcovmat_file = "invcov/Roman_KL_shear_shear_invcov_Ncl%d_Ntomo%d"
-chain_output_file = "chains/Roman_KL_shear_shear_Ncl%d_Ntomo%d"
+chain_output_file = "chains/Roman_KL_shear_shear_wCDM_Ncl%d_Ntomo%d"
 
 # external prior
 external_prior = "none"
 
 # flag
-DE_FLAG = False
+DE_FLAG = True
 KL_FLAG = True
 MG_FLAG = False
 
