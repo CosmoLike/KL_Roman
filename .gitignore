@@ -5,7 +5,7 @@ like_fourier.dSYM/
 like_fourier
 *.out
 like_fourier.so.dSYM/
-
+*.dSYM/
 *.so
 
 chains/
