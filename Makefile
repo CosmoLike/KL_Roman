@@ -26,7 +26,7 @@ ocelote:
 	gcc -o ./compute_covariances_fourier compute_covariances_fourier.c $(header_puma) $(FLAGS)
 
 compute_cov:
-	gcc -o ./compute_covariances_fourier compute_covariances_fourier.c $(header_puma) $(FLAGS)
+	gcc -o ./compute_covariances_fourier compute_covariances_fourier.c $(header_home) $(FLAGS)
 
 clean:
 	rm like_fourier.so like_fourier compute_covariances_fourier
