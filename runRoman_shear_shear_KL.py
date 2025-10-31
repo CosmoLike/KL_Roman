@@ -31,8 +31,8 @@ def parse_ini_file(fname):
     return params
 
 # path
-dirname = "/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST/"
-outdirname = "/home/u15/yhhuang/cosmology/CosmoLike/3Dx2D/"
+dirname = "/xdisk/timeifler/yhhuang/3Dx2D_old/"
+outdirname = "/xdisk/timeifler/yhhuang/3Dx2D_old/"
 
 # file fmt
 data_vector_file = "datav/Roman_KL_shear_shear_Ntomo%d_Ncl%d_dmo"
