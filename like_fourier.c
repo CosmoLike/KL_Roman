@@ -785,8 +785,6 @@ int main(int argc, char** argv)
     &survey_area, &n_gal, &n_lens,
     &Ntomo_source, &Ntomo_lens, 
     &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
-  sprintf(datav_file, "datav/Roman_KL_%s_Ntomo%d_Ncl%d_%s", probes, Ntomo_source, Ncl, bary_scenario);
-  sprintf(invcov_file, "../3Dx2D/invcov/Roman_KL_%s_invcov_Ncl%d_Ntomo%d", probes, Ncl, Ntomo_source);
 /* here, do your time-consuming job */
   
   begin = clock();
@@ -804,7 +802,10 @@ int main(int argc, char** argv)
   );
   // tomo.clustering_Npowerspectra = tomo.clustering_Nbin;
   
-  init_survey("Roman_KL");
+  init_survey("WFIRST_KL");
+  sprintf(datav_file, "datav/%s_%s_Ntomo%d_Ncl%d_%s", survey.name, probes, Ntomo_source, Ncl, bary_scenario);
+  sprintf(invcov_file, "../3Dx2D/invcov/%s_%s_invcov_Ncl%d_Ntomo%d", survey.name, probes, Ncl, Ntomo_source);
+
   init_galaxies(
     shear_REDSHIFT_FILE,
     clustering_REDSHIFT_FILE,
@@ -815,7 +816,7 @@ int main(int argc, char** argv)
   init_probes(probes); 
 
   /* compute data vector */
-  compute_data_vector("Roman_KL",
+  compute_data_vector(survey.name,
     // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
     0.3156, 0.831, 0.9645, -1.0, 0.0, 0.0491685, 0.6727, 0., 0.,
     // galaxy bias: b[0-9]
