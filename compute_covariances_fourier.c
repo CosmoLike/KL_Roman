@@ -638,7 +638,7 @@ int main(int argc, char** argv)
   Ntable.N_a = 20;
 
   // Read parameters from file
-  init_from_file("params_cl.ini", probes, shear_redshift_file, clustering_redshift_file,
+  init_from_file("params_shear_shear.ini", probes, shear_redshift_file, clustering_redshift_file,
     &survey_area, &n_gal, &n_lens, &Ntomo_source, &Ntomo_lens, &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
 
   //RUN MODE setup
@@ -685,7 +685,7 @@ int main(int argc, char** argv)
   survey.area = survey_area;
   survey.n_gal = n_gal;
   survey.n_lens = n_lens;
-  sprintf(covparams.outdir, "/home/u15/yhhuang/cosmology/CosmoLike/3Dx2D/cov/");
+  sprintf(covparams.outdir, "/xdisk/timeifler/yhhuang/3Dx2D_old/cov/");
 
   printf("----------------------------------\n");  
   printf("area: %le n_source: %le n_lens: %le\n",survey.area,survey.n_gal,survey.n_lens);

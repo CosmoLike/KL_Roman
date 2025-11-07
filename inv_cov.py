@@ -43,7 +43,7 @@ probes = params.get('probes')
 
 infile_fmt = 'cov/Roman_KL_%s_cov_Ncl%d_Ntomo%d'
 outfile_fmt = 'invcov/Roman_KL_%s_invcov_Ncl%d_Ntomo%d'
-DATA_DIR = '../3Dx2D/'
+DATA_DIR = '/xdisk/timeifler/yhhuang/3Dx2D_old/'
 
 # the numbers below can be computed knowing the data vector settings, 
 # e.g. 10 tomographic source bins results in 55 shear-shear power spectra. 
@@ -93,9 +93,9 @@ fontsize = 10
 
 fig_title = "$n_\mathrm{src}=$%.2f arcmin$^{-2}$, $\ell_\mathrm{max}$=%.0f"%(Nsrc, ellmax)
 if plot_corrmat:
-    fig_filename = "../3Dx2D/figure/Roman_KL_%s_corr_Ncl%d_Ntomo%d.png"%(probes, Ncl, Ntomo)
+    fig_filename = "/xdisk/timeifler/yhhuang/3Dx2D_old/figure/Roman_KL_%s_corr_Ncl%d_Ntomo%d.png"%(probes, Ncl, Ntomo)
 else:
-    fig_filename = "../3Dx2D/figure/Roman_KL_%s_cov_Ncl%d_Ntomo%d.png"%(probes, Ncl, Ntomo)
+    fig_filename = "/xdisk/timeifler/yhhuang/3Dx2D_old/figure/Roman_KL_%s_cov_Ncl%d_Ntomo%d.png"%(probes, Ncl, Ntomo)
 
 if plot_separate and probes == '3x2pt':
     fig_list = [

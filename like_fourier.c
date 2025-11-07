@@ -607,7 +607,7 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
     sprintf(filename,"%s",details);
   }
   else {
-    sprintf(filename, "datav/%s_%s_Ntomo%d_Ncl%d_%s", details, like.probes, tomo.shear_Nbin, like.Ncl, bary_sce);
+    sprintf(filename, "/xdisk/timeifler/yhhuang/3Dx2D_old/datav/%s_%s_Ntomo%d_Ncl%d_%s", details, like.probes, tomo.shear_Nbin, like.Ncl, bary_sce);
   }
   F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
@@ -785,6 +785,8 @@ int main(int argc, char** argv)
     &survey_area, &n_gal, &n_lens,
     &Ntomo_source, &Ntomo_lens, 
     &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
+  sprintf(datav_file, "/xdisk/timeifler/yhhuang/3Dx2D_old/datav/Roman_KL_%s_Ntomo%d_Ncl%d_%s", probes, Ntomo_source, Ncl, bary_scenario);
+  sprintf(invcov_file, "/xdisk/timeifler/yhhuang/3Dx2D_old/invcov/Roman_KL_%s_invcov_Ncl%d_Ntomo%d", probes, Ncl, Ntomo_source);
 /* here, do your time-consuming job */
   
   begin = clock();
@@ -798,7 +800,7 @@ int main(int argc, char** argv)
   init_priors_IA_bary(
     "spec_Roman", "shear_Roman", "none", "none",
     false, 3.0, 1.2, 3.8, 2.0,
-    true, 16, 1.9, 0.7
+    false, 16, 1.9, 0.7
   );
   // tomo.clustering_Npowerspectra = tomo.clustering_Nbin;
   
@@ -844,7 +846,8 @@ int main(int argc, char** argv)
   /* compute likelihood */
   if (mode_like == 1) {
     begin = clock();
-    init_data_inv_bary(invcov_file, datav_file, "../3Dx2D/data/Roman_KL_3x2pt_pca.txt");
+    init_data_inv(invcov_file, datav_file);
+    // init_data_inv_bary(invcov_file, datav_file, "../3Dx2D/data/Roman_KL_3x2pt_pca.txt");
     loglike = log_multi_like(
       // cosmology+MG: Om, S8, ns, w0, wa, Ob, h0, MG_sigma, MG_mu
       0.3156, 0.831, 0.9645, -1.0, 0.0, 0.0491685, 0.6727, 0., 0.,
