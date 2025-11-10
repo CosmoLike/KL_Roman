@@ -1,23 +1,39 @@
 #!/bin/bash
-#PBS -S /bin/bash
-#PBS -V
-#PBS -W group_list=cosmo
-#PBS -q standard
-#PBS -J 1-3
-#PBS -l select=1:ncpus=1:mem=6GB
-#PBS -l place=free:shared
-#PBS -l walltime=1:00:00
-#PBS -N WL_W1st_KL_cov
-#PBS -e /home/u17/jiachuanxu/output/
-#PBS -o /home/u17/jiachuanxu/output/
+#SBATCH --job-name=RomanKL
+#SBATCH --output=RomanKL-%A_%a.out
 
-module load gsl/2/2.1
-module load mpich/ge/gcc/64/3.2.1
-module load openmpi
+### 1. puma
+###SBATCH --nodes=1
+###SBATCH --ntasks-per-node=80
+###SBATCH --ntasks-per-socket=40
+###SBATCH --cpus-per-task=1
+###SBATCH --partition=high_priority
+###SBATCH --qos=user_qos_timeifler
+###SBATCH --account=timeifler
+###SBATCH --time=96:00:00
 
-cd $PBS_O_WORKDIR
-/home/u17/jiachuanxu/CosmoLike/KL_WFIRST/./compute_covariances_fourier $PBS_ARRAY_INDEX >& /home/u17/jiachuanxu/output/job_output_$PBS_ARRAY_INDEX.log
+### 2. ocelote
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH --partition=standard
+#SBATCH --array=1-770
+#SBATCH --qos=qual_qos_timeifler
+#SBATCH --account=timeifler
+#SBATCH --time=96:00:00
+
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=jiachuanxu@arizona.edu
 
 
+module load gsl
+module swap openmpi3/3.1.4 mpich/3.3.1
+
+cd /home/u17/jiachuanxu/CosmoLike/KL_WFIRST
+for i in $(seq 1 2);
+do
+IDX=$(( ${SLURM_ARRAY_TASK_ID} + ( i - 1 ) * 770 ))
+./compute_covariances_fourier $IDX
+done
 
 

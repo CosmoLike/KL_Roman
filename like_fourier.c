@@ -602,15 +602,15 @@ void compute_data_vector(char *details, double OMM, double S8, double NS, double
   if (strstr(details,"FM") != NULL){
     sprintf(filename,"%s",details);
   }
-  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%2d_Ncl%2d_sigmae%.2f_%s",survey.name,like.probes,details,tomo.shear_Nbin,like.Ncl,survey.sigma_e,bary_sce);}
-  /*F=fopen(filename,"w");
+  else {sprintf(filename,"datav/%s_%s_%s_Ntomo%2d_Ncl%2d_%s_2025",survey.name,like.probes,details,tomo.shear_Nbin,like.Ncl, bary_sce);}
+  F=fopen(filename,"w");
   for (i=0;i<like.Ndata; i++){  
     //a = pred[i]+Q1*bary_read(1,0,i)+Q2*bary_read(1,1,i)+Q3*bary_read(1,2,i);
     a = pred[i];
     fprintf(F,"%d %le\n",i,a);
-    //printf("%d %le\n",i,pred[i]);
+    printf("%d %le\n",i,pred[i]);
   }
-  fclose(F);*/
+  fclose(F);
 }
 
 void write_vector_wrapper(char *details, char *bary_sce, input_cosmo_params ic, input_nuisance_params in)
@@ -697,8 +697,8 @@ int main(int argc, char** argv)
 
   // init_binning_fourier: Ncl, lmin, lmax, lmax_shear , Rmin_bias, source tomo bin, lensing tomo bin
   //init_binning_fourier(25,30.0,15000.0,4000.0,21.0,10,10);// WFIRST standard WL
-  //init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
-  init_binning_fourier(10,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 10
+  init_binning_fourier(20,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000
+  //init_binning_fourier(10,30.0,4000.0,4000.0,21.0,10,10);// KL shear shear, Ncl=20, l_max=4000, tomo bin = 10
   if(strcmp(argv[2],"WFIRST_KL")==0)
     init_priors_KL("photo_opti","shear_opti","none","none");
   else{
