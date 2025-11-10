@@ -638,19 +638,19 @@ int main(int argc, char** argv)
   Ntable.N_a = 20;
 
   // Read parameters from file
-  init_from_file("params_shear_shear.ini", probes, shear_redshift_file, clustering_redshift_file,
+  init_from_file("params_WFIRST_KL.ini", probes, shear_redshift_file, clustering_redshift_file,
     &survey_area, &n_gal, &n_lens, &Ntomo_source, &Ntomo_lens, &Ncl, &lmin, &lmax, &lmax_shear, &Rmin_bias);
 
   //RUN MODE setup
   init_cosmo_runmode("halofit");
   init_binning_fourier(Ncl, lmin, lmax, lmax_shear, Rmin_bias, Ntomo_source, Ntomo_lens);
   init_priors_IA_bary(
-    "spec_Roman", "shear_Roman", "none", "none",
+    "photo_KL", "shear_KL", "none", "none",
     /* IA_flag, A, beta, eta, etaZ */
     false, 3.0, 1.2, 3.8, 2.0,
     /* Baryon flag, Q1, Q2, Q3 */
     false, 16, 1.9, 0.7);
-  init_survey("Roman_KL");
+  init_survey("WFIRST_KL");
   init_galaxies(
     shear_redshift_file,
     clustering_redshift_file, 
@@ -685,7 +685,7 @@ int main(int argc, char** argv)
   survey.area = survey_area;
   survey.n_gal = n_gal;
   survey.n_lens = n_lens;
-  sprintf(covparams.outdir, "/xdisk/timeifler/yhhuang/3Dx2D_old/cov/");
+  sprintf(covparams.outdir, "/xdisk/timeifler/yhhuang/3Dx2D_old/cov/3Dx2D_3Dx2D/");
 
   printf("----------------------------------\n");  
   printf("area: %le n_source: %le n_lens: %le\n",survey.area,survey.n_gal,survey.n_lens);
