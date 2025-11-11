@@ -46,6 +46,9 @@
 #include "../cosmolike_core/theory/covariances_cluster.c"
 #include "init_WFIRST_forecasts.c"
 
+#define WRITE_GAUSS_BY_PART 0
+#define WRITE_DATAV 0
+
 void run_cov_N_N (char *OUTFILE, char *PATH, int nzc1, int nzc2,int start);
 void run_cov_cgl_N (char *OUTFILE, char *PATH, double *ell_Cluster, double *dell_Cluster,int N1, int nzc2, int start);
 void run_cov_cgl_cgl (char *OUTFILE, char *PATH, double *ell_Cluster, double *dell_Cluster,int N1, int N2, int start);
@@ -69,6 +72,65 @@ void init_from_file(char *filename, char *probes, char *shear_REDSHIFT_FILE, cha
   int *Ntomo_source, int *Ntomo_lens, 
   int *Ncl, double *lmin, double *lmax, double *lmax_shear, double *Rmin_bias);
 
+
+void write_G_shear_shear_tomo(char *fname, double *ell, double *dell, int n1, int n2)
+{
+    int z1, z2, z3, z4, nl1;
+    double c13, c14, c23, c24, n13, n14, n23, n24;
+    double l, delta_l;
+    double fsky = survey.area / 41253.0;
+    FILE *F;
+    F = fopen(fname, "w");
+    printf("Write Gaussian covariance by part to %s\n", fname);
+
+    for (nl1=0; nl1<like.Ncl; nl1++){
+        l = ell[nl1]; delta_l = dell[nl1];
+        n13 = 0.; n14 = 0.; n23 = 0.; n24 = 0.;
+        z1 = Z1(n1); z2 = Z2(n1);
+        z3 = Z1(n2); z4 = Z2(n2);
+        c13 = C_shear_tomo_nointerp(l, z1, z3);
+        c14 = C_shear_tomo_nointerp(l, z1, z4);
+        c23 = C_shear_tomo_nointerp(l, z2, z3);
+        c24 = C_shear_tomo_nointerp(l, z2, z4);
+        if (z1 == z3){n13 = pow(survey.sigma_e, 2.0)/(2.0 * nsource(z1) * survey.n_gal_conversion_factor);}
+        if (z1 == z4){n14 = pow(survey.sigma_e, 2.0)/(2.0 * nsource(z1) * survey.n_gal_conversion_factor);}
+        if (z2 == z3){n23 = pow(survey.sigma_e, 2.0)/(2.0 * nsource(z2) * survey.n_gal_conversion_factor);}
+        if (z2 == z4){n24 = pow(survey.sigma_e, 2.0)/(2.0 * nsource(z2) * survey.n_gal_conversion_factor);}
+        fprintf(F, "%d %d %e %e %d %d %d %d %e %e %e %e %e %e %e %e\n",
+            like.Ncl*n1+nl1, like.Ncl*n2+nl1, ell[nl1], ell[nl1],
+            z1, z2, z3, z4,
+            c13, c14, c23, c24,
+            n13, n14, n23, n24);
+    }
+    fclose(F);
+}
+
+double C_shear_tomo_sys(double ell, int z1, int z2)
+{
+  double C;
+  // C= C_shear_tomo_nointerp(ell,z1,z2);
+  // if(like.IA==1) C+=C_II_nointerp(ell,z1,z2)+C_GI_nointerp(ell,z1,z2);
+  
+  if(like.IA!=1) C= C_shear_tomo_nointerp(ell,z1,z2);
+  //if(like.IA==1) C= C_shear_shear_IA(ell,z1,z2);
+  if(like.IA==1) C = C_shear_tomo_nointerp(ell,z1,z2)+C_II_nointerp(ell,z1,z2)+C_GI_nointerp(ell,z1,z2);
+  if(like.IA==2) C += C_II_lin_nointerp(ell,z1,z2)+C_GI_lin_nointerp(ell,z1,z2);  
+  if(like.shearcalib==1) C *=(1.0+nuisance.shear_calibration_m[z1])*(1.0+nuisance.shear_calibration_m[z2]);
+  //printf("%le %d %d %le\n",ell,z1,z2,C_shear_tomo_nointerp(ell,z1,z2)+C_II_JB_nointerp(ell,z1,z2)+C_GI_JB_nointerp(ell,z1,z2));
+return C;
+}
+void set_data_shear(int Ncl, double *ell, double *data, int start)
+{
+  int i,z1,z2,nz;
+  double a;
+  for (nz = 0; nz < tomo.shear_Npowerspectra; nz++){
+    z1 = Z1(nz); z2 = Z2(nz);
+    for (i = 0; i < Ncl; i++){
+      if (ell[i] < like.lmax_shear){ data[Ncl*nz+i] = C_shear_tomo_sys(ell[i],z1,z2);}
+      else {data[Ncl*nz+i] = 0.;}
+    }
+  }
+}
 
 void run_cov_N_N (char *OUTFILE, char *PATH, int nzc1, int nzc2,int start)
 {
@@ -635,7 +697,7 @@ int main(int argc, char** argv)
   // int fail[5]={1134, 259, 497, 623, 718};
   // hit=fail[hit-1];
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  Ntable.N_a = 20;
+  // Ntable.N_a = 20;
 
   // Read parameters from file
   init_from_file("params_WFIRST_KL.ini", probes, shear_redshift_file, clustering_redshift_file,
@@ -685,17 +747,34 @@ int main(int argc, char** argv)
   survey.area = survey_area;
   survey.n_gal = n_gal;
   survey.n_lens = n_lens;
-  sprintf(covparams.outdir, "/xdisk/timeifler/yhhuang/3Dx2D_old/cov/3Dx2D_3Dx2D/");
+  sprintf(covparams.outdir, "/xdisk/timeifler/yhhuang/3Dx2D_old/cov/Na100/");
+  // sprintf(covparams.outdir, "./cov/test/");
 
   printf("----------------------------------\n");  
   printf("area: %le n_source: %le n_lens: %le\n",survey.area,survey.n_gal,survey.n_lens);
   printf("----------------------------------\n");
+  #if WRITE_DATAV == 1
+    int start = 0;
+    static double *pred;
+    pred = create_double_vector(0, like.Ncl * tomo.shear_Npowerspectra - 1);
+    set_data_shear(like.Ncl, ell, pred, start);
+    FILE *F;
+    F = fopen("cov/test/data_shear", "w");
+    for (i = 0; i < like.Ncl * tomo.shear_Npowerspectra; i++){
+      fprintf(F, "%d %e\n", i, pred[i]);
+    }
+    fclose(F);
+  #endif
   /********************** cosmic shear - cosmic shear  **********************/
   if (like.shear_shear == 1){
     sprintf(OUTFILE, "%s_ssss_cov_Ncl%d_Ntomo%d", survey.name, like.Ncl, tomo.shear_Nbin);
     for (l=0; l<tomo.shear_Npowerspectra; l++){
       for (m=l; m<tomo.shear_Npowerspectra; m++){
         if(k==hit){ 
+          #if WRITE_GAUSS_BY_PART == 1
+            sprintf(filename, "%s%s_by_part_%d", covparams.outdir, OUTFILE, k);
+            write_G_shear_shear_tomo(filename, ell, dell, l, m);
+          #endif
           sprintf(filename, "%s%s_%d", covparams.outdir, OUTFILE, k);
           if (fopen(filename, "r") != NULL){
             printf("File %s already exists! Forced not to overwrite.\n", filename);
