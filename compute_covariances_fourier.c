@@ -747,7 +747,7 @@ int main(int argc, char** argv)
   survey.area = survey_area;
   survey.n_gal = n_gal;
   survey.n_lens = n_lens;
-  sprintf(covparams.outdir, "/xdisk/timeifler/yhhuang/3Dx2D_old/cov/Na100/");
+  sprintf(covparams.outdir, "/xdisk/timeifler/yhhuang/3Dx2D_old/cov/3Dx2D_KL_Ntomo10_Na100/");
   // sprintf(covparams.outdir, "./cov/test/");
 
   printf("----------------------------------\n");  

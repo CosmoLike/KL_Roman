@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=cov3x2
-#SBATCH --output=log/cov3x2-%A_%a.out
+#SBATCH --output=log/cov-%A_%a.out
+#SBATCH --error=log/cov-%A_%a.err
 
 ### puma
 ##SBATCH --array=1-770
@@ -25,7 +26,7 @@
 #SBATCH --mail-user=yhhuang@arizona.edu
 
 module load gsl
-module load openmpi5
+#module load openmpi5
 WORKDIR=/home/u15/yhhuang/cosmology/CosmoLike/KL_WFIRST
 
 cd ${WORKDIR}
